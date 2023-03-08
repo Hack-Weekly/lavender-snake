@@ -43,11 +43,16 @@ function EmotionTest() {
 function ServerData() {
   const [serverCount, setServerCount] = useState('Loading...')
   useEffect (() => {
-    fetch('http://localhost:3000').then((res) => {
-      console.log(res)
-    }).catch((err) => {
-      console.log(err)
-    })
+    fetch('http://localhost:3000/count')
+      .then((res) => res.json())
+      .then((resp) => {
+        console.log(resp)
+        setServerCount(`Server count is: ${resp.count}`)
+      })
+      .catch((err) => {
+        console.log(err)
+      }
+    )
   }, [])
 
   return (<div>{serverCount}</div>)
