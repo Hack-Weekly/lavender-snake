@@ -31,18 +31,22 @@ const dummyTodos = [
 	{
 		id: 1,
 		text: "Learn React",
+		completed: false,
 	},
 	{
 		id: 2,
 		text: "Learn TypeScript",
+		completed: true,
 	},
 	{
 		id: 3,
 		text: "Learn GraphQL",
+		completed: false,
 	},
 ];
 
 function App() {
+	// TODO: Get data from server
 	const [todos, setTodos] = useState(dummyTodos);
 	const [input, setInput] = useState("");
 
@@ -50,6 +54,7 @@ function App() {
 		const newTodo = {
 			id: todos.length + 1,
 			text: input,
+			completed: false,
 		};
 		setTodos([...todos, newTodo]);
 	};
@@ -75,6 +80,7 @@ function App() {
 				<ul>
 					{todos.map((todo) => (
 						<div>
+							{/* TODO: style todo differently when it's completed */}
 							<li key={todo.id}>{todo.text}</li>
 							<button onClick={() => removeTodo(todo.id)}>DELETE</button>
 						</div>
