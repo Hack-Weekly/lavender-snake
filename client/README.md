@@ -1,0 +1,3 @@
+This is the web client! Just run `npm install && npm run dev` to get this running, after which vite will tell you the local path this can be accessed on. Note the client may have functionality that requires a server, so you should have the server running as well.
+
+Note: any changes to the code are 'hot reloaded' - you don't need to stop and restart the webserver to see changes to the UI. Very convenient :)
