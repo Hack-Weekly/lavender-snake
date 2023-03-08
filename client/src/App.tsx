@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+interface TodoItemProps {
+	isCompleted: boolean;
+}
 
 const AppContainer = styled.div`
 	display: flex;
@@ -27,6 +31,10 @@ const TodoContainer = styled.div`
 	flex: 1;
 `;
 
+const TodoItem = styled.div<TodoItemProps>`
+	text-decoration: ${(props) => props.isCompleted ? 'line-through' : 'none'}
+`;
+
 const dummyTodos = [
 	{
 		id: 1,
@@ -50,6 +58,10 @@ function App() {
 	const [todos, setTodos] = useState(dummyTodos);
 	const [input, setInput] = useState("");
 
+	useEffect(()=>{
+		console.log(todos);
+	},)
+
 	const addTodo = () => {
 		const newTodo = {
 			id: todos.length + 1,
@@ -62,6 +74,16 @@ function App() {
 	const removeTodo = (id: number) => {
 		setTodos(todos.filter((todo) => todo.id !== id));
 	};
+
+	const handleCompleted = (completedId: number) => {
+		console.log("clicked");
+		const newTodos = todos;
+		console.log(newTodos);
+		newTodos.map(item  => {
+			(item.id === completedId) && (item.completed = !item.completed);
+		})
+		setTodos(newTodos);
+	}
 
 	return (
 		<AppContainer>
@@ -79,9 +101,11 @@ function App() {
 				</div>
 				<ul>
 					{todos.map((todo) => (
-						<div>
+						<div key={todo.id}>
 							{/* TODO: style todo differently when it's completed */}
-							<li key={todo.id}>{todo.text}</li>
+							<li>
+								<TodoItem isCompleted={todo.completed} onClick={() => handleCompleted(todo.id)}>{todo.text}</TodoItem>
+							</li>
 							<button onClick={() => removeTodo(todo.id)}>DELETE</button>
 						</div>
 					))}
