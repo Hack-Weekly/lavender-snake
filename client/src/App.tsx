@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 
 const AppContainer = styled.div`
 	display: flex;
@@ -42,20 +43,42 @@ const dummyTodos = [
 ];
 
 function App() {
+	const [todos, setTodos] = useState(dummyTodos);
+	const [input, setInput] = useState("");
+
+	const addTodo = () => {
+		const newTodo = {
+			id: todos.length + 1,
+			text: input,
+		};
+		setTodos([...todos, newTodo]);
+	};
+
+	const removeTodo = (id: number) => {
+		setTodos(todos.filter((todo) => todo.id !== id));
+	};
+
 	return (
 		<AppContainer>
 			<AppHeader>
 				<h1>lavender-snake : TODO LIST</h1>
 			</AppHeader>
 			<TodoContainer>
-				<input placeholder="What needs to be done?" />
+				<div>
+					<input
+						placeholder="What needs to be done?"
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+					/>
+					<button onClick={addTodo}>ADD TODO</button>
+				</div>
 				<ul>
-					{dummyTodos.map((todo) => (
+					{todos.map((todo) => (
 						<li key={todo.id}>{todo.text}</li>
 					))}
 				</ul>
 				<div>
-					TODO COUNT: <span>{dummyTodos.length}</span>
+					TODO COUNT: <span>{todos.length}</span>
 				</div>
 			</TodoContainer>
 		</AppContainer>
