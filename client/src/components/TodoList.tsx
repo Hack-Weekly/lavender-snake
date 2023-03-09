@@ -45,6 +45,7 @@ const AddItemInput = styled.div`
 			border: 1px solid hsl(198, 1%, 29%);
 		}
 		& span:hover{
+			color: #fff;
 			background: #61A4D9;
 		}
 	}
