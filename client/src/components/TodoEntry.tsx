@@ -38,7 +38,13 @@ function TodoEntry({ todo }: any) {
 		setTodos(todos);
 	};
 
-	const handleCompleted = () => {};
+	const handleCompleted = async () => {
+		const todos = await apiClient.updateTodo({
+			...todo,
+			completed: !todo.completed,
+		});
+		setTodos(todos);
+	};
 
 	return (
 		<TodoItemContainer key={todo.id}>
