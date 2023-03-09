@@ -10,11 +10,11 @@ import Category from "./components/Category";
 const AppContainer = styled.div`
 	font-family: 'Outfit', sans-serif;
 	box-sizing: border-box;
-	min-height: 100%;
+	min-height: 100vh;
 `;
 
 const MainContent = styled.div`
-	min-height: calc(100% - 3.5rem);
+	min-height: calc(100vh - 3.5rem);
 	display: flex;
 `
 
