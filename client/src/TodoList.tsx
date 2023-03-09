@@ -1,9 +1,8 @@
 import { useTodos } from "./Context";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Todo } from '../../shared/types'
+import { Todo } from "../../shared/types";
 import apiClient from "./apiClient";
-
 
 const TodoContainer = styled.div`
 	display: flex;
@@ -19,36 +18,45 @@ interface TodoItemProps {
 }
 
 const TodoItem = styled.div<TodoItemProps>`
-	text-decoration: ${(props) => props.isCompleted ? 'line-through' : 'none'}
+	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
 `;
 
-function TodoEntry({todo} : any) {
+function TodoEntry({ todo }: any) {
 	const [, setTodos] = useTodos();
-    const removeTodo = async () => {
+	const removeTodo = async () => {
 		const todos = await apiClient.deleteTodo(todo);
 		setTodos(todos);
 	};
 
 	const handleCompleted = () => {};
 
-    return <div key={todo.id}>
-        <TodoItem isCompleted={todo.completed} onClick={() => handleCompleted()}>{todo.text}</TodoItem>
-    <button onClick={() => removeTodo()}>DELETE</button>
-</div>
+	return (
+		<div key={todo.id}>
+			<TodoItem isCompleted={todo.completed} onClick={() => handleCompleted()}>
+				{todo.text}
+			</TodoItem>
+			<button onClick={() => removeTodo()}>DELETE</button>
+		</div>
+	);
 }
+
 export function TodoList() {
-    const [todos] = useTodos();
+	const [todos] = useTodos();
 
-    if (todos === undefined) {
-        return <div>"Loading..."</div>;
-    }
+	if (todos === undefined) {
+		return <div>"Loading..."</div>;
+	}
 
-    return <TodoContainer>
-      			<ul>
-					{todos.map((todo) => <TodoEntry key={todo.id} todo={todo} />)}
-				</ul>
-				<div>
-					TODO COUNT: <span>{todos.length}</span>
-				</div>
-    </TodoContainer>
+	return (
+		<TodoContainer>
+			<ul>
+				{todos.map((todo) => (
+					<TodoEntry key={todo.id} todo={todo} />
+				))}
+			</ul>
+			<div>
+				TODO COUNT: <span>{todos.length}</span>
+			</div>
+		</TodoContainer>
+	);
 }

@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Todo } from '../../shared/types'
+import { Todo } from "../../shared/types";
 import apiClient from "./apiClient";
 import { Context, useTodos } from "./Context";
 import { TodoList } from "./TodoList";
-
 
 const AppContainer = styled.div`
 	display: flex;
@@ -29,27 +28,27 @@ function AppContent() {
 
 	const addTodo = async () => {
 		const newTodo = {
-			id: '',
+			id: "",
 			text: input,
 			completed: false,
 		};
 		const newTodos = await apiClient.addTodo(input);
 		// Update local view of todos from the 'master' list from server
 		setTodos(newTodos);
-		setInput('');
+		setInput("");
 	};
 
 	return (
 		<>
 			<AppHeader>
-				<h1>lavender-snake : TODO LIST</h1> 
+				<h1>lavender-snake : TODO LIST</h1>
 			</AppHeader>
-			<div> 
+			<div>
 				<input
-						placeholder="What needs to be done?"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-					/>
+					placeholder="What needs to be done?"
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+				/>
 				<button onClick={addTodo}>ADD TODO</button>
 			</div>
 			<TodoList />
