@@ -3,30 +3,27 @@ import { useEffect, useState } from "react";
 import { Todo } from "../../shared/types";
 import apiClient from "./apiClient";
 import { Context, useTodos } from "./Context";
-import { TodoList } from "./TodoList";
+import { TodoList } from "./components/TodoList";
+import Header from "./components/Header";
+import Category from "./components/Category";
 
 const AppContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
+	font-family: 'Outfit', sans-serif;
+	box-sizing: border-box;
+	min-height: 100%;
 `;
 
-const AppHeader = styled.div`
+const MainContent = styled.div`
+	min-height: calc(100% - 3.5rem);
 	display: flex;
-	align-items: center;
-	height: 60px;
-	width: 100%;
-	padding-left: 20px;
-	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-`;
+`
 
 function AppContent() {
 	const [, setTodos] = useTodos();
 	const [input, setInput] = useState("");
 
-	const addTodo = async () => {
+	const addTodo = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
 		const newTodo = {
 			id: "",
 			text: input,
@@ -38,20 +35,17 @@ function AppContent() {
 		setInput("");
 	};
 
+	const handleInput = ((newInput: string) => {
+		setInput(newInput);
+	})
+
 	return (
 		<>
-			<AppHeader>
-				<h1>lavender-snake : TODO LIST</h1>
-			</AppHeader>
-			<div>
-				<input
-					placeholder="What needs to be done?"
-					value={input}
-					onChange={(e) => setInput(e.target.value)}
-				/>
-				<button onClick={addTodo}>ADD TODO</button>
-			</div>
-			<TodoList />
+			<Header />
+			<MainContent>
+				<Category></Category>
+				<TodoList inputValue={input} handleInput={handleInput} addTodo={addTodo}/>
+			</MainContent>
 		</>
 	);
 }
