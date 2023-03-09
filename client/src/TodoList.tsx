@@ -23,12 +23,19 @@ const TodoItem = styled.div<TodoItemProps>`
 
 function TodoEntry({ todo }: any) {
 	const [, setTodos] = useTodos();
+
 	const removeTodo = async () => {
 		const todos = await apiClient.deleteTodo(todo);
 		setTodos(todos);
 	};
 
-	const handleCompleted = () => {};
+	const handleCompleted = async () => {
+		const todos = await apiClient.updateTodo({
+			...todo,
+			completed: !todo.completed,
+		});
+		setTodos(todos);
+	};
 
 	return (
 		<div key={todo.id}>

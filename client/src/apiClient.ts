@@ -34,6 +34,18 @@ class ApiClient {
 		const j = await resp.json();
 		return j.todos;
 	}
+
+	async updateTodo(todo: Todo) {
+		const resp = await fetch("http://localhost:3000/todos", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(todo),
+		});
+		const j = await resp.json();
+		return j.todos;
+	}
 }
 
 export default new ApiClient();
