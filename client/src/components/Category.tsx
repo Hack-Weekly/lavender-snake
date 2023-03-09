@@ -27,10 +27,16 @@ const ListItem = styled.div`
     display: flex;
     align-items: center;
     gap: 0.2rem;
+    padding: 0.1rem;
+    border-radius: 0.3rem;
     cursor: pointer;
-    &:hover{
-        background: #EDEDED;
+    &.active{
+        background: #D5D5D5;
     }
+    &:hover{
+        background: #BDBDBD;
+    }
+
 `
 
 export default function Category() {
@@ -40,7 +46,7 @@ export default function Category() {
                 <CategoryTitle>Category 1</CategoryTitle>
                 <ListContainer>
                     <ListItem><AiOutlineUnorderedList /><span>List 1</span></ListItem>
-                    <ListItem><AiOutlineUnorderedList /><span>List 2</span></ListItem>
+                    <ListItem className="active"><AiOutlineUnorderedList /><span>List 2</span></ListItem>
                 </ListContainer>
             </CategoryItem>
             <CategoryItem>

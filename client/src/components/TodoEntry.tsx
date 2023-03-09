@@ -18,8 +18,8 @@ const TodoItemContainer = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin: 0.4rem 0;
-	font-size: 1.3rem;
+	margin: 0.5rem 0;
+	font-size: 1.4rem;
 `
 
 const TodoItem = styled.div<TodoItemProps>`
@@ -29,6 +29,12 @@ const TodoItem = styled.div<TodoItemProps>`
 const DeleteButton = styled.div`
 	margin-left: auto;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&:hover svg{
+		stroke: #61A4D9;
+	}
 `
 
 function TodoEntry({ todo }: any) {
@@ -50,9 +56,11 @@ function TodoEntry({ todo }: any) {
 		<TodoItemContainer key={todo.id}>
 			<IconContext.Provider value={{ color: "#61A4D9" }}>
 				{(todo.completed) ? <AiFillCheckCircle/> : <BsCircle/>}
+			</IconContext.Provider>
 				<TodoItem isCompleted={todo.completed} onClick={() => handleCompleted()}>
 					{todo.text}
 				</TodoItem>
+			<IconContext.Provider value={{ color: "hsl(198, 1%, 29%)" }}>
 				<DeleteButton>
 					<IoTrashOutline onClick={() => removeTodo()}/>
 				</DeleteButton>
