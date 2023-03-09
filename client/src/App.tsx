@@ -16,6 +16,7 @@ const AppContainer = styled.div`
 const MainContent = styled.div`
 	min-height: calc(100vh - 3.5rem);
 	display: flex;
+	color: #272b33;
 `
 
 function AppContent() {

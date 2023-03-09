@@ -24,6 +24,7 @@ const TodoItemContainer = styled.div`
 
 const TodoItem = styled.div<TodoItemProps>`
 	margin-left: 0.5rem;
+	color: ${(props) => (props.isCompleted && "#7A7E88")};
 	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
 `;
 const DeleteButton = styled.div`
