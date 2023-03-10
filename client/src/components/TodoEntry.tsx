@@ -7,6 +7,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { BsCircle } from "react-icons/bs";
 import { IoTrashOutline,IoTrashSharp } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
+import { css } from "@emotion/react";
 
 interface TodoItemProps {
 	isCompleted: boolean;
@@ -20,13 +21,14 @@ const TodoItemContainer = styled.div`
 	align-items: center;
 	margin: 0.5rem 0;
 	font-size: 1.4rem;
-`
+`;
 
 const TodoItem = styled.div<TodoItemProps>`
 	margin-left: 0.5rem;
 	color: ${(props) => (props.isCompleted && "#7A7E88")};
 	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
 `;
+
 const DeleteButton = styled.div`
 	margin-left: auto;
 	cursor: pointer;
@@ -36,10 +38,26 @@ const DeleteButton = styled.div`
 	&:hover svg{
 		stroke: #61A4D9;
 	}
-`
+`;
+
+const TodoStyleNoFade = css`
+	opacity: 1;
+	transition: opacity 0.6s ease-out, height 0.4s ease-out;
+	height: auto;
+`;
+
+const TodoStyleFadeTriggered = css`
+	margin: 0px;
+	padding: 0px;
+	height: 0px;
+	opacity: 0;
+`;
+
 
 function TodoEntry({ todo }: any) {
 	const [, setTodos] = useTodos();
+	const [isAnimating, setIsAnimating] = useState(false);
+
 	const removeTodo = async () => {
 		const todos = await apiClient.deleteTodo(todo);
 		setTodos(todos);
@@ -53,8 +71,17 @@ function TodoEntry({ todo }: any) {
 		setTodos(todos);
 	};
 
+	const handleDeleted = () => {
+		setIsAnimating(true);
+
+		setTimeout(() => {
+			setIsAnimating(false);
+			removeTodo();
+		}, 800);
+	}
+
 	return (
-		<TodoItemContainer key={todo.id}>
+		<TodoItemContainer key={todo.id} css={isAnimating ? [TodoStyleNoFade, TodoStyleFadeTriggered] : TodoStyleNoFade} >
 			<IconContext.Provider value={{ color: "#61A4D9" }}>
 				{(todo.completed) ? <AiFillCheckCircle/> : <BsCircle/>}
 			</IconContext.Provider>
@@ -63,7 +90,7 @@ function TodoEntry({ todo }: any) {
 				</TodoItem>
 			<IconContext.Provider value={{ color: "hsl(198, 1%, 29%)" }}>
 				<DeleteButton>
-					<IoTrashOutline onClick={() => removeTodo()}/>
+					<IoTrashOutline onClick={() => handleDeleted()}/>
 				</DeleteButton>
 			</IconContext.Provider>
 		</TodoItemContainer>
