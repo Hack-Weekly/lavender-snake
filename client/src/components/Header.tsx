@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 const HeaderContainer = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: start;
+	gap: 1.5rem;
 	height: 3.5rem;
 	padding-left: 1.2rem;
 	padding-right: 1.2rem;
