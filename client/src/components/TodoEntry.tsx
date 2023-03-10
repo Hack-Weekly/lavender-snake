@@ -27,6 +27,12 @@ const TodoItem = styled.div<TodoItemProps>`
 	color: ${(props) => props.isCompleted && `${colors.textSecondary}`};
 	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
 `;
+const CheckCircleContainer = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+`
 
 const DeleteButton = styled.div`
 	margin-left: auto;
@@ -86,9 +92,11 @@ function TodoEntry({ todo }: any) {
 			onTransitionEnd={handleTransitionEnd}
 		>
 			<IconContext.Provider value={{ color: colors.accent }}>
-				{todo.completed ? <AiFillCheckCircle /> : <BsCircle />}
+				<CheckCircleContainer onClick={() => handleCompleted()}>
+					{todo.completed ? <AiFillCheckCircle /> : <BsCircle />}
+				</CheckCircleContainer>
 			</IconContext.Provider>
-			<TodoItem isCompleted={todo.completed} onClick={() => handleCompleted()}>
+			<TodoItem isCompleted={todo.completed}>
 				{todo.text}
 			</TodoItem>
 			<IconContext.Provider value={{ color: colors.textSecondary }}>

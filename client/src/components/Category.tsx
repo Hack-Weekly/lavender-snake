@@ -11,6 +11,7 @@ const CategoryContainer = styled.div`
 	gap: 2rem;
 	background: ${colors.bgSecondary};
 	color: ${colors.textSecondary};
+	border-radius: 0 0.7rem 0 0;
 `;
 const CategoryItem = styled.div`
 	display: flex;

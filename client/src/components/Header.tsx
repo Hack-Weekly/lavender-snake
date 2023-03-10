@@ -5,9 +5,8 @@ const HeaderContainer = styled.div`
 	align-items: center;
 	justify-content: start;
 	gap: 1.5rem;
-	height: 3.5rem;
-	padding-left: 1.2rem;
-	padding-right: 1.2rem;
+	height: 4rem;
+	padding: 0 1.2rem;
 `;
 
 export default function Header() {
