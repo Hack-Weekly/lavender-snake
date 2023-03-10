@@ -25,15 +25,18 @@ function AppContent() {
 
 	const addTodo = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		const newTodo = {
-			id: "",
-			text: input,
-			completed: false,
-		};
-		const newTodos = await apiClient.addTodo(input);
-		// Update local view of todos from the 'master' list from server
-		setTodos(newTodos);
-		setInput("");
+		//add new todo when input isn't blank
+		if(input){
+			const newTodo = {
+				id: "",
+				text: input,
+				completed: false,
+			};
+			const newTodos = await apiClient.addTodo(input);
+			// Update local view of todos from the 'master' list from server
+			setTodos(newTodos);
+			setInput("");
+		}
 	};
 
 	const handleInput = (newInput: string) => {
