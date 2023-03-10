@@ -1,7 +1,7 @@
 import { useTodos } from "../Context";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Todo } from "../../../shared/types";
+import { Todo } from "../../types";
 import apiClient from "../apiClient";
 import TodoEntry from "./TodoEntry";
 
@@ -16,12 +16,12 @@ const TodoContainer = styled.div`
 const TodoListHeader = styled.div`
 	align-self: flex-start;
 	font-size: 1.7rem;
-	color: #61A4D9;
-`
+	color: #61a4d9;
+`;
 const AddItemInput = styled.div`
 	display: flex;
 	font-size: 1.2rem;
-	& input{
+	& input {
 		width: 20rem;
 		box-sizing: border-box;
 		background-color: transparent;
@@ -44,18 +44,18 @@ const AddItemInput = styled.div`
 			border-radius: 5px;
 			border: 1px solid hsl(198, 1%, 29%);
 		}
-		& span:hover{
+		& span:hover {
 			color: #fff;
-			background: #61A4D9;
+			background: #61a4d9;
 		}
 	}
-	& button:hover{
+	& button:hover {
 		padding-bottom: 0px;
 	}
-`
+`;
 const todoEntriesConatiner = {
-	margin: "1rem 0"
-}
+	margin: "1rem 0",
+};
 
 interface InputProps {
 	inputValue: string;
@@ -72,7 +72,9 @@ function AddItem(props: InputProps) {
 					value={props.inputValue}
 					onChange={(e) => props.handleInput(e.target.value)}
 				/>
-				<button type="submit"><span>Add</span></button>
+				<button type="submit">
+					<span>Add</span>
+				</button>
 			</form>
 		</AddItemInput>
 	);
@@ -88,7 +90,11 @@ export function TodoList(props: InputProps) {
 	return (
 		<TodoContainer>
 			<TodoListHeader>List 2</TodoListHeader>
-			<AddItem inputValue={props.inputValue} handleInput={props.handleInput} addTodo={props.addTodo}/>
+			<AddItem
+				inputValue={props.inputValue}
+				handleInput={props.handleInput}
+				addTodo={props.addTodo}
+			/>
 			<div style={todoEntriesConatiner}>
 				{todos.map((todo) => (
 					<TodoEntry key={todo.id} todo={todo} />
