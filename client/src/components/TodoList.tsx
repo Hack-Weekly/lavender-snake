@@ -12,6 +12,10 @@ const TodoContainer = styled.div`
 	padding: 2rem 3rem;
 	color: ${colors.textPrimary};
 `;
+const LoadingTodos = styled.div`
+	padding: 2rem 3rem;
+	color: ${colors.textPrimary};
+`
 const TodoListHeader = styled.div`
 	align-self: flex-start;
 	font-size: 2rem;
@@ -84,7 +88,7 @@ export function TodoList(props: InputProps) {
 	const [todos] = useTodos();
 
 	if (todos === undefined) {
-		return <div>"Loading..."</div>;
+		return <LoadingTodos>Loading...</LoadingTodos>;
 	}
 
 	return (
