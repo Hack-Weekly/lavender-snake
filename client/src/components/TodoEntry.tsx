@@ -1,13 +1,13 @@
 import { useTodos } from "../Context";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { Todo } from "../../types";
 import apiClient from "../apiClient";
+import { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { BsCircle } from "react-icons/bs";
-import { IoTrashOutline, IoTrashSharp } from "react-icons/io5";
+import { IoTrashOutline } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 import { css } from "@emotion/react";
+import { colors } from "../colors";
 
 interface TodoItemProps {
 	isCompleted: boolean;
@@ -15,18 +15,16 @@ interface TodoItemProps {
 
 const TodoItemContainer = styled.div`
 	min-width: 15rem;
-	max-width: 30rem;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	margin: 0.5rem 0;
 	font-size: 1.4rem;
 	transition: opacity 0.6s ease-out, height 0.4s ease-out;
 `;
 
 const TodoItem = styled.div<TodoItemProps>`
 	margin-left: 0.5rem;
-	color: ${(props) => props.isCompleted && "#7A7E88"};
+	color: ${(props) => props.isCompleted && `${colors.textSecondary}`};
 	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
 `;
 
@@ -37,7 +35,7 @@ const DeleteButton = styled.div`
 	align-items: center;
 	justify-content: center;
 	&:hover svg {
-		stroke: #61a4d9;
+		stroke: ${colors.accent};
 	}
 `;
 
@@ -87,13 +85,13 @@ function TodoEntry({ todo }: any) {
 			css={isAnimating ? TodoStyleFadeTriggered : TodoStyleNoFade}
 			onTransitionEnd={handleTransitionEnd}
 		>
-			<IconContext.Provider value={{ color: "#61A4D9" }}>
+			<IconContext.Provider value={{ color: colors.accent }}>
 				{todo.completed ? <AiFillCheckCircle /> : <BsCircle />}
 			</IconContext.Provider>
 			<TodoItem isCompleted={todo.completed} onClick={() => handleCompleted()}>
 				{todo.text}
 			</TodoItem>
-			<IconContext.Provider value={{ color: "hsl(198, 1%, 29%)" }}>
+			<IconContext.Provider value={{ color: colors.textSecondary }}>
 				<DeleteButton>
 					<IoTrashOutline onClick={() => handleDeleted()} />
 				</DeleteButton>
