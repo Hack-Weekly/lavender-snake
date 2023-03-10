@@ -1,4 +1,4 @@
-import { Todo } from "../../shared/types";
+import { Todo } from "../types";
 
 class ApiClient {
 	constructor() {}
