@@ -35,7 +35,7 @@ class storageClient {
 	async load(id) {
 		if (this.isProd) {
 			const file = this.bucket.file(id)
-			if (file) {
+			if (await file.exists()) {
 				return (await file.download()).toString();
 			}
 
