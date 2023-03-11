@@ -12,7 +12,7 @@ const HeaderContainer = styled.div`
 export default function Header() {
 	return (
 		<HeaderContainer>
-			<img src="/lavender-snake.png" alt="logo" width="120" height="120" />
+			<img src="/lavender-snake.png" alt="logo" width="90" height="90" />
 			<h1>To Do List by Lavender Snake</h1>
 		</HeaderContainer>
 	);
