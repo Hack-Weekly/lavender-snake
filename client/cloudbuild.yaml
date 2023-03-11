@@ -17,7 +17,7 @@ steps:
         "--image",
         "gcr.io/code-practice-380104/lavender-snake",
         "--region",
-        "us-west1",
+        "us-central1",
       ]
 images:
   - gcr.io/code-practice-380104/lavender-snake
