@@ -39,6 +39,7 @@ class storageClient {
 				return JSON.parse(await file.download());
 			}
 
+			return [];
 		} else {
 			// dev
 			return inMemoryStorage[id];
