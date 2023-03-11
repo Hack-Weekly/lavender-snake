@@ -96,7 +96,7 @@ function AppContent() {
 		<>
 			<Header />
 			<MainContent>
-				<Category></Category>
+				<Category />
 				<TodoList
 					inputValue={input}
 					handleInput={handleInput}

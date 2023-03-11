@@ -9,9 +9,10 @@ const CategoryContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
+	margin: 2rem;
 	background: ${colors.bgSecondary};
 	color: ${colors.textSecondary};
-	border-radius: 0 0.7rem 0 0;
+	border-radius: 1.2rem;
 `;
 const CategoryItem = styled.div`
 	display: flex;
