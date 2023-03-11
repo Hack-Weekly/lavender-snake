@@ -1,6 +1,5 @@
 import { useTodos } from "../Context";
 import styled from "@emotion/styled";
-import apiClient from "../apiClient";
 import { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { BsCircle } from "react-icons/bs";
@@ -8,6 +7,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 import { css } from "@emotion/react";
 import { colors } from "../colors";
+import { useApiClient } from "../apiClient";
 
 interface TodoItemProps {
 	isCompleted: boolean;
@@ -32,7 +32,7 @@ const CheckCircleContainer = styled.div`
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-`
+`;
 
 const DeleteButton = styled.div`
 	margin-left: auto;
@@ -60,6 +60,7 @@ const TodoStyleFadeTriggered = css`
 function TodoEntry({ todo }: any) {
 	const [, setTodos] = useTodos();
 	const [isAnimating, setIsAnimating] = useState(false);
+	const apiClient = useApiClient();
 
 	const removeTodo = async () => {
 		const todos = await apiClient.deleteTodo(todo);
@@ -96,9 +97,7 @@ function TodoEntry({ todo }: any) {
 					{todo.completed ? <AiFillCheckCircle /> : <BsCircle />}
 				</CheckCircleContainer>
 			</IconContext.Provider>
-			<TodoItem isCompleted={todo.completed}>
-				{todo.text}
-			</TodoItem>
+			<TodoItem isCompleted={todo.completed}>{todo.text}</TodoItem>
 			<IconContext.Provider value={{ color: colors.textSecondary }}>
 				<DeleteButton>
 					<IoTrashOutline onClick={() => handleDeleted()} />

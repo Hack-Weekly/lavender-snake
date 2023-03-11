@@ -1,16 +1,21 @@
+import { useMemo } from "react";
+import { useApiEndpoint } from "./Context";
 import { Todo } from "./types";
 
 class ApiClient {
-	constructor() {}
+	endpoint: string;
+	constructor(endpoint: string) {
+		this.endpoint = endpoint;
+	}
 
 	async getTodos() {
-		const resp = await fetch("http://localhost:3000/todos");
+		const resp = await fetch(`${this.endpoint}/todos`);
 		const j = await resp.json();
 		return j.todos;
 	}
 
 	async addTodo(text: string) {
-		const resp = await fetch("http://localhost:3000/todos", {
+		const resp = await fetch(`${this.endpoint}/todos`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -24,7 +29,7 @@ class ApiClient {
 	}
 
 	async deleteTodo(todo: Todo) {
-		const resp = await fetch("http://localhost:3000/todos", {
+		const resp = await fetch(`${this.endpoint}/todos`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -36,7 +41,7 @@ class ApiClient {
 	}
 
 	async updateTodo(todo: Todo) {
-		const resp = await fetch("http://localhost:3000/todos", {
+		const resp = await fetch(`${this.endpoint}/todos`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
@@ -48,4 +53,7 @@ class ApiClient {
 	}
 }
 
-export default new ApiClient();
+export function useApiClient() {
+	const endpoint = useApiEndpoint()[0];
+	return useMemo(() => new ApiClient(endpoint), [endpoint]);
+}

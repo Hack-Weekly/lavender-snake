@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Todo } from "./types";
-import apiClient from "./apiClient";
-import { Context, useTodos } from "./Context";
+import { ApiEndpoints, Context, useApiEndpoint, useTodos } from "./Context";
 import { TodoList } from "./components/TodoList";
 import Header from "./components/Header";
 import Category from "./components/Category";
+import * as ToggleGroup from "@radix-ui/react-toggle-group";
+import { colors } from "./colors";
+import { css } from "@emotion/react";
+import { useApiClient } from "./apiClient";
 
 const AppContainer = styled.div`
 	font-family: "Outfit", sans-serif;
@@ -19,9 +22,55 @@ const MainContent = styled.div`
 	color: #272b33;
 `;
 
+const ToggleItem = styled(ToggleGroup.Item)`
+	background-color: ${colors.textSecondary};
+	padding: 11px;
+	border: 0px;
+	&[data-state="on"] {
+		background-color: ${colors.accent};
+	}
+
+	&:first-of-type {
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	&:last-child {
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+`;
+
+function ApiSelector() {
+	const [apiEndpoint, setApiEndpoint] = useApiEndpoint();
+
+	// hide in prod
+	if (import.meta.env.MODE !== "development") {
+		return null;
+	}
+
+	return (
+		<div
+			css={{ position: "absolute", top: "12px", right: "20px", color: "black" }}
+		>
+			<ToggleGroup.Root
+				type="single"
+				value={apiEndpoint}
+				onValueChange={(sel) => {
+					if (sel) setApiEndpoint(sel);
+				}}
+			>
+				<ToggleItem value={ApiEndpoints.Local}>Local API</ToggleItem>
+				<ToggleItem value={ApiEndpoints.GCP}>Cloud API</ToggleItem>
+			</ToggleGroup.Root>
+		</div>
+	);
+}
+
 function AppContent() {
 	const [, setTodos] = useTodos();
 	const [input, setInput] = useState("");
+	const apiClient = useApiClient();
 
 	const addTodo = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -54,6 +103,7 @@ function AppContent() {
 					addTodo={addTodo}
 				/>
 			</MainContent>
+			<ApiSelector />
 		</>
 	);
 }
