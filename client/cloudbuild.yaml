@@ -1,11 +1,10 @@
 steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      ["build", "-t", "gcr.io/code-practice-380104/code-practice-webapp", "."]
+    args: ["build", "-t", "gcr.io/code-practice-380104/lavender-snake", "."]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/code-practice-380104/code-practice-webapp"]
+    args: ["push", "gcr.io/code-practice-380104/lavender-snake"]
   # Deploy container image to Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
@@ -13,11 +12,11 @@ steps:
       [
         "run",
         "deploy",
-        "code-practice-webapp",
+        "lavender-snake",
         "--image",
-        "gcr.io/code-practice-380104/code-practice-webapp",
+        "gcr.io/code-practice-380104/lavender-snake",
         "--region",
         "us-west1",
       ]
 images:
-  - gcr.io/code-practice-380104/code-practice-webapp
+  - gcr.io/code-practice-380104/lavender-snake
