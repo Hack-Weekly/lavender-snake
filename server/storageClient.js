@@ -36,7 +36,7 @@ class storageClient {
 		if (this.isProd) {
 			const file = this.bucket.file(id)
 			if (file) {
-				return JSON.parse(await file.download());
+				return (await file.download()).toString();
 			}
 
 			return [];
