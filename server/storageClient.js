@@ -1,3 +1,5 @@
+const {Storage} = require('@google-cloud/storage');
+
 // This is meant to represent k-v storage as can be found in things like blob storage
 const inMemoryStorage = {
 	todos: [
@@ -19,15 +21,38 @@ const inMemoryStorage = {
 	]
 }
 
+const storage = new Storage();
+
 class storageClient {
-	constructor() {}
+	constructor() {
+		console.log(process.env.NODE_ENV);
+		this.isProd = process.env.NODE_ENV === 'production';
+		if (this.isProd) {
+			this.bucket = storage.bucket('lavender-snake-todos')
+		}
+	}
 	
-	load(id) {
-		return inMemoryStorage[id];
+	async load(id) {
+		if (this.isProd) {
+			const file = this.bucket.file(id)
+			if (file) {
+				return JSON.parse(await file.download());
+			}
+
+		} else {
+			// dev
+			return inMemoryStorage[id];
+		}
 	}
 
-	save(id, o) {
-		inMemoryStorage[id] = o;
+	async save(id, o) {
+		if (this.isProd) {
+			await this.bucket.file(id).save(JSON.stringify(o));
+		} else {
+			// dev
+			inMemoryStorage[id] = o;
+		}
+		
 	}
 }
 

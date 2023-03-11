@@ -1,1 +1,1 @@
-npm install && DEBUG=server:* npm start
+npm install && DEBUG=server:* NODE_ENV=development npm start
