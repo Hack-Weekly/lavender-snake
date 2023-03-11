@@ -80,9 +80,9 @@ function TodoEntry({ todo }: any) {
 	};
 
 	const handleTransitionEnd = async () => {
+		await removeTodo();
 		if (isAnimating) {
 			setIsAnimating(false);
-			await removeTodo();
 		}
 	};
 
