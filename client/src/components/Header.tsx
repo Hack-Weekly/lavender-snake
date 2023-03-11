@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { colors } from "../colors";
 
 const HeaderContainer = styled.div`
 	display: flex;
@@ -7,6 +8,7 @@ const HeaderContainer = styled.div`
 	gap: 1.5rem;
 	height: 4rem;
 	padding: 0 1.2rem;
+	background: ${colors.bgDark};
 `;
 
 export default function Header() {

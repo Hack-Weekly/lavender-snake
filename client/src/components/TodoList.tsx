@@ -39,6 +39,9 @@ const AddItemInput = styled.div`
 		border-bottom: groove 2px ${colors.accent};
 		color: ${colors.textPrimary};
 	}
+	& input::placeholder{
+		color: ${colors.textSecondary};
+	}
 	& input:focus {
 		outline: none;
 		ring: none;
@@ -54,7 +57,7 @@ const AddItemInput = styled.div`
 		padding-right: 1rem;
 	}
 	& button:hover {
-		background-color: ${colors.bgPrimary};
+		background-color: ${colors.bgSecondary};
 		color: ${colors.accent};
 	}
 `;

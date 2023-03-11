@@ -41,7 +41,7 @@ const DeleteButton = styled.div`
 	align-items: center;
 	justify-content: center;
 	&:hover svg {
-		stroke: ${colors.accent};
+		stroke: ${colors.bgSecondary};
 	}
 `;
 

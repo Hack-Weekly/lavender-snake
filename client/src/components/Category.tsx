@@ -11,7 +11,7 @@ const CategoryContainer = styled.div`
 	gap: 2rem;
 	background: ${colors.bgSecondary};
 	color: ${colors.textSecondary};
-	border-radius: 0 0.7rem 0 0;
+	// border-radius: 0 0.7rem 0 0;
 `;
 const CategoryItem = styled.div`
 	display: flex;
@@ -36,10 +36,10 @@ const ListItem = styled.div`
 	border-radius: 0.3rem;
 	cursor: pointer;
 	&.active {
-		background: ${colors.bgPrimary};
+		background: ${colors.bgDark};
 	}
 	&:hover {
-		background: ${colors.bgPrimary};
+		background: ${colors.bgDark};
 	}
 `;
 
