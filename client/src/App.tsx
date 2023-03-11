@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { Todo } from "../types";
+import { Todo } from "./types";
 import apiClient from "./apiClient";
 import { Context, useTodos } from "./Context";
 import { TodoList } from "./components/TodoList";
@@ -26,7 +26,7 @@ function AppContent() {
 	const addTodo = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		//add new todo when input isn't blank
-		if(input){
+		if (input) {
 			const newTodo = {
 				id: "",
 				text: input,

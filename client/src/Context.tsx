@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Todo } from "../types";
+import { Todo } from "./types";
 import apiClient from "./apiClient";
 
 const TodoContext = createContext<[Todo[] | undefined, any]>([[], () => {}]);
