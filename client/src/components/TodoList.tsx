@@ -50,7 +50,7 @@ const AddItemInput = styled.div`
 	& button {
 		border: 1px solid ${colors.accent};
 		background-color: ${colors.accent};
-		color: ${colors.bgPrimary};
+		color: ${colors.bgSecondary};
 		border-radius: 5px;
 		cursor: pointer;
 		padding-left: 1rem;
