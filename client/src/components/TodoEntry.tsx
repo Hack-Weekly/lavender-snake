@@ -5,7 +5,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { BsCircle } from "react-icons/bs";
 import { IoTrashOutline } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import { colors } from "../colors";
 import { useApiClient } from "../apiClient";
 
@@ -24,9 +24,43 @@ const TodoItemContainer = styled.div`
 
 const TodoItem = styled.div<TodoItemProps>`
 	margin-left: 0.5rem;
+	position: relative;
 	color: ${(props) => props.isCompleted && `${colors.textSecondary}`};
-	text-decoration: ${(props) => (props.isCompleted ? "line-through" : "none")};
+	${(props) => (props.isCompleted) && 
+		`&:before{
+			content: "";
+			position: absolute;
+			display: block;
+			width: 100%;
+			height: 0.15rem;
+			top: 0.7rem;
+			background: ${colors.textSecondary};
+		}
+		`
+	}
 `;
+const lineThrough = keyframes`
+	from {
+		width: 0%;
+	}
+	to {
+		width: 100%;
+	}
+`
+const move = keyframes`
+	0%{
+		padding-left: 0;
+	}
+	70%{
+		padding-left: 0;
+	}
+	85%{
+		padding-left: 0.15rem;
+	}
+	100% {
+		padding-left: 0;
+	}
+`
 const CheckCircleContainer = styled.div`
 	display: flex;
 	align-items: center;
@@ -60,6 +94,7 @@ const TodoStyleFadeTriggered = css`
 function TodoEntry({ todo }: any) {
 	const [, setTodos] = useTodos();
 	const [isAnimating, setIsAnimating] = useState(false);
+	const [isLineThroughAnimating, setIsLineThroughAnimating] = useState(false);
 	const apiClient = useApiClient();
 
 	const removeTodo = async () => {
@@ -97,7 +132,15 @@ function TodoEntry({ todo }: any) {
 					{todo.completed ? <AiFillCheckCircle /> : <BsCircle />}
 				</CheckCircleContainer>
 			</IconContext.Provider>
-			<TodoItem isCompleted={todo.completed}>{todo.text}</TodoItem>
+			<TodoItem 
+				isCompleted={todo.completed}
+				css={ (todo.completed) && css`animation: ${move} 0.8s ease;
+					&:before{
+						animation: ${lineThrough} 0.4s ease;
+					}`}
+			>
+				{todo.text}
+			</TodoItem>
 			<IconContext.Provider value={{ color: colors.textSecondary }}>
 				<DeleteButton>
 					<IoTrashOutline onClick={() => handleDeleted()} />
