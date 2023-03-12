@@ -2,6 +2,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useApiClient } from "./apiClient";
 import { Todo } from "./types";
+import { isProd } from "./utils";
 
 const TodoContext = createContext<[Todo[] | undefined, any]>([[], () => {}]);
 export const useTodos = () => useContext(TodoContext);
@@ -16,6 +17,23 @@ const ApiEndpointContext = createContext<[string, any]>([
 	() => {},
 ]);
 export const useApiEndpoint = () => useContext(ApiEndpointContext);
+
+export interface User {
+	authCode: string;
+	email: string;
+	family_name: string;
+	given_name: string;
+	id: string;
+	locale: string;
+	name: string;
+	picture: string;
+	verified_email: boolean;
+}
+const UserContext = createContext<[User | undefined, any]>([
+	undefined,
+	() => {},
+]);
+export const useUser = () => useContext(UserContext);
 
 function TodoContextProvider({ children }: any) {
 	const [todos, setTodos] = useState<Todo[] | undefined>(undefined);
@@ -33,13 +51,25 @@ function TodoContextProvider({ children }: any) {
 		</TodoContext.Provider>
 	);
 }
+function UserContextProvider({ children }: any) {
+	const [user, setUser] = useState<User | undefined>(undefined);
+	return (
+		<UserContext.Provider value={[user, setUser]}>
+			{children}
+		</UserContext.Provider>
+	);
+}
 export function Context({ children }: any) {
-	const [apiEndpoint, setApiEndpoint] = useState(ApiEndpoints.GCP);
+	const [apiEndpoint, setApiEndpoint] = useState(
+		isProd ? ApiEndpoints.GCP : ApiEndpoints.Local
+	);
 
 	return (
 		<GoogleOAuthProvider clientId="987357728284-k763p5d1paujmlvn83tl2lc637f8ofc3.apps.googleusercontent.com">
 			<ApiEndpointContext.Provider value={[apiEndpoint, setApiEndpoint]}>
-				<TodoContextProvider>{children}</TodoContextProvider>
+				<UserContextProvider>
+					<TodoContextProvider>{children}</TodoContextProvider>
+				</UserContextProvider>
 			</ApiEndpointContext.Provider>
 		</GoogleOAuthProvider>
 	);

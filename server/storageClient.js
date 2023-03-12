@@ -45,7 +45,7 @@ class storageClient {
 			return [];
 		} else {
 			// dev
-			return inMemoryStorage[id];
+			return inMemoryStorage[id] || [];
 		}
 	}
 

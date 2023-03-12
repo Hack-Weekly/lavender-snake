@@ -15,7 +15,7 @@ const TodoContainer = styled.div`
 const LoadingTodos = styled.div`
 	padding: 2rem 3rem;
 	color: ${colors.textPrimary};
-`
+`;
 const TodoListHeader = styled.div`
 	align-self: flex-start;
 	font-size: 2rem;
