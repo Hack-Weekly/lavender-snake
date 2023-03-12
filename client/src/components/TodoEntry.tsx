@@ -26,6 +26,8 @@ const TodoItem = styled.div<TodoItemProps>`
 	margin-left: 0.5rem;
 	position: relative;
 	color: ${(props) => props.isCompleted && `${colors.textSecondary}`};
+`;
+const LineThrough = styled.div<TodoItemProps>`
 	${(props) => (props.isCompleted) && 
 		`&:before{
 			content: "";
@@ -38,7 +40,7 @@ const TodoItem = styled.div<TodoItemProps>`
 		}
 		`
 	}
-`;
+`
 const lineThrough = keyframes`
 	from {
 		content: "";
@@ -124,6 +126,7 @@ function TodoEntry({ todo }: any) {
 
 	const handleCompleted = () => {
 		setIsLineThroughAnimating(true);
+		console.log("completed");
 	}
 	const handleLineThroughTransitionEnd = async () => {
 		await completeTodo();
@@ -137,6 +140,8 @@ function TodoEntry({ todo }: any) {
 	};
 
 	const handleTransitionEnd = async () => {
+		console.log("transition ended");
+		
 		await removeTodo();
 		if (isAnimating) {
 			setIsAnimating(false);
@@ -156,12 +161,13 @@ function TodoEntry({ todo }: any) {
 			</IconContext.Provider>
 			<TodoItem 
 				isCompleted={todo.completed}
-				css={ isLineThroughAnimating && css`animation: ${move} 0.6s ease;
-					&:before{
-						animation: ${lineThrough} 0.4s ease;
-					}`}
+				css={ isLineThroughAnimating && css`animation: ${move} 0.6s ease;}`}
 				onTransitionEnd={handleLineThroughTransitionEnd}
 			>
+				<LineThrough 
+					isCompleted={todo.completed}
+					css={ isLineThroughAnimating && css`animation: ${lineThrough} 0.4s ease;}`}
+				/>
 				{todo.text}
 			</TodoItem>
 			<IconContext.Provider value={{ color: colors.textSecondary }}>
