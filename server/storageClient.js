@@ -37,7 +37,7 @@ class storageClient {
 			console.log('creating file')
 			const file = this.bucket.file(id)
 			console.log('checking exists')
-			if (await file.exists()) {
+			if ((await file.exists())[0]) {
 				console.log('exists')
 				return (await file.download()).toString();
 			}
