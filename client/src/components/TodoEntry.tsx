@@ -41,10 +41,22 @@ const TodoItem = styled.div<TodoItemProps>`
 `;
 const lineThrough = keyframes`
 	from {
+		content: "";
+		position: absolute;
+		display: block;
 		width: 0%;
+		height: 0.15rem;
+		top: 0.7rem;
+		background: ${colors.textSecondary};
 	}
 	to {
+		content: "";
+		position: absolute;
+		display: block;
 		width: 100%;
+		height: 0.15rem;
+		top: 0.7rem;
+		background: ${colors.textSecondary};
 	}
 `
 const move = keyframes`
@@ -102,13 +114,23 @@ function TodoEntry({ todo }: any) {
 		setTodos(todos);
 	};
 
-	const handleCompleted = async () => {
+	const completeTodo = async () => {
 		const todos = await apiClient.updateTodo({
 			...todo,
 			completed: !todo.completed,
 		});
 		setTodos(todos);
 	};
+
+	const handleCompleted = () => {
+		setIsLineThroughAnimating(true);
+	}
+	const handleLineThroughTransitionEnd = async () => {
+		await completeTodo();
+		if(isLineThroughAnimating) {
+			setIsLineThroughAnimating(false);
+		}
+	} 
 
 	const handleDeleted = () => {
 		setIsAnimating(true);
@@ -134,10 +156,11 @@ function TodoEntry({ todo }: any) {
 			</IconContext.Provider>
 			<TodoItem 
 				isCompleted={todo.completed}
-				css={ (todo.completed) && css`animation: ${move} 0.8s ease;
+				css={ isLineThroughAnimating && css`animation: ${move} 0.6s ease;
 					&:before{
 						animation: ${lineThrough} 0.4s ease;
 					}`}
+				onTransitionEnd={handleLineThroughTransitionEnd}
 			>
 				{todo.text}
 			</TodoItem>
