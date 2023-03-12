@@ -39,7 +39,7 @@ class storageClient {
 			console.log('checking exists')
 			if ((await file.exists())[0]) {
 				console.log('exists')
-				return (await file.download()).toString();
+				return (await file.download());
 			}
 
 			return [];
