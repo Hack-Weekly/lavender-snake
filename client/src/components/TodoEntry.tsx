@@ -29,15 +29,13 @@ const TodoItem = styled.div<TodoItemProps>`
 `;
 const LineThrough = styled.div<TodoItemProps>`
 	${(props) => (props.isCompleted) && 
-		`&:before{
-			content: "";
+		`	content: "";
 			position: absolute;
 			display: block;
 			width: 100%;
 			height: 0.15rem;
 			top: 0.7rem;
 			background: ${colors.textSecondary};
-		}
 		`
 	}
 `
@@ -124,16 +122,13 @@ function TodoEntry({ todo }: any) {
 		setTodos(todos);
 	};
 
-	const handleCompleted = () => {
-		setIsLineThroughAnimating(true);
-		console.log("completed");
-	}
-	const handleLineThroughTransitionEnd = async () => {
+	const handleCompleted = async () => {
+		(!todo.completed) && setIsLineThroughAnimating(true);
 		await completeTodo();
-		if(isLineThroughAnimating) {
+		setTimeout(async () => {
 			setIsLineThroughAnimating(false);
-		}
-	} 
+		}, 1000);
+	}
 
 	const handleDeleted = () => {
 		setIsAnimating(true);
@@ -162,11 +157,10 @@ function TodoEntry({ todo }: any) {
 			<TodoItem 
 				isCompleted={todo.completed}
 				css={ isLineThroughAnimating && css`animation: ${move} 0.6s ease;}`}
-				onTransitionEnd={handleLineThroughTransitionEnd}
 			>
 				<LineThrough 
 					isCompleted={todo.completed}
-					css={ isLineThroughAnimating && css`animation: ${lineThrough} 0.4s ease;}`}
+					css={ isLineThroughAnimating && css`animation: ${lineThrough} 0.6s ease;}`}
 				/>
 				{todo.text}
 			</TodoItem>
