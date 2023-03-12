@@ -11,13 +11,12 @@ const HeaderContainer = styled.div`
 	padding: 0 1.2rem;
 `;
 
-export default function Header() {
+function LoginButton() {
 	const [user, setUser] = useUser();
 	const [apiEndpoint] = useApiEndpoint();
 	const googleLogin = useGoogleLogin({
 		flow: "auth-code",
 		onSuccess: async (codeResponse) => {
-			console.log(codeResponse);
 			const tokenResp = await fetch(`${apiEndpoint}/auth/google`, {
 				method: "POST",
 				headers: {
@@ -29,7 +28,6 @@ export default function Header() {
 			});
 
 			const tokens = await tokenResp.json();
-			console.log(tokens);
 			setUser(tokens);
 		},
 	});
@@ -37,13 +35,21 @@ export default function Header() {
 	const login = () => googleLogin();
 	const logout = () => setUser(undefined);
 
+	if (apiEndpoint === ApiEndpoints.Local) {
+		return null;
+	}
+
+	return (
+		<button onClick={user ? logout : login}>{user ? "Logout" : "Login"}</button>
+	);
+}
+
+export default function Header() {
 	return (
 		<HeaderContainer>
 			<img src="/lavender-snake.png" alt="logo" width="90" height="90" />
 			<h1>To Do List by Lavender Snake</h1>
-			<button onClick={user ? logout : login}>
-				{user ? "Logout" : "Login"}
-			</button>
+			<LoginButton />
 		</HeaderContainer>
 	);
 }

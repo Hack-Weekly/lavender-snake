@@ -25,7 +25,6 @@ router.post("/", async function (req, res, next) {
 router.delete("/", async function (req, res, next) {
 	const id = req.body.id;
 
-	console.log(id);
 	const oldTodos = await storageClient.load(req.user.userData.id);
 	const newTodos = oldTodos.filter((todo) => todo.id !== id);
 	await storageClient.save(req.user.userData.id, newTodos);

@@ -63,6 +63,5 @@ class ApiClient {
 export function useApiClient() {
 	const endpoint = useApiEndpoint()[0];
 	const [user] = useUser();
-	console.log(user);
 	return useMemo(() => new ApiClient(endpoint, user), [endpoint, user]);
 }

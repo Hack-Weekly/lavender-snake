@@ -29,6 +29,18 @@ export interface User {
 	picture: string;
 	verified_email: boolean;
 }
+
+const testUser: User = {
+	authCode: "tester",
+	email: "tester@tester.com",
+	family_name: "Qa",
+	given_name: "Tester",
+	id: "tester",
+	locale: "en-US",
+	name: "Tester Qa",
+	picture: "none",
+	verified_email: false,
+};
 const UserContext = createContext<[User | undefined, any]>([
 	undefined,
 	() => {},
@@ -52,9 +64,15 @@ function TodoContextProvider({ children }: any) {
 	);
 }
 function UserContextProvider({ children }: any) {
-	const [user, setUser] = useState<User | undefined>(undefined);
+	const userState = useState<User | undefined>(undefined);
+	const [apiEndpoint] = useApiEndpoint();
+
 	return (
-		<UserContext.Provider value={[user, setUser]}>
+		<UserContext.Provider
+			value={
+				apiEndpoint === ApiEndpoints.GCP ? userState : [testUser, () => {}]
+			}
+		>
 			{children}
 		</UserContext.Provider>
 	);

@@ -2,7 +2,7 @@ const {Storage} = require('@google-cloud/storage');
 
 // This is meant to represent k-v storage as can be found in things like blob storage
 const inMemoryStorage = {
-	todos: [
+	tester: [
 		{
 			id: '83e6c89f-bfe2-4cc0-b3da-0d0688904f82',
 			text: "Learn React",
@@ -34,11 +34,8 @@ class storageClient {
 	
 	async load(id) {
 		if (this.isProd) {
-			console.log('creating file')
 			const file = this.bucket.file(id)
-			console.log('checking exists')
 			if ((await file.exists())[0]) {
-				console.log('exists')
 				return JSON.parse((await file.download()).toString());
 			}
 

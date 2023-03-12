@@ -6,7 +6,11 @@ const { google }  = require("googleapis");
 var createError = require("http-errors");
 
 const knownUsers = {
-
+    'tester': { 
+        userData: {
+            id: 'tester'
+        }
+    }
 }
 
 const clientId = "987357728284-k763p5d1paujmlvn83tl2lc637f8ofc3.apps.googleusercontent.com";
@@ -14,8 +18,6 @@ const clientSecret = process.env.CLIENT_SECRET;
 
 async function authenticateRequest(req, res, next) {
     const authCode = req.headers.authorization.replace("Bearer ", "");
-	console.log(authCode);
-    console.log(JSON.stringify(knownUsers));
 	req.user = knownUsers[authCode];
     if (req.user)
 	    next();    
