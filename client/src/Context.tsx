@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useApiClient } from "./apiClient";
 import { Todo } from "./types";
@@ -36,8 +37,10 @@ export function Context({ children }: any) {
 	const [apiEndpoint, setApiEndpoint] = useState(ApiEndpoints.GCP);
 
 	return (
-		<ApiEndpointContext.Provider value={[apiEndpoint, setApiEndpoint]}>
-			<TodoContextProvider>{children}</TodoContextProvider>
-		</ApiEndpointContext.Provider>
+		<GoogleOAuthProvider clientId="987357728284-k763p5d1paujmlvn83tl2lc637f8ofc3.apps.googleusercontent.com">
+			<ApiEndpointContext.Provider value={[apiEndpoint, setApiEndpoint]}>
+				<TodoContextProvider>{children}</TodoContextProvider>
+			</ApiEndpointContext.Provider>
+		</GoogleOAuthProvider>
 	);
 }
