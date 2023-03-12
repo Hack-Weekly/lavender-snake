@@ -24,7 +24,7 @@ async function authenticateRequest(req, res, next) {
 }
 
 function setupAuthRoutes(app) {    
-    console.log(clientSecret?.substring(5, 10));
+    console.log(`Secret: ${clientSecret?.substring(5, 10)}`);
 
     app.post('/auth/google', async (req, res) => {
         const authCode = req.body.code;
