@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useGoogleLogin } from "@react-oauth/google";
-import { ApiEndpoints, useUser } from "../Context";
+import { ApiEndpoints, useApiEndpoint, useUser } from "../Context";
 
 const HeaderContainer = styled.div`
 	display: flex;
@@ -13,11 +13,12 @@ const HeaderContainer = styled.div`
 
 export default function Header() {
 	const [user, setUser] = useUser();
+	const [apiEndpoint] = useApiEndpoint();
 	const googleLogin = useGoogleLogin({
 		flow: "auth-code",
 		onSuccess: async (codeResponse) => {
 			console.log(codeResponse);
-			const tokenResp = await fetch(`${ApiEndpoints.Local}/auth/google`, {
+			const tokenResp = await fetch(`${apiEndpoint}/auth/google`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
