@@ -9,6 +9,7 @@ import * as ToggleGroup from "@radix-ui/react-toggle-group";
 import { colors } from "./colors";
 import { css } from "@emotion/react";
 import { useApiClient } from "./apiClient";
+import { isProd } from "./utils";
 
 const AppContainer = styled.div`
 	font-family: "Outfit", sans-serif;
@@ -45,7 +46,7 @@ function ApiSelector() {
 	const [apiEndpoint, setApiEndpoint] = useApiEndpoint();
 
 	// hide in prod
-	if (import.meta.env.MODE !== "development") {
+	if (isProd) {
 		return null;
 	}
 

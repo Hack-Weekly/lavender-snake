@@ -4,7 +4,7 @@ const router = express.Router();
 const storageClient = require("../storageClient");
 
 router.get("/", async function (req, res, next) {
-	const todos = await storageClient.load("todos");
+	const todos = await storageClient.load(req.user.userData.id);
 	res.json({ todos });
 });
 
@@ -16,26 +16,25 @@ router.post("/", async function (req, res, next) {
 	};
 
 	console.log(newTodo);
-	const oldTodos = await storageClient.load("todos");
+	const oldTodos = await storageClient.load(req.user.userData.id);
 	const newTodos = [...oldTodos, newTodo];
-	await storageClient.save("todos", newTodos);
+	await storageClient.save(req.user.userData.id, newTodos);
 	res.json({ todos: newTodos });
 });
 
 router.delete("/", async function (req, res, next) {
 	const id = req.body.id;
 
-	console.log(id);
-	const oldTodos = await storageClient.load("todos");
+	const oldTodos = await storageClient.load(req.user.userData.id);
 	const newTodos = oldTodos.filter((todo) => todo.id !== id);
-	await storageClient.save("todos", newTodos);
+	await storageClient.save(req.user.userData.id, newTodos);
 	res.json({ todos: newTodos });
 });
 
 router.put("/", async function (req, res, next) {
 	const { id, text, completed } = req.body;
 
-	const oldTodos = await storageClient.load("todos");
+	const oldTodos = await storageClient.load(req.user.userData.id);
 	const newTodos = oldTodos.map((todo) => {
 		if (todo.id === id) {
 			return {
@@ -46,7 +45,7 @@ router.put("/", async function (req, res, next) {
 		}
 		return todo;
 	});
-	await storageClient.save("todos", newTodos);
+	await storageClient.save(req.user.userData.id, newTodos);
 	res.json({ todos: newTodos });
 });
 
