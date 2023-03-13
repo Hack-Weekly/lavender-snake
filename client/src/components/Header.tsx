@@ -10,6 +10,9 @@ const HeaderContainer = styled.div`
 	gap: 1.5rem;
 	height: 6rem;
 	padding: 0 1.2rem;
+	@media (max-width: 660px) {
+		flex-direction: column;
+	}
 `;
 
 const Button = styled.button`
@@ -60,17 +63,11 @@ function LoginButton() {
 export default function Header() {
 	return (
 		<HeaderContainer>
-			<img
-				src="/lavender-snake.png"
-				alt="logo"
-				width="140"
-				height="140"
-				style={{ opacity: 0 }}
-			/>
 			<Spacer />
 			<h1
 				css={{
 					fontSize: "6em",
+					margin: 0,
 				}}
 			>
 				ToDo

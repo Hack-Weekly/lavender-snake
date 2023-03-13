@@ -15,6 +15,9 @@ const CategoryContainer = styled.div`
 	background: ${colors.bgSecondary};
 	color: ${colors.textSecondary};
 	border-radius: 1.2rem;
+	@media (max-width: 660px) {
+		display: none;
+	}
 `;
 const CategoryItem = styled.div`
 	display: flex;
