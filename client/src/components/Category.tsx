@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { colors } from "../colors";
 
@@ -37,47 +38,55 @@ const ListItem = styled.div`
 	padding: 0.1rem;
 	border-radius: 0.3rem;
 	cursor: pointer;
-	&.active {
-		background: ${colors.bgPrimary};
-	}
+	background: ${(item) => (item.active ? colors.bgPrimary : "inherit")};
 	&:hover {
 		background: ${colors.bgPrimary};
 	}
 `;
 
+const categories = [
+	{
+		name: "Urgency",
+		values: ["Urgent", "Normal"],
+	},
+	{
+		name: "Task type",
+		values: ["Study", "Housework", "Errands"],
+	},
+];
+
 export default function Category() {
+	const [selectedCategory, setSelectedCategory] = useState({
+		category: "Urgency",
+		value: "Normal",
+	});
+
 	return (
 		<CategoryContainer>
-			<CategoryItem>
-				<CategoryTitle>Urgency</CategoryTitle>
-				<ListContainer>
-					<ListItem>
-						<AiOutlineUnorderedList />
-						<span>Urgent</span>
-					</ListItem>
-					<ListItem className="active">
-						<AiOutlineUnorderedList />
-						<span>Normal</span>
-					</ListItem>
-				</ListContainer>
-			</CategoryItem>
-			<CategoryItem>
-				<CategoryTitle>Task type</CategoryTitle>
-				<ListContainer>
-					<ListItem>
-						<AiOutlineUnorderedList />
-						<span>Study</span>
-					</ListItem>
-					<ListItem>
-						<AiOutlineUnorderedList />
-						<span>Housework</span>
-					</ListItem>
-					<ListItem>
-						<AiOutlineUnorderedList />
-						<span>Errands</span>
-					</ListItem>
-				</ListContainer>
-			</CategoryItem>
+			{categories.map((category) => (
+				<CategoryItem>
+					<CategoryTitle>{category.name}</CategoryTitle>
+					<ListContainer>
+						{category.values.map((val) => (
+							<ListItem
+								active={
+									selectedCategory.category === category.name &&
+									selectedCategory.value === val
+								}
+								onClick={() =>
+									setSelectedCategory({
+										category: category.name,
+										value: val,
+									})
+								}
+							>
+								<AiOutlineUnorderedList />
+								<span>{val}</span>
+							</ListItem>
+						))}
+					</ListContainer>
+				</CategoryItem>
+			))}
 		</CategoryContainer>
 	);
 }
