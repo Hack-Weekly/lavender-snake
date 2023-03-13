@@ -30,7 +30,7 @@ const ListContainer = styled.div`
 	flex-direction: column;
 	gap: 0.5rem;
 `;
-const ListItem = styled.div`
+const ListItem = styled.div<{ active: boolean }>`
 	font-size: 1.15rem;
 	display: flex;
 	align-items: center;
