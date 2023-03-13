@@ -68,11 +68,10 @@ function TodoEntry({ todo }: any) {
 	};
 
 	const handleCompleted = async () => {
-		const todos = await apiClient.updateTodo({
-			...todo,
-			completed: !todo.completed,
-		});
-		setTodos(todos);
+		todo.completed = !todo.completed;
+		setTodos((t: any[]) => [...t]); // Assumes this will succeed
+		const todos = await apiClient.updateTodo(todo);
+		setTodos(todos); // refresh with updated data from server (which should match our local view, in most cases)
 	};
 
 	const handleDeleted = () => {

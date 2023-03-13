@@ -51,6 +51,7 @@ function TodoContextProvider({ children }: any) {
 	const [todos, setTodos] = useState<Todo[] | undefined>(undefined);
 	const apiClient = useApiClient();
 	useEffect(() => {
+		if (!apiClient.user) return;
 		(async () => {
 			const t = await apiClient.getTodos();
 			setTodos(t);

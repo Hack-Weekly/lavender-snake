@@ -10,6 +10,7 @@ const CategoryContainer = styled.div`
 	flex-direction: column;
 	gap: 2rem;
 	margin: 2rem;
+	margin-top: -1rem;
 	background: ${colors.bgSecondary};
 	color: ${colors.textSecondary};
 	border-radius: 1.2rem;
@@ -48,41 +49,32 @@ export default function Category() {
 	return (
 		<CategoryContainer>
 			<CategoryItem>
-				<CategoryTitle>Category 1</CategoryTitle>
+				<CategoryTitle>Urgency</CategoryTitle>
 				<ListContainer>
 					<ListItem>
 						<AiOutlineUnorderedList />
-						<span>List 1</span>
+						<span>Urgent</span>
 					</ListItem>
 					<ListItem className="active">
 						<AiOutlineUnorderedList />
-						<span>List 2</span>
+						<span>Normal</span>
 					</ListItem>
 				</ListContainer>
 			</CategoryItem>
 			<CategoryItem>
-				<CategoryTitle>Category 2</CategoryTitle>
+				<CategoryTitle>Task type</CategoryTitle>
 				<ListContainer>
 					<ListItem>
 						<AiOutlineUnorderedList />
-						<span>List 3</span>
+						<span>Study</span>
 					</ListItem>
 					<ListItem>
 						<AiOutlineUnorderedList />
-						<span>List 4</span>
+						<span>Housework</span>
 					</ListItem>
 					<ListItem>
 						<AiOutlineUnorderedList />
-						<span>List 5</span>
-					</ListItem>
-				</ListContainer>
-			</CategoryItem>
-			<CategoryItem>
-				<CategoryTitle>Category 3</CategoryTitle>
-				<ListContainer>
-					<ListItem>
-						<AiOutlineUnorderedList />
-						<span>List 5</span>
+						<span>Errands</span>
 					</ListItem>
 				</ListContainer>
 			</CategoryItem>
