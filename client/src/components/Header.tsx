@@ -82,7 +82,7 @@ export default function Header() {
 					color: colors.textSecondary,
 				}}
 			>
-				<span css={{ fontSize: ".8em" }}>by</span> Lavender Snake
+				<span css={{ fontSize: ".8em", position:"relative", left:"19px"}}>by Lavender Snake</span>
 			</div>
 			<Spacer />
 			<LoginButton />
