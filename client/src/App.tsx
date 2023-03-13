@@ -17,6 +17,16 @@ const AppContainer = styled.div`
 	min-height: 100vh;
 `;
 
+const BackgroundImage = styled.img`
+	opacity: 0.03;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: auto;
+	pointer-events: none;
+`;
+
 const MainContent = styled.div`
 	min-height: calc(100vh - 5rem);
 	display: flex;
@@ -52,7 +62,12 @@ function ApiSelector() {
 
 	return (
 		<div
-			css={{ position: "absolute", top: "12px", right: "20px", color: "black" }}
+			css={{
+				position: "absolute",
+				bottom: "3rem",
+				left: "7rem",
+				color: "black",
+			}}
 		>
 			<ToggleGroup.Root
 				type="single"
@@ -112,6 +127,7 @@ function AppContent() {
 function App() {
 	return (
 		<AppContainer>
+			<BackgroundImage src="./lavender-snake-bg.png" />
 			<Context>
 				<AppContent />
 			</Context>

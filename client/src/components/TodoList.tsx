@@ -1,4 +1,4 @@
-import { useTodos } from "../Context";
+import { useTodos, useUser } from "../Context";
 import styled from "@emotion/styled";
 import TodoEntry from "./TodoEntry";
 import { colors } from "../colors";
@@ -15,6 +15,7 @@ const TodoContainer = styled.div`
 const LoadingTodos = styled.div`
 	padding: 2rem 3rem;
 	color: ${colors.textPrimary};
+	font-size: 2em;
 `;
 const TodoListHeader = styled.div`
 	align-self: flex-start;
@@ -86,6 +87,11 @@ function AddItem(props: InputProps) {
 
 export function TodoList(props: InputProps) {
 	const [todos] = useTodos();
+	const [user] = useUser();
+
+	if (!user) {
+		return <LoadingTodos>Log in to begin!</LoadingTodos>;
+	}
 
 	if (todos === undefined) {
 		return <LoadingTodos>Loading...</LoadingTodos>;
@@ -93,7 +99,7 @@ export function TodoList(props: InputProps) {
 
 	return (
 		<TodoContainer>
-			<TodoListHeader>List 2</TodoListHeader>
+			<TodoListHeader>Welcome, {user.given_name}!</TodoListHeader>
 			<AddItem
 				inputValue={props.inputValue}
 				handleInput={props.handleInput}

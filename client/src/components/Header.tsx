@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useGoogleLogin } from "@react-oauth/google";
+import { colors } from "../colors";
 import { ApiEndpoints, useApiEndpoint, useUser } from "../Context";
 
 const HeaderContainer = styled.div`
@@ -7,8 +8,20 @@ const HeaderContainer = styled.div`
 	align-items: center;
 	justify-content: start;
 	gap: 1.5rem;
-	height: 5rem;
+	height: 6rem;
 	padding: 0 1.2rem;
+`;
+
+const Button = styled.button`
+	padding: 20px;
+	border-radius: 10px;
+	border: none;
+	background-color: ${colors.accent};
+	cursor: pointer;
+`;
+
+const Spacer = styled.div`
+	flex: 100;
 `;
 
 function LoginButton() {
@@ -40,15 +53,38 @@ function LoginButton() {
 	}
 
 	return (
-		<button onClick={user ? logout : login}>{user ? "Logout" : "Login"}</button>
+		<Button onClick={user ? logout : login}>{user ? "Logout" : "Login"}</Button>
 	);
 }
 
 export default function Header() {
 	return (
 		<HeaderContainer>
-			<img src="/lavender-snake.png" alt="logo" width="90" height="90" />
-			<h1>To Do List by Lavender Snake</h1>
+			<img
+				src="/lavender-snake.png"
+				alt="logo"
+				width="140"
+				height="140"
+				style={{ opacity: 0 }}
+			/>
+			<Spacer />
+			<h1
+				css={{
+					fontSize: "6em",
+				}}
+			>
+				ToDo
+			</h1>
+			<div
+				css={{
+					fontSize: "1.6em",
+					transform: "translate(-50px, -18px) ",
+					color: colors.textSecondary,
+				}}
+			>
+				<span css={{ fontSize: ".8em" }}>by</span> Lavender Snake
+			</div>
+			<Spacer />
 			<LoginButton />
 		</HeaderContainer>
 	);
