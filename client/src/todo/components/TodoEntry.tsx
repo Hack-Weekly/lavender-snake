@@ -1,4 +1,4 @@
-import { useTodos } from "../Context";
+import { useTodos } from "@/todo/TodoContextProvider";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
@@ -6,8 +6,8 @@ import { BsCircle } from "react-icons/bs";
 import { IoTrashOutline } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 import { css } from "@emotion/react";
-import { colors } from "../colors";
-import { useApiClient } from "../apiClient";
+import { colors } from "@/colors";
+import { useApiClient } from "@/apiClient";
 
 interface TodoItemProps {
 	isCompleted: boolean;
