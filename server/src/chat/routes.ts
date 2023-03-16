@@ -3,5 +3,10 @@ export default function chatHandler(server, options, next) {
     res.send({ message: 'Hello from chat!' })
   })
 
+  server.post('/', async (req, res) => {
+    const data = req.body
+    console.log(data)
+    res.send({ message: 'Message posted' })
+  })
   next()
 }
