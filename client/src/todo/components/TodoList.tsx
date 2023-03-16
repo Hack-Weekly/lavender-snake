@@ -1,7 +1,8 @@
-import { useTodos, useUser } from "../Context";
+import { useTodos } from "@/todo/TodoContextProvider";
+import { useUser } from "@/Context";
 import styled from "@emotion/styled";
 import TodoEntry from "./TodoEntry";
-import { colors } from "../colors";
+import { colors } from "@/colors";
 
 const TodoContainer = styled.div`
 	display: flex;
