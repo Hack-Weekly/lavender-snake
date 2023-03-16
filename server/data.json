@@ -1,0 +1,88 @@
+{
+  "messages": [
+    {
+      "participants": [
+        {
+          "name": "Bob",
+          "picture": ""
+        },
+        {
+          "name": "Frank",
+          "picture": ""
+        },
+        {
+          "name": "Tim",
+          "picture": ""
+        }
+      ],
+      "messages": [
+        {
+          "id": "123",
+          "from": {
+            "name": "Bob",
+            "picture": ""
+          },
+          "message": "This is bob"
+        },
+        {
+          "id": "123",
+          "from": {
+            "name": "Frank",
+            "picture": ""
+          },
+          "message": "This is frank :)"
+        },
+        {
+          "id": "123",
+          "from": {
+            "name": "Tim",
+            "picture": ""
+          },
+          "message": "This is tim"
+        }
+      ]
+    },
+    {
+      "participants": [
+        {
+          "name": "Bob",
+          "picture": ""
+        },
+        {
+          "name": "Frank",
+          "picture": ""
+        },
+        {
+          "name": "Tim",
+          "picture": ""
+        }
+      ],
+      "messages": [
+        {
+          "id": "123",
+          "from": {
+            "name": "Bob",
+            "picture": ""
+          },
+          "message": "This is bob"
+        },
+        {
+          "id": "123",
+          "from": {
+            "name": "Frank",
+            "picture": ""
+          },
+          "message": "This is frank :)"
+        },
+        {
+          "id": "123",
+          "from": {
+            "name": "Tim",
+            "picture": ""
+          },
+          "message": "This is tim"
+        }
+      ]
+    }
+  ]
+}
