@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { createContext } from "react";
 import { ChatContext } from "./ChatContext";
 import { LeftSide } from "./LeftSide";
 import { RightSide } from "./RightSide";
