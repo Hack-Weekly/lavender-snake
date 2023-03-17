@@ -1,48 +1,54 @@
+import { randomUUID } from 'crypto'
 import * as fs from 'fs'
+import { ThreadId } from '../types'
+import { dummyThreads } from './dummyData/dummyThreads'
 
-import { bob, frank, tim } from '../dummyUser'
+import { bob, frank, tim } from './dummyData/dummyUsers'
 // import { data } from '../dummy'
 
+interface addMessageType {
+  message: string
+  threadId: ThreadId // TODO: can also be UserId (e.g., create new thread)
+}
 export default function chatHandler(server, options, next) {
   server.get('/', async (req, res) => {
+    const currentUser = bob
+    const allThreads = dummyThreads
     try {
-      const data = JSON.parse(fs.readFileSync('./data.json', 'utf-8'))
-      res.send({ message: data })
+      res.send({
+        threads: allThreads.filter((thread) =>
+          thread.participants.includes(bob.id)
+        ),
+        contacts: [tim, frank],
+      })
     } catch (err) {
       console.error(err)
     }
   })
 
   server.post('/', async (req, res) => {
+    const currentUser = bob
+    const allThreads = dummyThreads
+
     try {
-      const newThread = {
-        participants: [bob, frank, tim],
-        messages: [
-          {
-            id: '123',
-            from: bob,
-            message: 'This is bob',
-          },
-          {
-            id: '123',
-            from: frank,
-            message: 'This is frank :)',
-          },
-          {
-            id: '123',
-            from: tim,
-            message: 'This is tim',
-          },
-        ],
+      const payload: addMessageType = req.body
+      const thread = allThreads.find((t) => (t.id = payload.threadId))
+      if (!thread) {
+        res.send({
+          error: 'thread not found',
+        })
+        return // TODO is this right?
       }
-      const data = JSON.parse(fs.readFileSync('./data.json', 'utf-8'))
 
-      data.messages.push(newThread)
+      thread.messages.push({
+        id: randomUUID(),
+        from: currentUser.id,
+        message: payload.message,
+      })
 
-      // Write the updated data to a file
-      fs.writeFileSync('./data.json', JSON.stringify(data, null, 2))
-
-      res.send({ message: 'Message posted' })
+      res.send({
+        status: 'good',
+      })
     } catch (err) {
       console.error(err)
     }
