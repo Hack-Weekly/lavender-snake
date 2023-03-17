@@ -41,7 +41,7 @@ function CreateChatMessage() {
 	const [text, setText] = useState("");
 	const [, setUserChatData] = useUserChatData();
 
-	const addMessage = () => {
+	const addMessage = async () => {
 		setUserChatData((userChatData: UserChatData) => {
 			userChatData.chatDatas[userChatData.selectedChat].messages.push({
 				id: `${Math.floor(Math.random() * 100000)}`,
@@ -51,6 +51,17 @@ function CreateChatMessage() {
 			return { ...userChatData };
 		});
 		setText("");
+
+		fetch("http://localhost:3000/chat", {
+			method: "POST",
+			headers: new Headers({
+				"Content-Type": "application/json",
+			}),
+			body: JSON.stringify({
+				message: text,
+				threadId: "thread1",
+			}),
+		});
 	};
 
 	return (
@@ -60,7 +71,7 @@ function CreateChatMessage() {
 				value={text}
 				onChange={(e) => setText(e.target.value)}
 			/>
-			<button onClick={addMessage as any}>Send</button>
+			<button onClick={addMessage}>Send</button>
 		</div>
 	);
 }
