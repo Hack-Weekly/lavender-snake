@@ -13,7 +13,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*"],
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/*"]
     },
     "noImplicitAny": false,
     "lib": ["es6"]
