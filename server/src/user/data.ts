@@ -56,6 +56,6 @@ export function addUser(
   return userAccount.user
 }
 
-export function getUserByEmail(email: string) {
+export function getUserAccount(email: string) {
   return userAccounts.find((user) => user.email === email)
 }

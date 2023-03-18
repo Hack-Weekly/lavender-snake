@@ -1,5 +1,5 @@
 import { isValidEmail, isValidPassword } from '@/utils/validators'
-import { addUser, getUserByEmail } from './data'
+import { addUser, getUserAccount } from './data'
 
 export default function userHandler(server, options, done) {
   server.get('/', { onRequest: [server.authenticate] }, async (req, reply) => {
@@ -26,18 +26,38 @@ export default function userHandler(server, options, done) {
       return
     }
 
-    const user = getUserByEmail(email.toLowerCase())
-    if (user) {
+    const userAccount = getUserAccount(email.toLowerCase())
+    if (userAccount) {
       reply.code(400).send({
         message: `user with the email ${email.toLowerCase()} already exist`,
       })
       return
     }
 
-    const userData = addUser(email.toLowerCase(), password, username)
+    const user = addUser(email.toLowerCase(), password, username)
 
-    const token = server.jwt.sign({ id: userData.id })
-    reply.send({ ...userData, jwt: token })
+    const token = server.jwt.sign({ id: user.id })
+    reply.send({ ...user, jwt: token })
+  })
+
+  server.post('/login', async (req, reply) => {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+      reply.code(400).send({ message: 'missing fields' })
+      return
+    }
+
+    const userAccount = getUserAccount(email.toLowerCase())
+    if (!userAccount || userAccount.password !== password) {
+      reply.code(400).send({ message: 'invalid credentials' })
+      return
+    }
+
+    const { user } = userAccount
+
+    const token = server.jwt.sign({ id: user.id })
+    reply.send({ ...user, jwt: token })
   })
 
   done()
