@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { ChatContext } from "./ChatContext";
-import { AllChats } from "./components/AllChats"
+import { HomeScreen } from "./components/HomeScreen"
 import { ChatScreen } from "./components/ChatScreen";
 
 const ChatAppContainer = styled.div({
@@ -12,7 +12,7 @@ const ChatAppContainer = styled.div({
 function ChatAppContent() {
 	return (
 		<ChatAppContainer>
-			<AllChats />
+			<HomeScreen />
 			<ChatScreen />
 		</ChatAppContainer>
 	);

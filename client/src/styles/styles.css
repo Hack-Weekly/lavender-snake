@@ -1,0 +1,5 @@
+.brand-name{
+    background: linear-gradient(90deg, rgba(140,81,165,1) 0%, rgba(203,94,152,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

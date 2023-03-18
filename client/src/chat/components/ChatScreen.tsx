@@ -10,7 +10,7 @@ import {
 } from "../ChatContext";
 
 const RightSideContainer = styled.div({
-	minWidth: "75vh", // TODO: I think this is wrong
+	minWidth: "70%",
 	display: "flex",
 	flexDirection: "column",
 });
