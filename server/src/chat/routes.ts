@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import * as fs from 'fs'
-import { ThreadId } from '../types'
+import { Thread, ThreadId, UserChatData } from '../../../shared/chatTypes'
 import { dummyThreads } from './dummyData/dummyThreads'
 
 import { bob, frank, tim } from './dummyData/dummyUsers'
@@ -15,12 +15,31 @@ export default function chatHandler(server, options, next) {
     const currentUser = bob
     const allThreads = dummyThreads
     try {
-      res.send({
-        threads: allThreads.filter((thread) =>
-          thread.participants.includes(bob.id)
-        ),
-        contacts: [tim, frank],
-      })
+      const response: UserChatData = {
+        threads: allThreads
+          .filter((thread) => thread.participants.includes(currentUser.id))
+          .map((thread) => ({
+            id: thread.id,
+            participants: thread.participants,
+            lastMessage: thread.messages[thread.messages.length - 1],
+          })),
+        contacts: [tim, frank, bob],
+      }
+      res.send(response)
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+  server.get('/thread/:threadId', async (req, res) => {
+    const allThreads = dummyThreads
+    const { threadId } = req.params
+    console.log(threadId)
+    try {
+      const response: Thread | undefined = allThreads.find(
+        (thread) => thread.id === threadId
+      )
+      res.send(response)
     } catch (err) {
       console.error(err)
     }
