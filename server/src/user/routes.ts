@@ -2,10 +2,6 @@ import { isValidEmail, isValidPassword } from '@/utils/validators'
 import { addUser, getUserAccount } from './data'
 
 export default function userHandler(server, options, done) {
-  server.get('/', { onRequest: [server.authenticate] }, async (req, reply) => {
-    reply.send({ message: 'hello from auth' })
-  })
-
   server.post('/signup', async (req, reply) => {
     const { email, password, username } = req.body
 
