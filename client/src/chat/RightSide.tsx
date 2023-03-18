@@ -1,9 +1,10 @@
+import { ApiEndpoints } from "@/Context";
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Message, Thread, UserChatData } from "../../../shared/chatTypes";
 import {
-	bob,
+	useContacts,
 	useCurrentChatData,
-	UserChatData,
 	useUserChatData,
 } from "./ChatContext";
 
@@ -19,19 +20,40 @@ function CurrentChatHeader() {
 
 function ChatMessage({ data }: any) {
 	console.log(data);
+	const contacts = useContacts();
+	const user = contacts?.find((user) => user.id === data.from);
 	return (
 		<div>
-			{data.from.name}: {data.message}
+			{user?.name}: {data.message}
 		</div>
 	);
 }
 
 function CurrentChatContent() {
+	const [chatMessages, setChatMessages] = useState<Message[]>([]);
 	const currentChatData = useCurrentChatData();
+	useEffect(() => {
+		const handler = async () => {
+			if (currentChatData) {
+				// Load from server
+				console.log(`Loading ${currentChatData}`);
+				const resp = await fetch(
+					`${ApiEndpoints.Local}/chat/thread/${currentChatData}`
+				);
+				const body = (await resp.json()) as Thread;
+				setChatMessages(body.messages);
+			} else {
+				// clear
+				console.log(`Clearing chat data`);
+				setChatMessages([]);
+			}
+		};
+		handler();
+	}, [currentChatData]);
 	return (
 		<div>
-			{currentChatData.messages.map((data) => (
-				<ChatMessage key={data.id} data={data} />
+			{chatMessages.map((message) => (
+				<ChatMessage key={message.id} data={message} />
 			))}
 		</div>
 	);
@@ -42,14 +64,14 @@ function CreateChatMessage() {
 	const [, setUserChatData] = useUserChatData();
 
 	const addMessage = async () => {
-		setUserChatData((userChatData: UserChatData) => {
-			userChatData.chatDatas[userChatData.selectedChat].messages.push({
-				id: `${Math.floor(Math.random() * 100000)}`,
-				from: bob,
-				message: text,
-			});
-			return { ...userChatData };
-		});
+		// setUserChatData((userChatData: UserChatData) => {
+		// 	userChatData.chatDatas[userChatData.selectedChat].messages.push({
+		// 		id: `${Math.floor(Math.random() * 100000)}`,
+		// 		from: bob,
+		// 		message: text,
+		// 	});
+		// 	return { ...userChatData };
+		// });
 		setText("");
 
 		fetch("http://localhost:3000/chat", {

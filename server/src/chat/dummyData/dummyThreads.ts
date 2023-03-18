@@ -1,4 +1,4 @@
-import { Thread } from '../../types'
+import { Thread } from '../../../../shared/chatTypes'
 import { bob, frank, tim } from './dummyUsers'
 
 export const dummyThreads: Thread[] = [

@@ -1,85 +1,48 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { ApiEndpoints, useUser } from "@/Context";
+import { ThreadId, UserChatData } from "../../../shared/chatTypes";
 
-interface User {
-	name: string;
-	picture: string;
-}
-
-export interface Message {
-	id: string;
-	from: User;
-	message: string;
-}
-
-// a single group, or 1-on-1 conversation
-interface ChatData {
-	participants: User[];
-	messages: Message[];
-}
-
-// All the data for the current user (e.g., everything displayed)
-export interface UserChatData {
-	chatDatas: ChatData[];
-	selectedChat: number;
-}
-
-// some test users
-export const bob: User = {
-	name: "Bob",
-	picture: "",
-};
-
-const frank: User = {
-	name: "Frank",
-	picture: "",
-};
-
-const tim: User = {
-	name: "Tim",
-	picture: "",
-};
-
-const defaultChatData: UserChatData = {
-	chatDatas: [
-		{
-			participants: [bob, frank],
-			messages: [
-				{
-					id: "123",
-					from: bob,
-					message: "Hi, Frank.",
-				},
-				{
-					id: "223",
-					from: frank,
-					message: "Hi Bob!",
-				},
-			],
-		},
-		{
-			participants: [bob, tim],
-			messages: [],
-		},
-	],
-	selectedChat: 0,
-};
-
-const ChatContextObj = createContext<[UserChatData, any]>([
-	{ ...defaultChatData },
+const ChatContextObj = createContext<[UserChatData | undefined, any]>([
+	undefined,
 	() => {},
 ]);
-
 export const useUserChatData = () => useContext(ChatContextObj);
+export const useContacts = () => useUserChatData()?.[0]?.contacts;
+
+const SelectedThreadCtx = createContext<[ThreadId | undefined, any]>([
+	undefined,
+	undefined,
+]);
+export const useSelectedThread = () => useContext(SelectedThreadCtx);
+
 export const useCurrentChatData = () => {
 	const chatData = useUserChatData()[0];
-	return chatData.chatDatas[chatData.selectedChat];
+	const selectedthread = useSelectedThread()[0];
+	return chatData?.threads.filter(
+		(threadId) => threadId === selectedthread
+	)?.[0];
 };
 
 export function ChatContext({ children }: any) {
-	const chatData = useState({ ...defaultChatData });
+	const [chatData, setChatData] = useState<UserChatData | undefined>(undefined);
+	const [selectedThread, setSelectedThread] = useState<ThreadId | undefined>(
+		undefined
+	);
+
+	useEffect(() => {
+		(async () => {
+			const res = await fetch(`${ApiEndpoints.Local}/chat`);
+			const body = (await res.json()) as UserChatData;
+			console.log(body);
+			setChatData(body);
+			setSelectedThread(body.threads[0]);
+		})();
+	}, []);
 	return (
-		<ChatContextObj.Provider value={chatData}>
-			{children}
+		<ChatContextObj.Provider value={[chatData, setChatData]}>
+			<SelectedThreadCtx.Provider value={[selectedThread, setSelectedThread]}>
+				{children}
+			</SelectedThreadCtx.Provider>
 		</ChatContextObj.Provider>
 	);
 }
