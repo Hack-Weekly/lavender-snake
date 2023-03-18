@@ -7,7 +7,6 @@
     "allowJs": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "rootDir": ".",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
