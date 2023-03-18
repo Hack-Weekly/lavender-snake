@@ -1,5 +1,5 @@
-import { randomUUID } from 'crypto'
-import { Thread, ThreadId, UserChatData } from '../../../shared/chatTypes'
+import { generateId } from '@/utils/generateId'
+import { Thread, ThreadId, UserChatData } from '@shared/chatTypes'
 import { dummyThreads } from './dummyData/dummyThreads'
 
 import { bob, frank, tim } from './dummyData/dummyUsers'
@@ -60,7 +60,7 @@ export default function chatHandler(server, options, done) {
       }
 
       thread.messages.push({
-        id: randomUUID(),
+        id: generateId(),
         from: currentUser.id,
         message: payload.message,
       })
