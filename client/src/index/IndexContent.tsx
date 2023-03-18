@@ -1,37 +1,58 @@
 import { css } from "@emotion/react";
 import { colors } from "@/colors";
 
+const breakpoints = [576, 768, 992, 1200];
+
+const mq = breakpoints.map((bp) => `@media (min-width: ${bp}px)`);
+
 const styles = {
 	container: css({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		maxHeight: "100vh",
+		overflow: "scroll",
 	}),
 
 	logoContainer: css({
 		display: "flex",
+		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
 		marginTop: "2rem",
 		marginBottom: "2rem",
+
+		[mq[2]]: {
+			flexDirection: "row",
+		},
 	}),
 
 	logoImg: css({
-		width: "20%",
-		height: "20%",
+		width: "40%",
+		height: "40%",
+
+		[mq[2]]: {
+			width: "20%",
+			height: "20%",
+		},
 	}),
 
 	logoText: css({
-		fontSize: "5rem",
+		fontSize: "2rem",
+
+		[mq[2]]: {
+			fontSize: "5rem",
+		},
 	}),
 
 	projectsContainer: css({
 		display: "grid",
-		gridTemplateColumns: "1fr 1fr",
+		gridTemplateColumns: "1fr",
 		gap: "2rem",
-		overflow: "scroll",
+
+		[mq[2]]: {
+			gridTemplateColumns: "1fr 1fr",
+		},
 	}),
 
 	projectCard: css({
