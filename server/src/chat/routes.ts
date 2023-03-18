@@ -1,5 +1,4 @@
 import { randomUUID } from 'crypto'
-import * as fs from 'fs'
 import { Thread, ThreadId, UserChatData } from '../../../shared/chatTypes'
 import { dummyThreads } from './dummyData/dummyThreads'
 
