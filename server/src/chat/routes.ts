@@ -9,7 +9,8 @@ interface addMessageType {
   message: string
   threadId: ThreadId // TODO: can also be UserId (e.g., create new thread)
 }
-export default function chatHandler(server, options, next) {
+
+export default function chatHandler(server, options, done) {
   server.get('/', async (req, res) => {
     const currentUser = bob
     const allThreads = dummyThreads
@@ -71,5 +72,6 @@ export default function chatHandler(server, options, next) {
       console.error(err)
     }
   })
-  next()
+
+  done()
 }
