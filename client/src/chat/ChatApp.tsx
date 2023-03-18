@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { ChatContext } from "./ChatContext";
-import { LeftSide } from "./LeftSide";
-import { RightSide } from "./RightSide";
+import { AllChats } from "./components/AllChats"
+import { ChatScreen } from "./components/ChatScreen";
 
 const ChatAppContainer = styled.div({
 	minHeight: "100vh", // TODO: use different units here I think
@@ -12,8 +12,8 @@ const ChatAppContainer = styled.div({
 function ChatAppContent() {
 	return (
 		<ChatAppContainer>
-			<LeftSide />
-			<RightSide />
+			<AllChats />
+			<ChatScreen />
 		</ChatAppContainer>
 	);
 }

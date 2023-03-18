@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { ThreadSummary } from "../../../shared/chatTypes";
-import { useContacts, useThreads } from "./ChatContext";
+import { ThreadSummary } from "../../../../shared/chatTypes";
+import { useContacts, useThreads } from "../ChatContext";
 
 const LeftSideContainer = styled.div({
 	minWidth: "25vh", // TODO: I think this is wrong
@@ -44,7 +44,7 @@ function ChatList() {
 	);
 }
 
-export function LeftSide() {
+export function AllChats() {
 	return (
 		<LeftSideContainer>
 			<AppHeader />
