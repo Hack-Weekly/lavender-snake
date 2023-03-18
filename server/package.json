@@ -13,6 +13,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@fastify/jwt": "^6.7.1",
 		"dotenv": "^8.2.0",
 		"fastify": "^3.14.2",
 		"fastify-cors": "^5.2.0",
