@@ -59,3 +59,10 @@ export function addUser(
 export function getUserAccount(email: string) {
   return userAccounts.find((user) => user.email === email)
 }
+
+export function getUserById(id: string) {
+  const userAccount = userAccounts.find(
+    (userAccount) => userAccount.user.id === id
+  )
+  return userAccount?.user
+}

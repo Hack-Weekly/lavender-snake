@@ -48,3 +48,9 @@ For backend:
     reply.send({ message: 'hello from protected route' })
   })
   ```
+- On protected route, you can get the authenticated user's id with `req.user`
+  ```ts
+  // on protected route (specifically, after server.authenticate run)
+  console.log(req.user) // return { id: 'a6786295-7061-4fa3-9be2-6dd8515078e6', iat: 1679146966 }
+  ```
+- With the id, you can search for the user's detail from db

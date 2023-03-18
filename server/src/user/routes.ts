@@ -1,7 +1,14 @@
 import { isValidEmail, isValidPassword } from '@/utils/validators'
-import { addUser, getUserAccount } from './data'
+import { addUser, getUserAccount, getUserById } from './data'
 
 export default function userHandler(server, options, done) {
+  // example of a protected route
+  server.get('/', { onRequest: [server.authenticate] }, async (req, reply) => {
+    const { id } = req.user
+    const user = getUserById(id)
+    reply.send({ user })
+  })
+
   server.post('/signup', async (req, reply) => {
     const { email, password, username } = req.body
 
