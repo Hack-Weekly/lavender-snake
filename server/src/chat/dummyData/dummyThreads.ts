@@ -9,12 +9,12 @@ export const dummyThreads: Thread[] = [
       {
         id: 'bt1',
         from: bob.id,
-        message: 'This tim, is bob',
+        message: "Hey Tim, it's Bob",
       },
       {
         id: 'bt2',
         from: tim.id,
-        message: 'Hi bob!',
+        message: 'Hi Bob!',
       },
       {
         id: 'bt3',

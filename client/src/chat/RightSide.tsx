@@ -1,3 +1,4 @@
+import { colors } from "@/colors";
 import { ApiEndpoints } from "@/Context";
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
@@ -22,8 +23,24 @@ function ChatMessage({ data }: any) {
 	console.log(data);
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
+	const currentUserId = "bobid"; // TODO
+	const isCurrentUser = user?.id === currentUserId;
 	return (
-		<div>
+		<div
+			css={{
+				background: isCurrentUser
+					? colors.bgChatMessageSelf
+					: colors.bgChatMessage,
+				marginBottom: "1em",
+				borderRadius: ".8em",
+				padding: "10px 20px",
+				color: isCurrentUser
+					? colors.chatMessageTextSelf
+					: colors.chatMessageText,
+				width: "fit-content",
+				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+			}}
+		>
 			{user?.name}: {data.message}
 		</div>
 	);
@@ -38,7 +55,7 @@ function CurrentChatContent() {
 				// Load from server
 				console.log(`Loading ${currentChatData}`);
 				const resp = await fetch(
-					`${ApiEndpoints.Local}/chat/thread/${currentChatData}`
+					`${ApiEndpoints.Local}/chat/thread/${currentChatData.id}`
 				);
 				const body = (await resp.json()) as Thread;
 				setChatMessages(body.messages);
@@ -51,7 +68,13 @@ function CurrentChatContent() {
 		handler();
 	}, [currentChatData]);
 	return (
-		<div>
+		<div
+			css={{
+				background: colors.bgChat,
+				display: "flex",
+				flexDirection: "column",
+			}}
+		>
 			{chatMessages.map((message) => (
 				<ChatMessage key={message.id} data={message} />
 			))}

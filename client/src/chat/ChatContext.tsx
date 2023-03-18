@@ -8,6 +8,7 @@ const ChatContextObj = createContext<[UserChatData | undefined, any]>([
 ]);
 export const useUserChatData = () => useContext(ChatContextObj);
 export const useContacts = () => useUserChatData()?.[0]?.contacts;
+export const useThreads = () => useUserChatData()?.[0]?.threads;
 
 const SelectedThreadCtx = createContext<[ThreadId | undefined, any]>([
 	undefined,
@@ -19,7 +20,7 @@ export const useCurrentChatData = () => {
 	const chatData = useUserChatData()[0];
 	const selectedthread = useSelectedThread()[0];
 	return chatData?.threads.filter(
-		(threadId) => threadId === selectedthread
+		(thread) => thread.id === selectedthread
 	)?.[0];
 };
 
@@ -35,7 +36,7 @@ export function ChatContext({ children }: any) {
 			const body = (await res.json()) as UserChatData;
 			console.log(body);
 			setChatData(body);
-			setSelectedThread(body.threads[0]);
+			setSelectedThread(body.threads[0].id);
 		})();
 	}, []);
 	return (

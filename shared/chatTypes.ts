@@ -20,11 +20,17 @@ export interface Thread {
   messages: Message[];
 }
 
+export interface ThreadSummary {
+  id: ThreadId;
+  participants: UserId[];
+  lastMessage: Message;
+}
+
 export interface Data {
   messages: Thread[];
 }
 
 export interface UserChatData {
-  threads: ThreadId[];
+  threads: ThreadSummary[];
   contacts: User[];
 }

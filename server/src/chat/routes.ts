@@ -18,7 +18,11 @@ export default function chatHandler(server, options, next) {
       const response: UserChatData = {
         threads: allThreads
           .filter((thread) => thread.participants.includes(currentUser.id))
-          .map((thread) => thread.id),
+          .map((thread) => ({
+            id: thread.id,
+            participants: thread.participants,
+            lastMessage: thread.messages[thread.messages.length - 1],
+          })),
         contacts: [tim, frank, bob],
       }
       res.send(response)
