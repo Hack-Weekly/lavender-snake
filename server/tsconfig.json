@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
@@ -7,14 +10,15 @@
     "allowJs": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "rootDir": ".",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["node_modules/*"],
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/*"]
     },
     "noImplicitAny": false,
     "lib": ["es6"]

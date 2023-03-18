@@ -1,6 +1,5 @@
-import { randomUUID } from 'crypto'
-import * as fs from 'fs'
-import { Thread, ThreadId, UserChatData } from '../../../shared/chatTypes'
+import { generateId } from '@/utils/generateId'
+import { Thread, ThreadId, UserChatData } from '@shared/chatTypes'
 import { dummyThreads } from './dummyData/dummyThreads'
 
 import { bob, frank, tim } from './dummyData/dummyUsers'
@@ -10,7 +9,8 @@ interface addMessageType {
   message: string
   threadId: ThreadId // TODO: can also be UserId (e.g., create new thread)
 }
-export default function chatHandler(server, options, next) {
+
+export default function chatHandler(server, options, done) {
   server.get('/', async (req, res) => {
     const currentUser = bob
     const allThreads = dummyThreads
@@ -60,7 +60,7 @@ export default function chatHandler(server, options, next) {
       }
 
       thread.messages.push({
-        id: randomUUID(),
+        id: generateId(),
         from: currentUser.id,
         message: payload.message,
       })
@@ -72,5 +72,6 @@ export default function chatHandler(server, options, next) {
       console.error(err)
     }
   })
-  next()
+
+  done()
 }
