@@ -2,15 +2,15 @@ import { colors } from "@/colors";
 import { ApiEndpoints } from "@/Context";
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
-import { Message, Thread, UserChatData } from "../../../shared/chatTypes";
+import { Message, Thread, UserChatData } from "../../../../shared/chatTypes";
 import {
 	useContacts,
 	useCurrentChatData,
 	useUserChatData,
-} from "./ChatContext";
+} from "../ChatContext";
 
 const RightSideContainer = styled.div({
-	minWidth: "75vh", // TODO: I think this is wrong
+	minWidth: "70%",
 	display: "flex",
 	flexDirection: "column",
 });
@@ -121,7 +121,7 @@ function CreateChatMessage() {
 	);
 }
 
-export function RightSide() {
+export function ChatScreen() {
 	return (
 		<RightSideContainer>
 			<CurrentChatHeader />
