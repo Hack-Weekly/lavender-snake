@@ -9,7 +9,7 @@ export default fp(function (server, options, done) {
     try {
       await request.jwtVerify()
     } catch (err) {
-      reply.send(err)
+      reply.code(401).send(err)
     }
   })
 
