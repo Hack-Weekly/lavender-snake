@@ -54,3 +54,9 @@ For backend:
   console.log(req.user) // return { id: 'a6786295-7061-4fa3-9be2-6dd8515078e6', iat: 1679146966 }
   ```
 - With the id, you can search for the user's detail from db
+
+Note: if you need api credentials, put them into .env, in the format
+
+> SOME_API_KEY=xxxx-xxxxx-xxxxxxxx
+
+This will be loaded via dotenv and allow local access to remote APIs guarded by secrets
