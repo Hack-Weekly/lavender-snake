@@ -12,7 +12,7 @@ import { LoginPage } from "./components/LoginPage";
 function AppContent() {
 	const [user] = useUser();
 	console.log(user);
-	if (!user) return <LoginPage />;
+	// if (!user) return <LoginPage />;
 	return <AppRouter />;
 }
 function App() {

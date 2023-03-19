@@ -10,7 +10,7 @@ import {
 } from "../ChatContext";
 
 const RightSideContainer = styled.div({
-	minWidth: "70%",
+	minWidth: "73%",
 	display: "flex",
 	flexDirection: "column",
 });
