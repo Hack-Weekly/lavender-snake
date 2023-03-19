@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import { colors } from "@/colors";
+import { Link } from "react-router-dom";
 
 const breakpoints = [576, 768, 992, 1200];
 
@@ -94,23 +95,22 @@ const IndexContent = () => {
 			</div>
 
 			<div css={styles.projectsContainer}>
-				<a href={"/todo"} css={styles.projectCard}>
+				<Link to={"/todo"} css={styles.projectCard}>
 					<img
 						css={styles.projectImg}
 						src="/lavender-snake-todo.png"
 						alt="lavender snake todo app"
 					/>
 					<h2 css={styles.projectTitle}>Todo</h2>
-				</a>
-
-				<a href={"/chat"} css={styles.projectCard}>
+				</Link>
+				<Link to={"/chat"} css={styles.projectCard}>
 					<img
 						css={styles.projectImg}
 						src="/coming-soon.jpg"
 						alt="lavender snake chat app"
 					/>
 					<h2 css={styles.projectTitle}>Chat</h2>
-				</a>
+				</Link>
 			</div>
 		</div>
 	);
