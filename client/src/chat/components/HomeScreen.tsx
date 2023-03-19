@@ -5,6 +5,7 @@ import { ThreadSummary } from "../../../../shared/chatTypes";
 import { useContacts, useThreads } from "../ChatContext";
 import { MdAccountCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
+import { brandGradient } from "@/branding";
 
 const homeScreenCSS = {
 	homeScreenContainer: css({
@@ -19,14 +20,6 @@ const homeScreenCSS = {
 		alignItems: "center",
 		justifyContent: "left",
 		padding: "0 1rem",
-	}),
-	brandName: css({
-		fontSize: "1.5rem",
-		fontWeight: "700",
-		background:
-			"linear-gradient(90deg, rgba(140, 81, 165, 1) 0%,rgba(203, 94, 152, 1) 100%)",
-		WebkitBackgroundClip: "text",
-		WebkitTextFillColor: "transparent",
 	}),
 	unreadChatCount: css({
 		marginLeft: "0.7rem",
@@ -52,7 +45,18 @@ const homeScreenCSS = {
 function HomeScreenHeader() {
 	return (
 		<div css={homeScreenCSS.header}>
-			<div css={homeScreenCSS.brandName}>LavenderLine</div>
+			<div css={[brandGradient, { fontSize: "1.5rem" }]}>
+				Lavender
+				<span
+					css={{
+						fontVariant: "all-small-caps",
+						fontSize: "1.4em",
+						fontWeight: "500",
+					}}
+				>
+					Line
+				</span>
+			</div>
 			<div css={homeScreenCSS.unreadChatCount}>12</div>
 			<div css={homeScreenCSS.account}>
 				<MdAccountCircle />

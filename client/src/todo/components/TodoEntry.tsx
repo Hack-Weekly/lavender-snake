@@ -6,7 +6,7 @@ import { BsCircle } from "react-icons/bs";
 import { IoTrashOutline } from "react-icons/io5";
 import { IconContext } from "react-icons/lib";
 import { css } from "@emotion/react";
-import { colors } from "@/colors";
+import { colors } from "@/branding";
 import { useApiClient } from "@/apiClient";
 
 interface TodoItemProps {

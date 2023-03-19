@@ -49,7 +49,7 @@ function UserContextProvider({ children }: any) {
 	return (
 		<UserContext.Provider
 			value={
-				apiEndpoint === ApiEndpoints.GCP ? userState : [testUser, () => {}]
+				apiEndpoint === ApiEndpoints.GCP ? userState : userState // [testUser, () => {}]
 			}
 		>
 			{children}
@@ -64,9 +64,7 @@ export function Context({ children }: any) {
 	return (
 		<GoogleOAuthProvider clientId="987357728284-k763p5d1paujmlvn83tl2lc637f8ofc3.apps.googleusercontent.com">
 			<ApiEndpointContext.Provider value={[apiEndpoint, setApiEndpoint]}>
-				<UserContextProvider>
-					{children}
-				</UserContextProvider>
+				<UserContextProvider>{children}</UserContextProvider>
 			</ApiEndpointContext.Provider>
 		</GoogleOAuthProvider>
 	);

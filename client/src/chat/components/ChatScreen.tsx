@@ -1,4 +1,4 @@
-import { colors } from "@/colors";
+import { colors } from "@/branding";
 import { ApiEndpoints } from "@/Context";
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
@@ -53,7 +53,6 @@ function CurrentChatContent() {
 		const handler = async () => {
 			if (currentChatData) {
 				// Load from server
-				console.log(`Loading ${currentChatData}`);
 				const resp = await fetch(
 					`${ApiEndpoints.Local}/chat/thread/${currentChatData.id}`
 				);
@@ -61,7 +60,6 @@ function CurrentChatContent() {
 				setChatMessages(body.messages);
 			} else {
 				// clear
-				console.log(`Clearing chat data`);
 				setChatMessages([]);
 			}
 		};

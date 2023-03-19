@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { colors } from "@/colors";
+import { colors } from "@/branding";
 import { Link } from "react-router-dom";
 
 const breakpoints = [576, 768, 992, 1200];

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { AiOutlineUnorderedList } from "react-icons/ai";
-import { colors } from "../colors";
+import { colors } from "../branding";
 
 const CategoryContainer = styled.div`
 	width: 15%;

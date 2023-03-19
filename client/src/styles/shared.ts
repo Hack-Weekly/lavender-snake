@@ -1,6 +1,5 @@
-
 import * as ToggleGroup from "@radix-ui/react-toggle-group";
-import { colors } from "../colors";
+import { colors } from "../branding";
 import styled from "@emotion/styled";
 
 /*
