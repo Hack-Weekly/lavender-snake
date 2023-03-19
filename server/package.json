@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "nodemon --watch './src/**/*.ts' --exec ts-node ./src/index.ts",
+		"dev": "nodemon --watch './src/**/*.ts' --exec ts-node -r dotenv/config ./src/index.ts",
 		"build": "tsc",
 		"test": "jest --coverage",
 		"test:watch": "npm run test -- --watchAll"
@@ -17,7 +17,7 @@
 		"@fastify/cors": "^8.2.1",
 		"@fastify/jwt": "^6.7.1",
 		"chatgpt": "^5.1.2",
-		"dotenv": "^8.2.0",
+		"dotenv": "^8.6.0",
 		"fastify": "^4.14.1",
 		"fastify-plugin": "^4.5.0"
 	},

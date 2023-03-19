@@ -1,1 +1,1 @@
-npm install && touch .localEnv && npm run dev
+npm install && npm run dev
