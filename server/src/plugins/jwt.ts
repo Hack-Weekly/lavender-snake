@@ -1,7 +1,8 @@
-const fp = require('fastify-plugin')
+import fp from 'fastify-plugin'
+import jwt from '@fastify/jwt'
 
 export default fp(function (server, options, done) {
-  server.register(require('@fastify/jwt'), {
+  server.register(jwt, {
     secret: 'lavender_snake_secret_key',
   })
 

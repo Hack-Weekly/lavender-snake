@@ -1,5 +1,5 @@
-import { generateId } from '@/utils/generateId'
-import type { User } from '@shared/chatTypes'
+import { generateId } from '../utils/generateId.js'
+import type { User } from '@shared/chatTypes.js'
 
 interface UserAccount {
   email: string

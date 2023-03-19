@@ -1,5 +1,5 @@
-import { isValidEmail, isValidPassword } from '@/utils/validators'
-import { addUser, getUserAccount, getUserById } from './data'
+import { addUser, getUserAccount, getUserById } from './data.js'
+import { isValidEmail, isValidPassword } from '../utils/validators.js'
 
 export default function userHandler(server, options, done) {
   // example of a protected route
