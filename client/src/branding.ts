@@ -14,6 +14,9 @@ export const colors = {
 	bgChatMessageSelf: "#4F378B",
 	chatMessageText: "#000000",
 	chatMessageTextSelf: "#ffffff",
+	highlight2: "#A7579F",
+	errorText: "indianred",
+	successText: "springgreen",
 };
 
 export const brandGradient = css({

@@ -100,7 +100,7 @@ export function TodoList(props: InputProps) {
 
 	return (
 		<TodoContainer>
-			<TodoListHeader>Welcome, {user.given_name}!</TodoListHeader>
+			<TodoListHeader>Welcome, {user.name}!</TodoListHeader>
 			<AddItem
 				inputValue={props.inputValue}
 				handleInput={props.handleInput}

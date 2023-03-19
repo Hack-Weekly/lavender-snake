@@ -14,7 +14,7 @@ class ApiClient {
 		const resp = await fetch(`${this.endpoint}/${path}`, {
 			headers: new Headers({
 				"Content-Type": "application/json",
-				Authorization: this.user ? `${this.user.authCode}` : "",
+				Authorization: this.user ? `${this.user.jwt}` : "",
 			}),
 			...options,
 		});

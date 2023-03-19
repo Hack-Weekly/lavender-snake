@@ -14,27 +14,15 @@ const ApiEndpointContext = createContext<[string, any]>([
 export const useApiEndpoint = () => useContext(ApiEndpointContext);
 
 export interface User {
-	authCode: string;
-	email: string;
-	family_name: string;
-	given_name: string;
-	id: string;
-	locale: string;
+	jwt: string;
 	name: string;
 	picture: string;
-	verified_email: boolean;
 }
 
-const testUser: User = {
-	authCode: "tester",
-	email: "tester@tester.com",
-	family_name: "Qa",
-	given_name: "Tester",
-	id: "tester",
-	locale: "en-US",
-	name: "Tester Qa",
-	picture: "none",
-	verified_email: false,
+export const testUser: User = {
+	jwt: "TestUserJWT",
+	name: "Test User",
+	picture: "my picture",
 };
 const UserContext = createContext<[User | undefined, any]>([
 	undefined,
