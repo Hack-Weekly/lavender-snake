@@ -4,7 +4,7 @@ class ChatGptClient {
   api: ChatGPTAPI
 
   constructor() {
-    console.log(process.env.CHAT_GPT_API)
+    // console.log(process.env.CHAT_GPT_API)
     this.api = new ChatGPTAPI({
       apiKey: process.env.CHAT_GPT_API,
     })
