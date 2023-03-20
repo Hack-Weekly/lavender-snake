@@ -1,5 +1,5 @@
-import { Thread } from '../../../../shared/chatTypes'
-import { bob, frank, tim } from './dummyUsers'
+import { Thread } from '../../../../shared/chatTypes.js'
+import { bob, frank, tim } from './dummyUsers.js'
 
 export const dummyThreads: Thread[] = [
   {

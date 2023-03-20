@@ -1,5 +1,13 @@
-import { brandGradient } from "@/branding";
+import { brandGradient, colors } from "@/branding";
+import { ApiEndpoints, testUser, useUser } from "@/Context";
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+import * as Dialog from "@radix-ui/react-dialog";
+import { useState } from "react";
+import { sleep } from "../../../../shared/utils";
+import { Button, Spacer } from "../Dialog";
+import { CreateAccountButton } from "./CreateAccount";
+import { SignIn } from "./SignIn";
 
 function Hero() {
 	return (
@@ -19,16 +27,20 @@ function Hero() {
 	);
 }
 
-const Spacer = styled.div`
-	flex: 100;
-`;
-
+function DevSignIn() {
+	const [, setUser] = useUser();
+	const devSignIn = () => {
+		setUser(testUser);
+	};
+	return <Button onClick={devSignIn}>Dev sign in</Button>;
+}
 function LoginButtons() {
 	return (
 		<div css={{ display: "flex", justifyContent: "center" }}>
-			<button>Create Account</button>
+			<CreateAccountButton />
 			<Spacer />
-			<button>Log In</button>
+			<DevSignIn />
+			<SignIn />
 		</div>
 	);
 }

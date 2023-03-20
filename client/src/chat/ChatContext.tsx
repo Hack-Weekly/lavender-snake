@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ApiEndpoints, useUser } from "@/Context";
 import { ThreadId, UserChatData } from "../../../shared/chatTypes";
+import { useChatApi } from "./chatApiClient";
 
 const ChatContextObj = createContext<[UserChatData | undefined, any]>([
 	undefined,
@@ -29,16 +30,15 @@ export function ChatContext({ children }: any) {
 	const [selectedThread, setSelectedThread] = useState<ThreadId | undefined>(
 		undefined
 	);
+	const chatApiClient = useChatApi();
 
 	useEffect(() => {
 		(async () => {
-			const res = await fetch(`${ApiEndpoints.Local}/chat`);
-			const body = (await res.json()) as UserChatData;
-			console.log(body);
-			setChatData(body);
-			setSelectedThread(body.threads[0].id);
+			const data = await chatApiClient.getChatData();
+			setChatData(data);
+			setSelectedThread(data.threads[0].id);
 		})();
-	}, []);
+	}, [chatApiClient]);
 	return (
 		<ChatContextObj.Provider value={[chatData, setChatData]}>
 			<SelectedThreadCtx.Provider value={[selectedThread, setSelectedThread]}>

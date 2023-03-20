@@ -1,4 +1,4 @@
-import { User } from '../../../../shared/chatTypes'
+import { User } from '../../../../shared/chatTypes.js'
 
 // some test users
 export const bob: User = {

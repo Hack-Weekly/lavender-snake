@@ -7,7 +7,7 @@ import ReactDOM from "react-dom/client";
 import { Global, css } from "@emotion/react";
 import normalize from "normalize.css/normalize.css?inline";
 import { colors } from "./branding";
-import { LoginPage } from "./components/LoginPage";
+import { LoginPage } from "./components/Login/LoginPage";
 
 function AppContent() {
 	const [user] = useUser();

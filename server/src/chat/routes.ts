@@ -1,8 +1,9 @@
-import { generateId } from '@/utils/generateId'
-import { Thread, ThreadId, UserChatData } from '@shared/chatTypes'
-import { dummyThreads } from './dummyData/dummyThreads'
+import { chatGptClient } from '../chatGptClient.js'
+import { generateId } from '../utils/generateId.js'
+import { Thread, ThreadId, UserChatData } from '@shared/chatTypes.js'
+import { dummyThreads } from './dummyData/dummyThreads.js'
 
-import { bob, frank, tim } from './dummyData/dummyUsers'
+import { bob, frank, tim } from './dummyData/dummyUsers.js'
 // import { data } from '../dummy'
 
 interface addMessageType {
@@ -11,8 +12,9 @@ interface addMessageType {
 }
 
 export default function chatHandler(server, options, done) {
-  server.get('/', async (req, res) => {
+  server.get('/', { onRequest: [server.authenticate] }, async (req, res) => {
     const currentUser = bob
+    console.log(req.user)
     const allThreads = dummyThreads
     try {
       const response: UserChatData = {
@@ -68,6 +70,15 @@ export default function chatHandler(server, options, done) {
       res.send({
         status: 'good',
       })
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+  server.get('/chatgpt', async (req, res) => {
+    try {
+      const fact = await chatGptClient.getResponse('Tell me a random fact.')
+      res.send({ fact })
     } catch (err) {
       console.error(err)
     }
