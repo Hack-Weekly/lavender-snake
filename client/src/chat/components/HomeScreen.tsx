@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ThreadSummary } from "../../../../shared/chatTypes";
 import { useContacts, useThreads } from "../ChatContext";
 import { MdAccountCircle, MdAddCircle } from "react-icons/md";
@@ -118,6 +118,10 @@ const homeScreenCSS = {
 	}),
 };
 
+const Thread = styled.div<{active: boolean}>`
+	background: ${(item) => (item.active ? chatColors.highLight : "")};
+`
+
 function HomeScreenHeader() {
 	return (
 		<div css={homeScreenCSS.header}>
@@ -176,10 +180,13 @@ const ThreadComp: FC<{ thread: ThreadSummary }> = ({ thread }) => {
 
 function ChatList() {
 	const threads = useThreads();
+	const [selectedId, setSelectedId] = useState("");
 	return (
 		<div css={homeScreenCSS.chatList}>
 			{threads?.map((t) => (
-				<ThreadComp key={t.id} thread={t} />
+				<Thread active={(t.id === selectedId)} onClick={() => {setSelectedId(t.id)}}>
+					<ThreadComp key={t.id} thread={t} />
+				</Thread>
 			))}
 		</div>
 	);
