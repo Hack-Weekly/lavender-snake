@@ -12,8 +12,9 @@ interface addMessageType {
 }
 
 export default function chatHandler(server, options, done) {
-  server.get('/', async (req, res) => {
+  server.get('/', { onRequest: [server.authenticate] }, async (req, res) => {
     const currentUser = bob
+    console.log(req.user)
     const allThreads = dummyThreads
     try {
       const response: UserChatData = {

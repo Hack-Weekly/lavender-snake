@@ -2,45 +2,58 @@ import { useMemo } from "react";
 import { useApiEndpoint, User, useUser } from "./Context";
 import { Todo } from "./types";
 
-class ApiClient {
+export class ApiClientBase {
 	endpoint: string;
 	user: User | undefined;
-	constructor(endpoint: string, user: User | undefined) {
+	subPath: string;
+	constructor(endpoint: string, subPath: string, user: User | undefined) {
 		this.endpoint = endpoint;
+		this.subPath = subPath;
 		this.user = user;
 	}
 
-	async request(path: string = "todos", options: RequestInit = {}) {
+	protected async request(
+		path: string = this.subPath,
+		options: RequestInit = {}
+	) {
 		const resp = await fetch(`${this.endpoint}/${path}`, {
 			headers: new Headers({
 				"Content-Type": "application/json",
-				Authorization: this.user ? `${this.user.jwt}` : "",
+				Authorization: this.user ? `Bearer ${this.user.jwt}` : "",
 			}),
 			...options,
 		});
 		return await resp.json();
 	}
 
-	async get(path: string = "todos", options: RequestInit = { method: "GET" }) {
+	protected async get(
+		path: string = this.subPath,
+		options: RequestInit = { method: "GET" }
+	) {
 		return await this.request(path, options);
 	}
 	async post(o: any) {
-		return await this.request("todos", {
+		return await this.request(this.subPath, {
 			method: "POST",
 			body: JSON.stringify(o),
 		});
 	}
-	async put(o: any) {
-		return await this.request("todos", {
+	protected async put(o: any) {
+		return await this.request(this.subPath, {
 			method: "PUT",
 			body: JSON.stringify(o),
 		});
 	}
-	async delete(o: any) {
-		return await this.request("todos", {
+	protected async delete(o: any) {
+		return await this.request(this.subPath, {
 			method: "DELETE",
 			body: JSON.stringify(o),
 		});
+	}
+}
+class ApiClient extends ApiClientBase {
+	constructor(endpoint: string, user: User | undefined) {
+		super(endpoint, "todos", user);
 	}
 
 	async getTodos() {
