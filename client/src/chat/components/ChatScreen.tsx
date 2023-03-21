@@ -1,5 +1,5 @@
 import { colors } from "@/branding";
-import { ApiEndpoints } from "@/Context";
+import { ApiEndpoints, useUser } from "@/Context";
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
 import { Message, Thread, UserChatData } from "../../../../shared/chatTypes";
@@ -25,8 +25,10 @@ function CurrentChatHeader() {
 function ChatMessage({ data }: any) {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
-	const currentUserId = "bobid"; // TODO
-	const isCurrentUser = user?.id === currentUserId;
+	const [currentUser] = useUser();
+	const isCurrentUser = user?.id === currentUser?.userData?.id;
+	console.log(user);
+	console.log(currentUser);
 	return (
 		<div
 			css={{
