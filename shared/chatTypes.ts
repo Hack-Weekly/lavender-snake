@@ -1,4 +1,4 @@
-import { User, UserId } from "@/Context";
+import { User, UserId } from "./userTypes";
 
 export type MessageId = string;
 export interface Message {

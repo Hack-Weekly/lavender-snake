@@ -36,7 +36,6 @@ export function SignIn() {
 		});
 
 		const data = await resp.json();
-		console.log(data);
 
 		if (resp.ok) {
 			setErrorMessage("");
