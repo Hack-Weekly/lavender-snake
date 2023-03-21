@@ -30,7 +30,18 @@ function Hero() {
 function DevSignIn() {
 	const [, setUser] = useUser();
 	const devSignIn = () => {
-		setUser(testUser);
+		const handler = async () => {
+			const resp = await fetch(`${ApiEndpoints.Local}/user/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email: "testuser@dummy.com", password: "test" }),
+			});
+			const data = await resp.json();
+			setUser(data);
+		};
+		handler();
 	};
 	return <Button onClick={devSignIn}>Dev sign in</Button>;
 }

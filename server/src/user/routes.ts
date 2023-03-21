@@ -1,3 +1,4 @@
+import { ClientUser } from '@shared/userTypes.js'
 import { usersStorageClient } from '../storageClients.js'
 import { generateId } from '../utils/generateId.js'
 import { isValidEmail, isValidPassword } from '../utils/validators.js'
@@ -72,7 +73,11 @@ export default function userHandler(server, options, done) {
     }
 
     const token = server.jwt.sign({ id: acct.user.id })
-    reply.send({ ...acct.user, jwt: token })
+    const resp: ClientUser = {
+      jwt: token,
+      userData: acct.user,
+    }
+    reply.send(resp)
   })
 
   done()

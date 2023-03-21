@@ -1,11 +1,14 @@
 import { colors } from "@/branding";
-import { ApiEndpoints } from "@/Context";
+import { ApiEndpoints, useUser } from "@/Context";
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
 import { Message, Thread, UserChatData } from "../../../../shared/chatTypes";
+import { useChatApi } from "../chatApiClient";
 import {
 	useContacts,
 	useCurrentChatData,
+	useCurrentThreadData,
+	useSelectedThread,
 	useUserChatData,
 } from "../ChatContext";
 
@@ -20,11 +23,12 @@ function CurrentChatHeader() {
 }
 
 function ChatMessage({ data }: any) {
-	console.log(data);
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
-	const currentUserId = "bobid"; // TODO
-	const isCurrentUser = user?.id === currentUserId;
+	const [currentUser] = useUser();
+	const isCurrentUser = user?.id === currentUser?.userData?.id;
+	console.log(user);
+	console.log(currentUser);
 	return (
 		<div
 			css={{
@@ -47,20 +51,20 @@ function ChatMessage({ data }: any) {
 }
 
 function CurrentChatContent() {
-	const [chatMessages, setChatMessages] = useState<Message[]>([]);
+	const [currentThreadData, setCurrentThreadData] = useCurrentThreadData();
 	const currentChatData = useCurrentChatData();
+	const chatApiClient = useChatApi();
+	// TODO: move this to context
 	useEffect(() => {
 		const handler = async () => {
 			if (currentChatData) {
 				// Load from server
-				const resp = await fetch(
-					`${ApiEndpoints.Local}/chat/thread/${currentChatData.id}`
-				);
-				const body = (await resp.json()) as Thread;
-				setChatMessages(body.messages);
+				const threadData = await chatApiClient.getThread(currentChatData.id);
+				console.log(threadData);
+				setCurrentThreadData(threadData);
 			} else {
 				// clear
-				setChatMessages([]);
+				setCurrentThreadData(undefined);
 			}
 		};
 		handler();
@@ -73,7 +77,7 @@ function CurrentChatContent() {
 				flexDirection: "column",
 			}}
 		>
-			{chatMessages.map((message) => (
+			{currentThreadData?.messages.map((message) => (
 				<ChatMessage key={message.id} data={message} />
 			))}
 		</div>
@@ -83,28 +87,16 @@ function CurrentChatContent() {
 function CreateChatMessage() {
 	const [text, setText] = useState("");
 	const [, setUserChatData] = useUserChatData();
+	const chatApiClient = useChatApi();
+	const [curThreadId] = useSelectedThread();
+	const [, setCurrentThreadData] = useCurrentThreadData();
 
 	const addMessage = async () => {
-		// setUserChatData((userChatData: UserChatData) => {
-		// 	userChatData.chatDatas[userChatData.selectedChat].messages.push({
-		// 		id: `${Math.floor(Math.random() * 100000)}`,
-		// 		from: bob,
-		// 		message: text,
-		// 	});
-		// 	return { ...userChatData };
-		// });
-		setText("");
-
-		fetch("http://localhost:3000/chat", {
-			method: "POST",
-			headers: new Headers({
-				"Content-Type": "application/json",
-			}),
-			body: JSON.stringify({
-				message: text,
-				threadId: "thread1",
-			}),
-		});
+		if (curThreadId) {
+			setText("");
+			const newThread = await chatApiClient.sendMessage(curThreadId, text);
+			setCurrentThreadData(newThread);
+		}
 	};
 
 	return (
