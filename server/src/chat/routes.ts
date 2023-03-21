@@ -8,6 +8,19 @@ import {
 } from '../storageClients.js'
 import { UserId } from '@shared/userTypes.js'
 
+function randChoice<T>(arr: Array<T>): T {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+function sleep(ms: number, props: any = undefined) {
+  let res: any
+  props?.signal?.addEventListener('abort', () => {
+    res()
+  })
+  return new Promise((resolve, reject) => {
+    res = resolve
+    setTimeout(resolve, ms)
+  })
+}
 // import { data } from '../dummy'
 
 interface addMessageType {
@@ -49,7 +62,7 @@ export default function chatHandler(server, options, done) {
 
     try {
       const payload: addMessageType = req.body
-      const thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
+      const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
       if (!thread) {
         res.send({
           error: 'thread not found',
@@ -68,11 +81,27 @@ export default function chatHandler(server, options, done) {
         message: payload.message,
       })
 
-      console.log(thread)
-
       threadStorageClient.save(payload.threadId, thread)
 
       res.send(thread)
+
+      if (
+        thread.participants.length === 2 &&
+        thread.participants.includes('autofriendid')
+      ) {
+        // User is chatting with the bot - lets respond
+        await sleep(3000)
+        const thread: Thread = await threadStorageClient.load(payload.threadId)
+        thread.messages.push({
+          id: generateId(),
+          from: 'autofriendid',
+          message: randChoice([
+            "That sound's great",
+            'Sure thing :)',
+            'How kind of you to say',
+          ]),
+        })
+      }
     } catch (err) {
       console.error(err)
     }
