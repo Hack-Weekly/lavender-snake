@@ -13,8 +13,8 @@ const homeScreenCSS = {
 		minWidth: "27%",
 		display: "flex",
 		flexDirection: "column",
-		background: chatColors.secondaryBG,
 		position: 'relative',
+		background: chatColors.tertiaryBG,
 	}),
 	header: css({
 		minHeight: "4rem",
@@ -22,6 +22,8 @@ const homeScreenCSS = {
 		alignItems: "center",
 		justifyContent: "left",
 		padding: "0 1.3rem",
+		background: chatColors.secondaryBG,
+		borderRight: `1px solid #383456`,
 	}),
 	unreadChatCount: css({
 		marginLeft: "0.7rem",
@@ -120,6 +122,7 @@ const homeScreenCSS = {
 
 const Thread = styled.div<{active: boolean}>`
 	background: ${(item) => (item.active ? chatColors.highLight : "")};
+	border-radius: 0.5rem;
 `
 
 function HomeScreenHeader() {
