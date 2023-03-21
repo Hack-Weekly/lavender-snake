@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 
 function AppContent() {
 	const [user] = useUser();
+	console.log(user);
 	if (!user) return <LoginPage />;
 	return <AppRouter />;
 }

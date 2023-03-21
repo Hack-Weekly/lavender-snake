@@ -1,4 +1,4 @@
-import { chatGptClient } from '../chatGptClient.js'
+// import { chatGptClient } from '../chatGptClient.js'
 import { generateId } from '../utils/generateId.js'
 import { Thread, ThreadId, UserChatData } from '@shared/chatTypes.js'
 import {
