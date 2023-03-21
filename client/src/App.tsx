@@ -8,6 +8,7 @@ import { Global, css } from "@emotion/react";
 import normalize from "normalize.css/normalize.css?inline";
 import { colors } from "./branding";
 import { LoginPage } from "./components/Login/LoginPage";
+import styled from "@emotion/styled";
 
 function AppContent() {
 	const [user] = useUser();
@@ -15,6 +16,7 @@ function AppContent() {
 	if (!user) return <LoginPage />;
 	return <AppRouter />;
 }
+
 function App() {
 	return (
 		<AppContainer>
