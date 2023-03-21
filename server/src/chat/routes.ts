@@ -109,8 +109,8 @@ export default function chatHandler(server, options, done) {
 
   server.get('/chatgpt', async (req, res) => {
     try {
-      const fact = await chatGptClient.getResponse('Tell me a random fact.')
-      res.send({ fact })
+      // const fact = await chatGptClient.getResponse('Tell me a random fact.')
+      // res.send({ fact })
     } catch (err) {
       console.error(err)
     }
