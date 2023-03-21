@@ -1,9 +1,4 @@
-export type UserId = string;
-export interface User {
-  id: UserId;
-  name: string;
-  picture: string;
-}
+import { User, UserId } from "@/Context";
 
 export type MessageId = string;
 export interface Message {

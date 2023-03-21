@@ -1,9 +1,8 @@
 import { chatGptClient } from '../chatGptClient.js'
 import { generateId } from '../utils/generateId.js'
 import { Thread, ThreadId, UserChatData } from '@shared/chatTypes.js'
-import { dummyThreads } from './dummyData/dummyThreads.js'
+import { usersStorageClient } from '../storageClients.js'
 
-import { bob, frank, tim } from './dummyData/dummyUsers.js'
 // import { data } from '../dummy'
 
 interface addMessageType {
@@ -13,28 +12,32 @@ interface addMessageType {
 
 export default function chatHandler(server, options, done) {
   server.get('/', { onRequest: [server.authenticate] }, async (req, res) => {
-    const currentUser = bob
-    console.log(req.user)
-    const allThreads = dummyThreads
-    try {
-      const response: UserChatData = {
-        threads: allThreads
-          .filter((thread) => thread.participants.includes(currentUser.id))
-          .map((thread) => ({
-            id: thread.id,
-            participants: thread.participants,
-            lastMessage: thread.messages[thread.messages.length - 1],
-          })),
-        contacts: [tim, frank, bob],
-      }
-      res.send(response)
-    } catch (err) {
-      console.error(err)
-    }
+    const user = req.user as any // TODO can we get a type for this?
+    console.log(user)
+
+    const users = await usersStorageClient.load('users')
+    console.log(users)
+    res.send('ok')
+    return
+    // try {
+    //   const response: UserChatData = {
+    //     threads: allThreads
+    //       .filter((thread) => thread.participants.includes(currentUser.id))
+    //       .map((thread) => ({
+    //         id: thread.id,
+    //         participants: thread.participants,
+    //         lastMessage: thread.messages[thread.messages.length - 1],
+    //       })),
+    //     contacts: [tim, frank, bob],
+    //   }
+    //   res.send(response)
+    // } catch (err) {
+    //   console.error(err)
+    // }
   })
 
   server.get('/thread/:threadId', async (req, res) => {
-    const allThreads = dummyThreads
+    const allThreads = []
     const { threadId } = req.params
     console.log(threadId)
     try {
@@ -48,8 +51,8 @@ export default function chatHandler(server, options, done) {
   })
 
   server.post('/', async (req, res) => {
-    const currentUser = bob
-    const allThreads = dummyThreads
+    const currentUser = {} as any
+    const allThreads = []
 
     try {
       const payload: addMessageType = req.body

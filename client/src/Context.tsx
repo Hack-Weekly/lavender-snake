@@ -1,6 +1,7 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createContext, useContext, useState } from "react";
 import { isProd } from "./utils";
+import { ClientUser } from "@/../../shared/userTypes";
 
 export const ApiEndpoints = {
 	GCP: "https://lavender-snake-server-wgikiljsnq-uc.a.run.app",
@@ -13,25 +14,22 @@ const ApiEndpointContext = createContext<[string, any]>([
 ]);
 export const useApiEndpoint = () => useContext(ApiEndpointContext);
 
-export interface User {
-	jwt: string;
-	name: string;
-	picture: string;
-}
-
-export const testUser: User = {
+export const testUser: ClientUser = {
 	jwt: "TestUserJWT",
-	name: "Test User",
-	picture: "my picture",
+	userData: {
+		id: "testuserid",
+		name: "Test User",
+		picture: "my picture",
+	},
 };
-const UserContext = createContext<[User | undefined, any]>([
+const UserContext = createContext<[ClientUser | undefined, any]>([
 	undefined,
 	() => {},
 ]);
 export const useUser = () => useContext(UserContext);
 
 function UserContextProvider({ children }: any) {
-	const userState = useState<User | undefined>(undefined);
+	const userState = useState<ClientUser | undefined>(undefined);
 	const [apiEndpoint] = useApiEndpoint();
 
 	return (

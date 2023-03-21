@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import { useApiEndpoint, User, useUser } from "./Context";
+import { useApiEndpoint, useUser } from "./Context";
+import { ClientUser } from "@/../../shared/userTypes";
 import { Todo } from "./types";
 
 export class ApiClientBase {
 	endpoint: string;
-	user: User | undefined;
+	user: ClientUser | undefined;
 	subPath: string;
-	constructor(endpoint: string, subPath: string, user: User | undefined) {
+	constructor(endpoint: string, subPath: string, user: ClientUser | undefined) {
 		this.endpoint = endpoint;
 		this.subPath = subPath;
 		this.user = user;
@@ -52,7 +53,7 @@ export class ApiClientBase {
 	}
 }
 class ApiClient extends ApiClientBase {
-	constructor(endpoint: string, user: User | undefined) {
+	constructor(endpoint: string, user: ClientUser | undefined) {
 		super(endpoint, "todos", user);
 	}
 

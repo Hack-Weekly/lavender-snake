@@ -1,10 +1,11 @@
 import { ApiClientBase } from "@/apiClient";
-import { useApiEndpoint, User, useUser } from "@/Context";
+import { useApiEndpoint, useUser } from "@/Context";
+import { ClientUser } from "@/../../shared/userTypes";
 import { useMemo } from "react";
 import { UserChatData } from "../../../shared/chatTypes";
 
 class ChatApiClient extends ApiClientBase {
-	constructor(endpoint: string, user: User | undefined) {
+	constructor(endpoint: string, user: ClientUser | undefined) {
 		super(endpoint, "chat", user);
 	}
 
