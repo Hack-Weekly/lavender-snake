@@ -1,4 +1,4 @@
-import { User } from '@/../../shared/userTypes.js'
+import { User } from '@shared/userTypes.js'
 
 export interface UserAccount {
   email: string
