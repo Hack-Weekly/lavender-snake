@@ -9,10 +9,10 @@ import normalize from "normalize.css/normalize.css?inline";
 import { colors } from "./branding";
 import { LoginPage } from "./components/Login/LoginPage";
 import styled from "@emotion/styled";
+import { ServerListener } from "./ServerListener";
 
 function AppContent() {
 	const [user] = useUser();
-	console.log(user);
 	if (!user) return <LoginPage />;
 	return <AppRouter />;
 }

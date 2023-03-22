@@ -1,8 +1,8 @@
 import { ApiClientBase } from "@/apiClient";
 import { useApiEndpoint, useUser } from "@/Context";
-import { ClientUser, UserId } from "@/../../shared/userTypes";
+import { ClientUser, UserId } from "shared/userTypes";
 import { useMemo } from "react";
-import { Thread, ThreadId, UserChatData } from "../../../shared/chatTypes";
+import { Thread, ThreadId, UserChatData } from "shared/chatTypes";
 import { threadId } from "worker_threads";
 
 class ChatApiClient extends ApiClientBase {
@@ -28,6 +28,7 @@ export function useChatApi() {
 	const [apiEndpoint] = useApiEndpoint();
 	return useMemo(
 		() => new ChatApiClient(apiEndpoint, user),
+		//() => new ChatApiClient("/api", user),
 		[apiEndpoint, user]
 	);
 }

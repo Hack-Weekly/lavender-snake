@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useApiEndpoint, useUser } from "./Context";
-import { ClientUser } from "@/../../shared/userTypes";
+import { ClientUser } from "shared/userTypes";
 import { Todo } from "./types";
 
 export class ApiClientBase {

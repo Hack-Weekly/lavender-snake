@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { FC, useState } from "react";
-import { ThreadSummary } from "../../../../shared/chatTypes";
+import { ThreadSummary } from "shared/chatTypes";
 import { useContacts, useThreads } from "../ChatContext";
 import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
@@ -13,7 +13,7 @@ const homeScreenCSS = {
 		minWidth: "27%",
 		display: "flex",
 		flexDirection: "column",
-		position: 'relative',
+		position: "relative",
 		background: chatColors.tertiaryBG,
 	}),
 	header: css({
@@ -45,85 +45,84 @@ const homeScreenCSS = {
 		cursor: "pointer",
 	}),
 	search: css({
-		margin: '1.3rem',
+		margin: "1.3rem",
 	}),
 	searchInput: css({
-		width: '100%',
-		padding: '1rem 1.5rem',
+		width: "100%",
+		padding: "1rem 1.5rem",
 		background: chatColors.secondaryText,
 		color: chatColors.darkText,
-		border: 'none',
-		borderRadius: '12px',
-		outline: 'none',
+		border: "none",
+		borderRadius: "12px",
+		outline: "none",
 		"&::placeholder": {
 			color: chatColors.darkText,
-			opacity: '0.6',
-		}
+			opacity: "0.6",
+		},
 	}),
 	chatList: css({
-		width: '100%',
-		padding: '1.3rem',
-		display: 'flex',
-		flexDirection: 'column',
+		width: "100%",
+		padding: "1.3rem",
+		display: "flex",
+		flexDirection: "column",
 	}),
 	threadCSS: css({
-		display: 'flex',
-		flexDirection: 'row',
-		padding: '0.5rem',
-		borderRadius: '0.5rem',
-		cursor: 'pointer',
-		'&:hover': {
+		display: "flex",
+		flexDirection: "row",
+		padding: "0.5rem",
+		borderRadius: "0.5rem",
+		cursor: "pointer",
+		"&:hover": {
 			background: chatColors.highLight,
-		}
+		},
 	}),
 	avatar: css({
-		'& img': {
-			display: 'block',
-			width: '3.4rem',
-			height: '3.4rem',
-			borderRadius: '50%',
-		}
+		"& img": {
+			display: "block",
+			width: "3.4rem",
+			height: "3.4rem",
+			borderRadius: "50%",
+		},
 	}),
 	nameAndMessage: css({
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'space-between',
-		margin: '0.4rem 0 0.5rem 1rem',
-
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		margin: "0.4rem 0 0.5rem 1rem",
 	}),
 	name: css({
-		fontSize: '1.1rem',
-		fontWeight: '500',
+		fontSize: "1.1rem",
+		fontWeight: "500",
 		color: chatColors.primaryText,
 	}),
 	message: css({
 		color: chatColors.secondaryText,
 	}),
 	time: css({
-		marginLeft: 'auto',
-		display: 'flex',
-		alignItems: 'center',
+		marginLeft: "auto",
+		display: "flex",
+		alignItems: "center",
 		color: chatColors.secondaryText,
 	}),
 	newChatButton: css({
-		position: 'absolute',
-		right: '20%',
+		position: "absolute",
+		right: "20%",
 		bottom: "10%",
-		fontSize: '2.2rem',
-		display: 'flex',
-		alignItems: 'center',
+		fontSize: "2.2rem",
+		display: "flex",
+		alignItems: "center",
 		color: chatColors.secondaryAccent,
-		cursor: 'pointer',
-		'&:hover': {
+		cursor: "pointer",
+		"&:hover": {
 			color: chatColors.accent,
-		}
+		},
 	}),
 };
 
-const Thread = styled.div<{active: boolean}>`
+const Thread = styled.div<{ active: boolean }>`
 	background: ${(item) => (item.active ? chatColors.highLight : "")};
 	border-radius: 0.5rem;
-`
+`;
 
 function HomeScreenHeader() {
 	return (
@@ -151,7 +150,11 @@ function HomeScreenHeader() {
 function SearchBox() {
 	return (
 		<div css={homeScreenCSS.search}>
-			<input type="text" css={homeScreenCSS.searchInput} placeholder="Search messages"/>
+			<input
+				type="text"
+				css={homeScreenCSS.searchInput}
+				placeholder="Search messages"
+			/>
 		</div>
 	);
 }
@@ -164,19 +167,13 @@ const ThreadComp: FC<{ thread: ThreadSummary }> = ({ thread }) => {
 	return (
 		<div css={homeScreenCSS.threadCSS}>
 			<div css={homeScreenCSS.avatar}>
-				<img src={dummyProfilePic1} alt=""/>
+				<img src={dummyProfilePic1} alt="" />
 			</div>
 			<div css={homeScreenCSS.nameAndMessage}>
-				<div css={homeScreenCSS.name}>
-					{participants[0]?.name}
-				</div>
-				<div css={homeScreenCSS.message}>
-					{thread.lastMessage.message}
-				</div>
+				<div css={homeScreenCSS.name}>{participants[0]?.name}</div>
+				<div css={homeScreenCSS.message}>{thread.lastMessage.message}</div>
 			</div>
-			<div css={homeScreenCSS.time}>
-				12m
-			</div>
+			<div css={homeScreenCSS.time}>12m</div>
 		</div>
 	);
 };
@@ -187,7 +184,13 @@ function ChatList() {
 	return (
 		<div css={homeScreenCSS.chatList}>
 			{threads?.map((t) => (
-				<Thread active={(t.id === selectedId)} onClick={() => {setSelectedId(t.id)}}>
+				<Thread
+					key={t.id}
+					active={t.id === selectedId}
+					onClick={() => {
+						setSelectedId(t.id);
+					}}
+				>
 					<ThreadComp key={t.id} thread={t} />
 				</Thread>
 			))}
@@ -198,9 +201,9 @@ function ChatList() {
 function NewChatButton() {
 	return (
 		<div css={homeScreenCSS.newChatButton}>
-			<MdAddCircle/>
+			<MdAddCircle />
 		</div>
-	)
+	);
 }
 
 export function HomeScreen() {

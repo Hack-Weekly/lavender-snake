@@ -1,12 +1,13 @@
 // import { chatGptClient } from '../chatGptClient.js'
 import { generateId } from '../utils/generateId.js'
-import { Thread, ThreadId, UserChatData } from '@shared/chatTypes.js'
+import { Message, Thread, ThreadId, UserChatData } from 'shared/chatTypes.js'
+import { WsMessageEvent } from 'shared/wsEvents.js'
 import {
   chatStorageClient,
   threadStorageClient,
   usersStorageClient,
 } from '../storageClients.js'
-import { UserId } from '@shared/userTypes.js'
+import { UserId } from 'shared/userTypes.js'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -21,7 +22,6 @@ function sleep(ms: number, props: any = undefined) {
     setTimeout(resolve, ms)
   })
 }
-// import { data } from '../dummy'
 
 interface addMessageType {
   message: string
@@ -48,7 +48,6 @@ export default function chatHandler(server, options, done) {
       } else if (!threadData.participants.includes(userId)) {
         res.code(400).send({ message: 'Access not allowed to this thread' })
       } else {
-        console.log(threadData)
         res.send(threadData)
       }
     }
@@ -56,9 +55,6 @@ export default function chatHandler(server, options, done) {
 
   server.post('/', { onRequest: [server.authenticate] }, async (req, res) => {
     const userId: UserId = req.user.id
-
-    console.log(userId)
-    console.log(JSON.stringify(threadStorageClient.inMemoryStorage))
 
     try {
       const payload: addMessageType = req.body
@@ -75,15 +71,18 @@ export default function chatHandler(server, options, done) {
         return
       }
 
-      thread.messages.push({
+      const message: Message = {
         id: generateId(),
         from: userId,
         message: payload.message,
-      })
+      }
+
+      thread.messages.push(message)
 
       threadStorageClient.save(payload.threadId, thread)
 
       res.send(thread)
+      server.broadcast(new WsMessageEvent('add', thread.id, message))
 
       if (
         thread.participants.length === 2 &&
@@ -92,7 +91,7 @@ export default function chatHandler(server, options, done) {
         // User is chatting with the bot - lets respond
         await sleep(3000)
         const thread: Thread = await threadStorageClient.load(payload.threadId)
-        thread.messages.push({
+        const message: Message = {
           id: generateId(),
           from: 'autofriendid',
           message: randChoice([
@@ -100,7 +99,9 @@ export default function chatHandler(server, options, done) {
             'Sure thing :)',
             'How kind of you to say',
           ]),
-        })
+        }
+        thread.messages.push(message)
+        server.broadcast(new WsMessageEvent('add', thread.id, message))
       }
     } catch (err) {
       console.error(err)

@@ -1,7 +1,7 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createContext, useContext, useState } from "react";
 import { isProd } from "./utils";
-import { ClientUser } from "@/../../shared/userTypes";
+import { ClientUser } from "shared/userTypes";
 
 export const ApiEndpoints = {
 	GCP: "https://lavender-snake-server-wgikiljsnq-uc.a.run.app",

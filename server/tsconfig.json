@@ -18,8 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"],
-      "@/*": ["src/*"],
-      "@shared/*": ["../shared/*"]
+      "@/*": ["src/*"]
     },
     "noImplicitAny": false,
     "lib": ["es6"]
