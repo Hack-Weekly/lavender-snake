@@ -24,6 +24,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.9.0",
+    "react-use-websocket": "^4.3.1",
+    "shared": "file:../shared",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
   },

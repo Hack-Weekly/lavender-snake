@@ -3,8 +3,7 @@ import userHandler from './user/routes.js'
 import chatHandler from './chat/routes.js'
 import fastifyCors from '@fastify/cors'
 import jwt from './plugins/jwt.js'
-import socket from 'socket.io'
-import fastifyIO from 'fastify-socket.io'
+import fastifyWS from '@fastify/websocket'
 
 export function createServer() {
   const server = fastify()
@@ -13,12 +12,31 @@ export function createServer() {
   server.register(jwt)
   server.register(userHandler, { prefix: '/user' })
   server.register(chatHandler, { prefix: '/chat' })
-  server.register(fastifyIO as any)
-  server.ready().then(() => {
-    // we need to wait for the server to be ready, else `server.io` is undefined
-    server.io.on('connection', (socket) => {
-      console.log(socket.id)
-    })
+
+  server.register(fastifyWS as any)
+  server.register(async function (server) {
+    server.get(
+      '/ws',
+      { websocket: true },
+      (connection /* SocketStream */, req /* FastifyRequest */) => {
+        connection.socket.on('message', (message) => {
+          // message.toString() === 'hi from client'
+          connection.socket.send('hi from server')
+        })
+        connection.socket.on('open', (socket) => {
+          console.log('open')
+        })
+        connection.socket.on('upgrade', (socket) => {
+          console.log('upgrade')
+        })
+      }
+    )
+  })
+
+  server.decorate('broadcast', (data, filter) => {
+    for (const client of server.websocketServer.clients) {
+      client.send(JSON.stringify(data))
+    }
   })
 
   server.setErrorHandler((error, req, res) => {

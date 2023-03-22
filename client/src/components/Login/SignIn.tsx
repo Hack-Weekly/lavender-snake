@@ -4,7 +4,7 @@ import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
-import { sleep } from "../../../../shared/utils";
+import { sleep } from "shared/utils";
 import {
 	Button,
 	DialogContent,

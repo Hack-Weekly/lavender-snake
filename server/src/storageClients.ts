@@ -1,5 +1,5 @@
 import { Storage } from '@google-cloud/storage'
-import { Thread, ThreadSummary, UserChatData } from '@shared/chatTypes.js'
+import { Thread, ThreadSummary, UserChatData } from 'shared/chatTypes.js'
 
 const storage = new Storage()
 

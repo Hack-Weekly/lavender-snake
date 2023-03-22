@@ -1,4 +1,4 @@
-import { ClientUser } from '@shared/userTypes.js'
+import { ClientUser } from 'shared/userTypes.js'
 import { FastifyInstance } from 'fastify'
 import { Static, Type } from '@sinclair/typebox'
 import { usersStorageClient } from '../storageClients.js'

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ApiEndpoints, useUser } from "@/Context";
-import { Thread, ThreadId, UserChatData } from "../../../shared/chatTypes";
+import { Thread, ThreadId, UserChatData } from "shared/chatTypes";
 import { useChatApi } from "./chatApiClient";
 
 const ChatContextObj = createContext<[UserChatData | undefined, any]>([
@@ -11,6 +11,7 @@ export const useUserChatData = () => useContext(ChatContextObj);
 export const useContacts = () => useUserChatData()?.[0]?.contacts;
 export const useThreads = () => useUserChatData()?.[0]?.threads;
 
+// TODO: remove this? Probably just need the next context
 const SelectedThreadCtx = createContext<[ThreadId | undefined, any]>([
 	undefined,
 	undefined,
