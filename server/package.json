@@ -18,11 +18,13 @@
 		"@fastify/jwt": "^6.7.1",
 		"@google-cloud/storage": "^6.9.4",
 		"@sinclair/typebox": "^0.25.24",
+		"@types/luxon": "^3.2.0",
 		"chatgpt": "^5.1.2",
 		"dotenv": "^8.6.0",
 		"fastify": "^4.15.0",
 		"fastify-plugin": "^4.5.0",
 		"fastify-socket.io": "^4.0.0",
+		"luxon": "^3.3.0",
 		"socket.io": "^4.6.1"
 	},
 	"devDependencies": {
