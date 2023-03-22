@@ -45,7 +45,7 @@ export function CreateAccountButton() {
 			setOpen(false);
 			setUser(data);
 		} else {
-			setErrorMessage(data.message);
+			setErrorMessage(data.message || data.error?.validation?.message);
 		}
 	};
 

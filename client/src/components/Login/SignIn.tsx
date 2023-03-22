@@ -44,7 +44,7 @@ export function SignIn() {
 			setOpen(false);
 			setUser(data);
 		} else {
-			setErrorMessage(data.message);
+			setErrorMessage(data.message || data.error?.validation?.message);
 		}
 	};
 

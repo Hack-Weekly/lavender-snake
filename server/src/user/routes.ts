@@ -13,25 +13,35 @@ const SignUpRouteBodySchema = Type.Object({
 })
 type SignUpRouteBody = Static<typeof SignUpRouteBodySchema>
 
-const SignUpRouteResponseSchema = Type.Object({
-  id: Type.String(),
-  name: Type.String(),
-  picture: Type.String(),
-  jwt: Type.String(),
+const LoginRouteBodySchema = Type.Object({
+  email: Type.String(),
+  password: Type.String(),
 })
-type SignUpRouteResponse = Static<typeof SignUpRouteResponseSchema>
+type LoginRouteBody = Static<typeof LoginRouteBodySchema>
+
+const AuthRouteResponseSchema = Type.Object({
+  jwt: Type.String(),
+  userData: Type.Object({
+    id: Type.String(),
+    name: Type.String(),
+    picture: Type.String(),
+  }),
+})
+type AuthRouteResponse =
+  | Static<typeof AuthRouteResponseSchema>
+  | { message: string }
 
 export default function userHandler(server: FastifyInstance, options, done) {
   server.post<{
     Body: SignUpRouteBody
-    Reply: SignUpRouteResponse | { message: string }
+    Reply: AuthRouteResponse
   }>(
     '/signup',
     {
       schema: {
         body: SignUpRouteBodySchema,
         response: {
-          200: SignUpRouteResponseSchema,
+          200: AuthRouteResponseSchema,
         },
       },
     },
@@ -78,38 +88,49 @@ export default function userHandler(server: FastifyInstance, options, done) {
       await usersStorageClient.save('allUsers', [...users, acct])
 
       const token = server.jwt.sign({ id: acct.user.id })
-      return reply.send({ ...acct.user, jwt: token })
+      return reply.send({ jwt: token, userData: acct.user })
     }
   )
 
-  server.post('/login', async (req, reply) => {
-    const { email, password } = req.body as any // TODO: type this properly
+  server.post<{ Body: LoginRouteBody; Reply: AuthRouteResponse }>(
+    '/login',
+    {
+      schema: {
+        body: LoginRouteBodySchema,
+        response: {
+          200: AuthRouteResponseSchema,
+        },
+      },
+    },
+    async (req, reply) => {
+      const { email, password } = req.body
 
-    // First check if request is valid (has all fields, etc)
-    if (!email || !password) {
-      reply.code(400).send({ message: 'missing fields' })
-      return
+      // First check if request is valid (has all fields, etc)
+      if (!email || !password) {
+        reply.code(400).send({ message: 'missing fields' })
+        return
+      }
+
+      // Looks okay - can we find this account?
+      const users = await usersStorageClient.load('allUsers')
+
+      const acct = users.find(
+        (acct) => acct.email.toLowerCase() === email
+      ) as UserAccount
+
+      if (!acct || acct.password !== password) {
+        reply.code(400).send({ message: 'invalid credentials' })
+        return
+      }
+
+      const token = server.jwt.sign({ id: acct.user.id })
+      const resp: ClientUser = {
+        jwt: token,
+        userData: acct.user,
+      }
+      return reply.send(resp)
     }
-
-    // Looks okay - can we find this account?
-    const users = await usersStorageClient.load('allUsers')
-
-    const acct = users.find(
-      (acct) => acct.email.toLowerCase() === email
-    ) as UserAccount
-
-    if (!acct || acct.password !== password) {
-      reply.code(400).send({ message: 'invalid credentials' })
-      return
-    }
-
-    const token = server.jwt.sign({ id: acct.user.id })
-    const resp: ClientUser = {
-      jwt: token,
-      userData: acct.user,
-    }
-    return reply.send(resp)
-  })
+  )
 
   done()
 }
