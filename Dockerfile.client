@@ -7,10 +7,10 @@ ENV PATH /app/node_modules/.bin:$PATH
 # build shared
 WORKDIR /app/shared
 COPY ./shared/package*.json ./
-RUN ls
-RUN npm i 
-COPY ./shared ./
-RUN npm run build
+RUN npm ci 
+WORKDIR /app
+COPY ./shared ./shared
+RUN npm run shared-build
 
 # build client
 WORKDIR /app/client
