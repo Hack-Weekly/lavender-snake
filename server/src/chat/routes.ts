@@ -61,7 +61,6 @@ export default function chatHandler(server, options, done) {
       const payload: addMessageType = req.body
       const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
       const dt = DateTime.now();
-      console.log(dt);
       
       if (!thread) {
         res.send({
