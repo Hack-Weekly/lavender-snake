@@ -1,13 +1,19 @@
 {
-  "name": "shared",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "description": "Shared types between apps",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC"
+	"name": "shared",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"description": "Shared types between apps",
+	"main": "./index.js",
+	"types": "./index.d.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc",
+		"prepublish": "tsc"
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"typescript": "^5.0.2"
+	}
 }
