@@ -162,13 +162,6 @@ function getTime(time : string){
 	return Duration.fromMillis(timeStampDiff).toFormat("mm'm'")
 }
 
-function getTime(time : string){
-	const t = DateTime.fromISO(time);
-	const timeStamp = t.ts;
-	const timeStampDiff = DateTime.now().toMillis() - timeStamp;
-	return Duration.fromMillis(timeStampDiff).toFormat("mm'm'")
-}
-
 function ChatMessage({ data }: any) {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
