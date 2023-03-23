@@ -2,9 +2,10 @@ import { User, UserId } from './userTypes.js'
 
 export type MessageId = string
 export interface Message {
-  id: MessageId
-  from: UserId
-  message: string
+  id: MessageId;
+  from: UserId;
+  message: string;
+  dateTime: DateTime;
 }
 
 // a single group, or 1-on-1 conversation

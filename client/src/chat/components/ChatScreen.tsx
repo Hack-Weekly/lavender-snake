@@ -16,6 +16,7 @@ import { chatColors } from "@/chatColors";
 import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
+import { DateTime, Duration } from "luxon";
 
 const ChatScreenContainer = styled.div({
 	minWidth: "73%",
@@ -154,11 +155,24 @@ function CurrentChatHeader() {
 	);
 }
 
+function getTime(time : string){
+	const t = DateTime.fromISO(time);
+	const timeStamp = t.ts;
+	const timeStampDiff = DateTime.now().toMillis() - timeStamp;
+	return Duration.fromMillis(timeStampDiff).toFormat("mm'm'")
+}
+
 function ChatMessage({ data }: any) {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
 	const [currentUser] = useUser();
 	const isCurrentUser = user?.id === currentUser?.userData?.id;
+	console.log(user);
+	console.log(currentUser);
+	// console.log(data);
+	// console.log(DateTime.fromISO(data.dateTime));
+	
+	
 	return (
 		<div
 			css={{
@@ -175,7 +189,7 @@ function ChatMessage({ data }: any) {
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
 			}}
 		>
-			{user?.name}: {data.message}
+			{user?.name}: {data.message} | {getTime(data.dateTime)}
 		</div>
 	);
 }
