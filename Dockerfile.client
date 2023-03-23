@@ -2,6 +2,7 @@
 FROM node:19-alpine as build
 ENV NODE_VERSION 19.7.0
 WORKDIR /app
+COPY ./package*.json ./
 ENV PATH /app/node_modules/.bin:$PATH
 
 # build shared
@@ -14,10 +15,11 @@ RUN npm run shared-build
 
 # build client
 WORKDIR /app/client
-COPY package*.json ./
-RUN npm ci --silent
-COPY . ./
-RUN npm run build
+COPY ./client/package*.json ./
+RUN npm ci 
+WORKDIR /app
+COPY ./client ./client
+RUN npm run client-build
 
 # production environment
 FROM nginx:stable-alpine
