@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@fastify/type-provider-typebox": "^2.4.0",
+    "@sinclair/typebox": "^0.25.24"
+  },
+  "scripts": {
+    "client-start": "npm run start --workspace client",
+    "client-dev": "npm run dev --workspace client",
+    "client-build": "npm run build --workspace client",
+    "client-preview": "npm run preview --workspace client",
+    "server-dev": "npm run dev --workspace server",
+    "server-build": "npm run build --workspace server",
+    "shared-build": "npm run build --workspace shared"
+  },
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ]
+}
