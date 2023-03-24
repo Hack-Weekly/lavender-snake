@@ -1,9 +1,11 @@
 import fastify from 'fastify'
 import userHandler from './user/routes.js'
 import chatHandler from './chat/routes.js'
+import wsHandler from './ws/routes.js'
 import fastifyCors from '@fastify/cors'
 import jwt from './plugins/jwt.js'
 import fastifyWS from '@fastify/websocket'
+import { FastifyPluginCallback } from 'fastify'
 
 export function createServer() {
   const server = fastify()
@@ -13,25 +15,8 @@ export function createServer() {
   server.register(userHandler, { prefix: '/user' })
   server.register(chatHandler, { prefix: '/chat' })
 
-  server.register(fastifyWS as any)
-  server.register(async function (server) {
-    server.get(
-      '/ws',
-      { websocket: true },
-      (connection /* SocketStream */, req /* FastifyRequest */) => {
-        connection.socket.on('message', (message) => {
-          // message.toString() === 'hi from client'
-          connection.socket.send('hi from server')
-        })
-        connection.socket.on('open', (socket) => {
-          console.log('open')
-        })
-        connection.socket.on('upgrade', (socket) => {
-          console.log('upgrade')
-        })
-      }
-    )
-  })
+  server.register(fastifyWS as unknown as FastifyPluginCallback)
+  server.register(wsHandler, { prefix: '/ws' })
 
   server.decorate('broadcast', (data, filter) => {
     for (const client of server.websocketServer.clients) {
