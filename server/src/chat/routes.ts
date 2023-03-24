@@ -31,8 +31,14 @@ interface addMessageType {
 export default function chatHandler(server, options, done) {
   server.get('/', { onRequest: [server.authenticate] }, async (req, res) => {
     const userId: UserId = req.user.id
+    const allUsers = await usersStorageClient.load('allUsers')
     const userData = await chatStorageClient.load(userId)
-    res.send(userData)
+    const defaultResp: UserChatData = {
+      contacts: allUsers,
+      threads: userData,
+    }
+    console.log({ userData, defaultResp })
+    res.send(userData || defaultResp)
   })
 
   server.get(
