@@ -17,6 +17,7 @@ import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import { DateTime, Duration } from "luxon";
 
 const ChatScreenContainer = styled.div({
 	minWidth: "73%",
@@ -155,6 +156,14 @@ function CurrentChatHeader() {
 	);
 }
 
+function getTime(time : string){
+	const t = DateTime.fromISO(time);
+	const currentTimestamp = DateTime.now().toMillis();
+	console.log(t, t.toMillis(), currentTimestamp);
+	console.log((DateTime.now().diff(t)).toMillis());
+	
+}
+
 function ChatMessage({ data }: any) {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
@@ -176,7 +185,7 @@ function ChatMessage({ data }: any) {
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
 			}}
 		>
-			{user?.name}: {data.message}
+			{user?.name}: {data.message} | {getTime(data.DateTime)}
 		</div>
 	);
 }

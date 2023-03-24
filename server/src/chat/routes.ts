@@ -8,6 +8,7 @@ import {
   usersStorageClient,
 } from '../storageClients.js'
 import { UserId } from 'shared/userTypes.js'
+import { DateTime } from 'luxon'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -65,6 +66,7 @@ export default function chatHandler(server, options, done) {
     try {
       const payload: addMessageType = req.body
       const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
+      const dt = DateTime.now();
       if (!thread) {
         res.send({
           error: 'thread not found',
@@ -81,6 +83,7 @@ export default function chatHandler(server, options, done) {
         id: generateId(),
         from: userId,
         message: payload.message,
+        dateTime: dt,
       }
 
       thread.messages.push(message)
@@ -105,6 +108,7 @@ export default function chatHandler(server, options, done) {
             'Sure thing :)',
             'How kind of you to say',
           ]),
+          dateTime: dt,
         }
         thread.messages.push(message)
         server.broadcast(new WsMessageEvent('add', thread.id, message))
