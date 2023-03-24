@@ -28,6 +28,7 @@
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",
     "jsonwebtoken": "^9.0.0",
+    "luxon": "^3.3.0",
     "shared": "file:../shared",
     "socket.io": "^4.6.1"
   },
