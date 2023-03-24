@@ -1,6 +1,8 @@
 import { FastifyInstance } from 'fastify'
 
 export default async function wsHandler(server: FastifyInstance) {
+  // server.addHook('preValidation', server.authenticate!) // TODO: authenticate
+
   server.get(
     '/',
     { websocket: true },
@@ -29,4 +31,40 @@ export default async function wsHandler(server: FastifyInstance) {
       clearInterval(timer)
     })
   })
+
+  server.get<{ Querystring: { username: string } }>(
+    '/chat',
+    { websocket: true },
+    (connection, req) => {
+      // A user join the chat
+      broadcast({
+        sender: '__server',
+        message: `${req.query.username} joined`,
+      })
+      // A user leaving the chat
+      connection.socket.on('close', () => {
+        broadcast({
+          sender: '__server',
+          message: `${req.query.username} left`,
+        })
+      })
+      // Broadcast incoming message
+      connection.socket.on('message', (message) => {
+        message = JSON.parse(message.toString())
+
+        // For now it's just echoing the message back
+        broadcast({
+          sender: 'TODO',
+          ...message,
+        })
+      })
+    }
+  )
+
+  // How do I let TS now that the server instance is already decorated with broadcast fn?
+  function broadcast(message) {
+    for (const client of server.websocketServer.clients) {
+      client.send(JSON.stringify(message))
+    }
+  }
 }
