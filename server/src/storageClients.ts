@@ -6,6 +6,8 @@ import {
   genThreadSummary,
 } from 'shared/chatTypes.js'
 import { UserAccount } from './user/data.js'
+import { Thread, ThreadSummary, UserChatData } from 'shared/chatTypes.js'
+import { DateTime } from 'luxon'
 
 const storage = new Storage()
 
@@ -65,6 +67,7 @@ const threadData: Thread = {
       id: '22692d8f-5677-4657-a281-a5696d00ea08',
       from: autoFriend.user.id,
       message: 'Hi, test user!',
+      dateTime: DateTime.now(),
     },
   ],
   participants: [autoFriend.user.id, testUser.user.id],

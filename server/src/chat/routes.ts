@@ -17,6 +17,7 @@ import { UserId } from 'shared/userTypes.js'
 import { userClient } from '../userClient.js'
 import { chatClient } from '../chatClient.js'
 import { sleep } from 'shared/utils.js'
+import { DateTime } from 'luxon'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -74,24 +75,26 @@ export default function chatHandler(server, options, done) {
     console.log("in post('/'): ", req.body)
 
     try {
-      const {
-        threadId,
-        userId: recipientId,
-        message: messageText,
-      } = req.body as addMessageType
+      const payload: addMessageType = req.body
+      const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
+      const dt = DateTime.now();
+      if (!thread) {
+        res.send({
+          error: 'thread not found',
+        })
+        return // TODO is this right?
+      }
 
       if ((recipientId && threadId) || (!recipientId && !threadId)) {
         resp.code(400).send({ message: 'Must supply thread or user ID' })
         return
       }
 
-      const res = threadId
-        ? await chatClient.AddMessageToThread(threadId, userId, messageText)
-        : await chatClient.SendMessage(userId, recipientId, messageText)
-
-      if (res.error) {
-        resp.code(400).send({ message: res.error })
-        return
+      const message: Message = {
+        id: generateId(),
+        from: userId,
+        message: payload.message,
+        dateTime: dt,
       }
 
       const { message, thread } = res
@@ -105,14 +108,18 @@ export default function chatHandler(server, options, done) {
         thread.participants.includes('autofriendid')
       ) {
         await sleep(3000)
-        const msg = chatGptClient
-          ? await chatGptClient.getResponse(messageText)
-          : randChoice([
-              "That sound's great",
-              'Sure thing :)',
-              'How kind of you to say',
-            ])
-        chatClient.AddMessageToThread(thread, 'autofriendid', msg)
+        const thread: Thread = await threadStorageClient.load(payload.threadId)
+        const message: Message = {
+          id: generateId(),
+          from: 'autofriendid',
+          message: randChoice([
+            "That sound's great",
+            'Sure thing :)',
+            'How kind of you to say',
+          ]),
+          dateTime: dt,
+        }
+        thread.messages.push(message)
         server.broadcast(new WsMessageEvent('add', thread.id, message))
       }
     } catch (err) {
