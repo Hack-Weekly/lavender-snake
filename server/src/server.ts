@@ -9,7 +9,9 @@ import { FastifyPluginCallback } from 'fastify'
 
 export function createServer() {
   const server = fastify()
-  server.register(fastifyCors)
+  server.register(fastifyCors, {
+    origin: '*',
+  })
 
   server.register(jwt)
   server.register(userHandler, { prefix: '/user' })
