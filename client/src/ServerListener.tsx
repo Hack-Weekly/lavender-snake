@@ -7,7 +7,7 @@ export function ServerListener() {
 	const [cc, setCurrentThreadData] = useCurrentThreadData();
 
 	const { sendMessage, lastMessage, readyState } = useWebSocket(
-		"ws://localhost:3000/ws/chat",
+		"ws://localhost:3000/ws",
 		{
 			onOpen: () => console.log("connected to ws"),
 			onClose: () => console.log("disconnected from ws"),

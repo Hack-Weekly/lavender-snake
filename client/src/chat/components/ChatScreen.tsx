@@ -224,7 +224,7 @@ function CreateChatMessage() {
 	const [, setCurrentThreadData] = useCurrentThreadData();
 
 	// TODO: Is this a separate websocket connection?
-	const { sendMessage } = useWebSocket("ws://localhost:3000/ws/chat");
+	const { sendMessage } = useWebSocket("ws://localhost:3000/ws");
 
 	const addMessage = async () => {
 		// sendMessage(JSON.stringify({ message: text })); // TODO websocket send

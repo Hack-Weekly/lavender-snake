@@ -5,37 +5,8 @@ export default async function wsHandler(server: FastifyInstance) {
   // Uncomment this line to enable authentication
   // server.addHook('preValidation', server.authenticate!) // TODO: make TS happy with this line
 
-  server.get(
-    '/',
-    { websocket: true },
-    (connection /* SocketStream */, req /* FastifyRequest */) => {
-      connection.socket.on('message', (message) => {
-        // message.toString() === 'hi from client'
-        connection.socket.send('your message: ' + message.toString())
-      })
-      connection.socket.on('open', (socket) => {
-        console.log('open')
-      })
-      connection.socket.on('close', (socket) => {
-        console.log('close')
-      })
-      connection.socket.on('upgrade', (socket) => {
-        console.log('upgrade')
-      })
-    }
-  )
-
-  server.get('/digits', { websocket: true }, (connection, req) => {
-    const timer = setInterval(() => {
-      connection.socket.send(Math.floor(Math.random() * 10).toString())
-    }, 1000)
-    connection.socket.on('close', () => {
-      clearInterval(timer)
-    })
-  })
-
   server.get<{ Querystring: { username: string } }>(
-    '/chat',
+    '/',
     { websocket: true },
     async (connection, req) => {
       // A user join the chat
