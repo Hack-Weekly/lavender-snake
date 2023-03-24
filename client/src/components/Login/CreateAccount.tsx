@@ -1,5 +1,5 @@
 import { brandGradient, colors } from "@/branding";
-import { ApiEndpoints, useUser } from "@/Context";
+import { ApiEndpoints, useApiEndpoint, useUser } from "@/Context";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -27,8 +27,9 @@ export function CreateAccountButton() {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [successMessage, setSuccessMessage] = useState("");
 	const [, setUser] = useUser();
+	const [apiEndpoint] = useApiEndpoint();
 	const createAccount = async () => {
-		const resp = await fetch(`${ApiEndpoints.Local}/user/signup`, {
+		const resp = await fetch(`${apiEndpoint.http}/user/signup`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

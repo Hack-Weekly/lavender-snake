@@ -54,10 +54,10 @@ export function useChatApi() {
 	const [user] = useUser();
 	const [apiEndpoint] = useApiEndpoint();
 
-	const { sendJsonMessage } = useWebSocket("ws://localhost:3000/ws");
+	const { sendJsonMessage } = useWebSocket(apiEndpoint.ws);
 
 	return useMemo(
-		() => new ChatApiClient(apiEndpoint, user, sendJsonMessage),
+		() => new ChatApiClient(apiEndpoint.http, user, sendJsonMessage),
 		//() => new ChatApiClient("/api", user),
 		[apiEndpoint, user, sendJsonMessage]
 	);

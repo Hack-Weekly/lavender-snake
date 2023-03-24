@@ -1,5 +1,5 @@
 import { brandGradient, colors } from "@/branding";
-import { ApiEndpoints, testUser, useUser } from "@/Context";
+import { ApiEndpoints, testUser, useApiEndpoint, useUser } from "@/Context";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -28,10 +28,11 @@ function Hero() {
 }
 
 function DevSignIn() {
+	const [apiEndpoint] = useApiEndpoint();
 	const [, setUser] = useUser();
 	const devSignIn = () => {
 		const handler = async () => {
-			const resp = await fetch(`${ApiEndpoints.Local}/user/login`, {
+			const resp = await fetch(`${apiEndpoint.http}/user/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

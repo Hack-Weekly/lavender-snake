@@ -77,5 +77,5 @@ class ApiClient extends ApiClientBase {
 export function useApiClient() {
 	const endpoint = useApiEndpoint()[0];
 	const [user] = useUser();
-	return useMemo(() => new ApiClient(endpoint, user), [endpoint, user]);
+	return useMemo(() => new ApiClient(endpoint.http, user), [endpoint, user]);
 }

@@ -30,7 +30,7 @@ function LoginButton() {
 	const googleLogin = useGoogleLogin({
 		flow: "auth-code",
 		onSuccess: async (codeResponse) => {
-			const tokenResp = await fetch(`${apiEndpoint}/auth/google`, {
+			const tokenResp = await fetch(`${apiEndpoint.http}/auth/google`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

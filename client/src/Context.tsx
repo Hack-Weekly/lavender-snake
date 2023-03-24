@@ -3,12 +3,25 @@ import { createContext, useContext, useState } from "react";
 import { isProd } from "./utils";
 import { ClientUser } from "shared/userTypes";
 
+interface ApiEndpoint {
+	name: string;
+	http: string;
+	ws: string;
+}
 export const ApiEndpoints = {
-	GCP: "https://lavender-snake-server-wgikiljsnq-uc.a.run.app",
-	Local: "http://localhost:3000",
+	GCP: {
+		name: "GCP",
+		http: "https://lavender-snake-server-wgikiljsnq-uc.a.run.app",
+		ws: "wss://lavender-snake-server-wgikiljsnq-uc.a.run.app/ws",
+	},
+	Local: {
+		name: "Local",
+		http: "http://localhost:3000",
+		ws: "ws://localhost:3000/ws",
+	},
 };
 
-const ApiEndpointContext = createContext<[string, any]>([
+const ApiEndpointContext = createContext<[ApiEndpoint, any]>([
 	ApiEndpoints.GCP,
 	() => {},
 ]);
