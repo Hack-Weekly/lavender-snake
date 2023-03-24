@@ -34,7 +34,7 @@ export default function chatHandler(server, options, done) {
     const allUsers = await usersStorageClient.load('allUsers')
     const userData = await chatStorageClient.load(userId)
     const defaultResp: UserChatData = {
-      contacts: allUsers,
+      contacts: allUsers.map((userData) => userData.user),
       threads: [],
     }
     console.log({ userData, defaultResp })
