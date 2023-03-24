@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --watch './src/**/*.ts' --exec ts-node -r dotenv/config ./src/index.ts",
+    "dev": "nodemon --watch './src/**/*.ts' --exec ts-node -T -r dotenv/config ./src/index.ts",
     "build": "tsc",
     "test": "jest --coverage",
     "test:watch": "npm run test -- --watchAll"

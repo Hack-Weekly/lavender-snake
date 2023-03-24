@@ -1,7 +1,9 @@
+import { usersStorageClient } from '../storageClients.js'
 import { FastifyInstance } from 'fastify'
 
 export default async function wsHandler(server: FastifyInstance) {
-  // server.addHook('preValidation', server.authenticate!) // TODO: authenticate
+  // Uncomment this line to enable authentication
+  // server.addHook('preValidation', server.authenticate!) // TODO: make TS happy with this line
 
   server.get(
     '/',
@@ -35,12 +37,18 @@ export default async function wsHandler(server: FastifyInstance) {
   server.get<{ Querystring: { username: string } }>(
     '/chat',
     { websocket: true },
-    (connection, req) => {
+    async (connection, req) => {
       // A user join the chat
+      // const { id } = req.user as any
+      // const userAccounts = await usersStorageClient.load('allUsers')
+      // const user = userAccounts.find((account) => account.user.id === id)
+      // const username = user ? user.name : 'Unknown user'
+
       broadcast({
         sender: '__server',
-        message: `${req.query.username} joined`,
+        message: `${'TODO'} joined`,
       })
+
       // A user leaving the chat
       connection.socket.on('close', () => {
         broadcast({
@@ -48,11 +56,11 @@ export default async function wsHandler(server: FastifyInstance) {
           message: `${req.query.username} left`,
         })
       })
+
       // Broadcast incoming message
       connection.socket.on('message', (message) => {
         message = JSON.parse(message.toString())
 
-        // For now it's just echoing the message back
         broadcast({
           sender: 'TODO',
           ...message,
