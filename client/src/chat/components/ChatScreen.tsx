@@ -223,14 +223,11 @@ function CreateChatMessage() {
 	const [curThreadId] = useSelectedThread();
 	const [, setCurrentThreadData] = useCurrentThreadData();
 
-	// TODO: Is this a separate websocket connection?
-	const { sendMessage } = useWebSocket("ws://localhost:3000/ws");
-
 	const addMessage = async () => {
-		// sendMessage(JSON.stringify({ message: text })); // TODO websocket send
 		if (curThreadId) {
 			setText("");
 			const newThread = await chatApiClient.sendMessage(curThreadId, text);
+			await chatApiClient.sendWsMessage(curThreadId, text);
 			// setCurrentThreadData(newThread);
 		}
 	};

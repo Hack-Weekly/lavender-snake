@@ -2,6 +2,7 @@ import { usersStorageClient } from '../storageClients.js'
 import { FastifyInstance } from 'fastify'
 
 export default async function wsHandler(server: FastifyInstance) {
+  // Auth is probably unnecessary, because to connect to the websocket you need to be logged in on the client anyway
   // Uncomment this line to enable authentication
   // server.addHook('preValidation', server.authenticate!) // TODO: make TS happy with this line
 
@@ -33,7 +34,7 @@ export default async function wsHandler(server: FastifyInstance) {
         message = JSON.parse(message.toString())
 
         broadcast({
-          sender: 'TODO',
+          // sender: 'TODO',
           ...message,
         })
       })

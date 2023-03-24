@@ -13,6 +13,7 @@ export function ServerListener() {
 			onClose: () => console.log("disconnected from ws"),
 			onMessage: (messageEvent) => {
 				const baseEvt: WsEvent = JSON.parse(messageEvent.data);
+				console.log(baseEvt);
 				if (baseEvt.dataType === "message") {
 					// TODO: this is wrong; it may not be the current thread
 					// set user data with updated 'lastMessage', and if it is current thread,

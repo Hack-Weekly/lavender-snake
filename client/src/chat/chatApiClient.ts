@@ -4,10 +4,19 @@ import { ClientUser, UserId } from "shared/userTypes";
 import { useMemo } from "react";
 import { Thread, ThreadId, UserChatData } from "shared/chatTypes";
 import { threadId } from "worker_threads";
+import useWebSocket from "react-use-websocket";
+import { WsMessageEvent } from "shared";
 
 class ChatApiClient extends ApiClientBase {
-	constructor(endpoint: string, user: ClientUser | undefined) {
+	wsSendMessage: Function;
+
+	constructor(
+		endpoint: string,
+		user: ClientUser | undefined,
+		sendJsonMessage: Function
+	) {
 		super(endpoint, "chat", user);
+		this.wsSendMessage = sendJsonMessage;
 	}
 
 	async getChatData() {
@@ -21,14 +30,35 @@ class ChatApiClient extends ApiClientBase {
 	async sendMessage(id: ThreadId | UserId, message: string) {
 		return (await this.post({ threadId: id, message })) as Thread;
 	}
+
+	async sendWsMessage(id: ThreadId | UserId, message: string) {
+		// I'm confused about how to use the WsMessageEvent
+		// For now I just hard code the message to be in the same form as WsMessageEvent
+
+		const data: WsMessageEvent = {
+			dataType: "message",
+			operation: "add",
+			context: id,
+			data: {
+				id: "123", // how to get this?
+				from: "username", // how to get this?
+				message: message,
+			},
+		};
+
+		return (await this.wsSendMessage(data)) as Thread;
+	}
 }
 
 export function useChatApi() {
 	const [user] = useUser();
 	const [apiEndpoint] = useApiEndpoint();
+
+	const { sendJsonMessage } = useWebSocket("ws://localhost:3000/ws");
+
 	return useMemo(
-		() => new ChatApiClient(apiEndpoint, user),
+		() => new ChatApiClient(apiEndpoint, user, sendJsonMessage),
 		//() => new ChatApiClient("/api", user),
-		[apiEndpoint, user]
+		[apiEndpoint, user, sendJsonMessage]
 	);
 }
