@@ -16,6 +16,7 @@ import { chatColors } from "@/chatColors";
 import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 
 const ChatScreenContainer = styled.div({
 	minWidth: "73%",
@@ -222,7 +223,11 @@ function CreateChatMessage() {
 	const [curThreadId] = useSelectedThread();
 	const [, setCurrentThreadData] = useCurrentThreadData();
 
+	// TODO: Is this a separate websocket connection?
+	const { sendMessage } = useWebSocket("ws://localhost:3000/ws/chat");
+
 	const addMessage = async () => {
+		// sendMessage(JSON.stringify({ message: text })); // TODO websocket send
 		if (curThreadId) {
 			setText("");
 			const newThread = await chatApiClient.sendMessage(curThreadId, text);
