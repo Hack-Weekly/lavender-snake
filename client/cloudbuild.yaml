@@ -2,7 +2,14 @@ steps:
   # Build the container image
   - name: "gcr.io/cloud-builders/docker"
     args:
-      ["build", "-t", "gcr.io/code-practice-380104/lavender-snake", "./client"]
+      [
+        "build",
+        "-t",
+        "gcr.io/code-practice-380104/lavender-snake",
+        ".",
+        "-f",
+        "Dockerfile.client",
+      ]
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/code-practice-380104/lavender-snake"]
