@@ -23,10 +23,10 @@ class storageClient {
         return JSON.parse((await file.download()).toString())
       }
 
-      return []
+      return undefined
     } else {
       // dev
-      return this.inMemoryStorage[id] || []
+      return this.inMemoryStorage[id] || undefined
     }
   }
 
