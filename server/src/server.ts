@@ -11,6 +11,8 @@ export function createServer() {
   const server = fastify()
   server.register(fastifyCors, {
     origin: '*',
+    methods: '*',
+    allowedHeaders: '*',
   })
 
   server.register(jwt)
