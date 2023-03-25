@@ -99,6 +99,7 @@ const chatScreenCSS = {
 	chatMessages: css({
 		display: "flex",
 		flexDirection: "column",
+		marginBottom: "1rem",
 	}),
 	createMessageContainer: css({
 		height: "4rem",
@@ -162,23 +163,20 @@ function CurrentChatHeader() {
 
 function getTime(time : string){	
 	const messageTime = DateTime.fromISO(time);
-	const currentTime = DateTime.now();
+    const diff = DateTime.now().diff(messageTime, ['hours', 'minutes']);
+    const hours = Math.round(diff.hours);
+    const minutes = Math.round(diff.minutes);
 
-	const tDiff = currentTime.diff(messageTime, ['hours', 'minutes']).toObject();
-	const hours = tDiff.hours;
-	const minutes = tDiff.minutes;
-
-	if(hours >= 1){
-		return messageTime.toLocaleString(DateTime.DATETIME_SHORT);
-	}else if(minutes >= 30){
+    if (hours >= 12) {
+        return messageTime.toLocaleString(DateTime.DATETIME_SHORT);
+    }else if(hours >= 1){
 		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
-	}else if(minutes < 30){
-		return (parseInt(minutes) + ' minutes ago');
-	}else if(minutes < 2){
-		return (parseInt(minutes) + ' minute ago');
-	}
-	
-	return ""
+	}else if (minutes > 0) {
+        return minutes + ` minute${minutes > 1 ? 's' : ''}`;
+    } else {
+        // between 2-30 minutes
+        return "just now";
+    }
 }
 
 const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
@@ -189,20 +187,62 @@ const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 	return (
 		<div
 			css={{
-				background: isCurrentUser
-					? colors.bgChatMessageSelf
-					: colors.bgChatMessage,
-				marginBottom: "1em",
-				borderRadius: ".8em",
-				padding: "10px 20px",
-				color: isCurrentUser
-					? colors.chatMessageTextSelf
-					: colors.chatMessageText,
 				width: "fit-content",
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+				display: "flex",
+				flexDirection: "column",
 			}}
 		>
-			<span>{user?.name ?? ""}</span> : <span>{data.message}</span> | <span>{getTime(data.dateTime)}</span>
+			<span css={{
+				display: 'flex',
+				flexDirection: isCurrentUser
+					?	'row-reverse'
+					:	'row',
+				gap: '0.5rem',
+
+			}}>
+				<span css={{
+					background: isCurrentUser
+						? colors.bgChatMessageSelf
+						: colors.bgChatMessage,
+					// marginBottom: "1em",
+					borderRadius: ".6em",
+					padding: "0.6rem 1.2rem",
+					color: isCurrentUser
+						? colors.chatMessageTextSelf
+						: colors.chatMessageText,
+					position: 'relative',
+					marginTop: '1.5rem',
+				}}>
+					<span css={{
+						borderRadius: '0.8rem 0.8em 0 0',
+						color: isCurrentUser
+							?	chatColors.secondaryText
+							:	chatColors.secondaryText,
+						fontSize: '0.9rem',
+						marginBottom: '0.1rem',
+						position: 'absolute',
+						top: '-1.1rem',
+						left: isCurrentUser
+							?	''
+							:	'0.1rem',
+						right: isCurrentUser
+							?	'0.1rem'
+							:	'',
+							whiteSpace: 'nowrap',
+					}}>
+						{ user?.name ?? ""}
+					</span>
+					{data.message}
+				</span>
+				<span css={{
+						fontSize: '0.7rem',
+						alignSelf: 'flex-end',
+						color: chatColors.secondaryText
+				}}>
+					{getTime(data.dateTime)}
+				</span>
+			</span>
 		</div>
 	);
 }
