@@ -71,6 +71,8 @@ export default function chatHandler(server, options, done) {
   server.post('/', { onRequest: [server.authenticate] }, async (req, resp) => {
     const userId: UserId = req.user.id
 
+    console.log("in post('/'): ", req.body)
+
     try {
       const {
         threadId,
