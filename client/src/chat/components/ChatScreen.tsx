@@ -2,7 +2,7 @@ import { colors } from "@/branding";
 import { ApiEndpoints, useUser } from "@/Context";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Message, Thread, UserChatData } from "shared/chatTypes";
 import { useChatApi } from "../chatApiClient";
 import {
@@ -18,6 +18,10 @@ import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { DateTime, Duration } from "luxon";
+
+interface ChatMessageProps {
+	data: Message;
+}
 
 const ChatScreenContainer = styled.div({
 	minWidth: "73%",
@@ -156,15 +160,28 @@ function CurrentChatHeader() {
 	);
 }
 
-function getTime(time : string){
-	const t = DateTime.fromISO(time);
-	const currentTimestamp = DateTime.now().toMillis();
-	console.log(t, t.toMillis(), currentTimestamp);
-	console.log((DateTime.now().diff(t)).toMillis());
+function getTime(time : string){	
+	const messageTime = DateTime.fromISO(time);
+	const currentTime = DateTime.now();
+
+	const tDiff = currentTime.diff(messageTime, ['hours', 'minutes']).toObject();
+	const hours = tDiff.hours;
+	const minutes = tDiff.minutes;
+
+	if(hours >= 1){
+		return messageTime.toLocaleString(DateTime.DATETIME_SHORT);
+	}else if(minutes >= 30){
+		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
+	}else if(minutes < 30){
+		return (parseInt(minutes) + ' minutes ago');
+	}else if(minutes < 2){
+		return (parseInt(minutes) + ' minute ago');
+	}
 	
+	return ""
 }
 
-function ChatMessage({ data }: any) {
+const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
 	const [currentUser] = useUser();
@@ -185,7 +202,7 @@ function ChatMessage({ data }: any) {
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
 			}}
 		>
-			{user?.name}: {data.message} | {getTime(data.DateTime)}
+			<span>{user?.name ?? ""}</span> : <span>{data.message}</span> | <span>{getTime(data.dateTime)}</span>
 		</div>
 	);
 }

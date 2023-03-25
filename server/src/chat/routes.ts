@@ -66,7 +66,7 @@ export default function chatHandler(server, options, done) {
     try {
       const payload: addMessageType = req.body
       const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
-      const dt = DateTime.now();
+      const dt = DateTime.now().toString();
       if (!thread) {
         res.send({
           error: 'thread not found',

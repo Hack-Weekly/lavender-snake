@@ -6,7 +6,7 @@ export interface Message {
 	id: MessageId
 	from: UserId
 	message: string
-	dateTime: DateTime
+	dateTime: string
 }
 
 // a single group, or 1-on-1 conversation
