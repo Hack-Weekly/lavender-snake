@@ -68,7 +68,7 @@ const threadData: Thread = {
       id: '22692d8f-5677-4657-a281-a5696d00ea08',
       from: autoFriend.user.id,
       message: 'Hi, test user!',
-      dateTime: DateTime.now(),
+      dateTime: DateTime.now().toString(),
     },
   ],
   participants: [autoFriend.user.id, testUser.user.id],
