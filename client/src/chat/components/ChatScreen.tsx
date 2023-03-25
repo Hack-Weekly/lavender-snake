@@ -172,7 +172,7 @@ function getTime(time : string){
     }else if(hours >= 1){
 		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
 	}else if (minutes > 0) {
-        return minutes + ` minute${minutes > 1 ? 's' : ''}`;
+        return minutes + ` minute${minutes > 1 ? 's' : ''} ago`;
     } else {
         // between 2-30 minutes
         return "just now";
