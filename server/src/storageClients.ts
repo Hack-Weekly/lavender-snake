@@ -1,10 +1,16 @@
 import { Storage } from '@google-cloud/storage'
-import { Thread, ThreadSummary, UserChatData } from 'shared/chatTypes.js'
+import {
+  Thread,
+  ThreadSummary,
+  UserChatData,
+  genThreadSummary,
+} from 'shared/chatTypes.js'
+import { UserAccount } from './user/data.js'
 import { DateTime } from 'luxon'
 
 const storage = new Storage()
 
-class storageClient {
+class storageClient<ContentT> {
   isProd: boolean
   bucket: any
   inMemoryStorage: any
@@ -17,7 +23,7 @@ class storageClient {
     }
   }
 
-  async load(id) {
+  async load(id): Promise<ContentT | undefined> {
     if (this.isProd) {
       const file = this.bucket.file(id)
       if ((await file.exists())[0]) {
@@ -31,7 +37,7 @@ class storageClient {
     }
   }
 
-  async save(id, o) {
+  async save(id: string, o: ContentT | undefined) {
     if (this.isProd) {
       await this.bucket.file(id).save(JSON.stringify(o))
     } else {
@@ -41,14 +47,6 @@ class storageClient {
   }
 }
 
-const genThreadSummary = (thread: Thread) => {
-  const res: ThreadSummary = {
-    id: thread.id,
-    lastMessage: thread.messages[thread.messages.length - 1],
-    participants: [...thread.participants],
-  }
-  return res
-}
 const testUser = {
   // TODO: don't copy this
   email: 'testuser@dummy.com',
@@ -91,7 +89,7 @@ const chatMemoryStorage = {
   [testUser.user.id]: testUserData,
   [autoFriend.user.id]: autoFriendData,
 }
-export const chatStorageClient = new storageClient(
+export const chatStorageClient = new storageClient<UserChatData>(
   'lavender-snake-chat-userdata',
   chatMemoryStorage
 )
@@ -99,7 +97,7 @@ export const chatStorageClient = new storageClient(
 const threadMemoryStorage = {
   [threadData.id]: threadData,
 }
-export const threadStorageClient = new storageClient(
+export const threadStorageClient = new storageClient<Thread>(
   'lavender-snake-chat-threads',
   threadMemoryStorage
 )
@@ -107,12 +105,12 @@ export const threadStorageClient = new storageClient(
 const usersMemoryStorage = {
   allUsers: [testUser, autoFriend],
 }
-export const usersStorageClient = new storageClient(
+export const usersStorageClient = new storageClient<UserAccount>(
   'lavender-snake-users',
   usersMemoryStorage
 )
 const todoMemoryStorage = {}
-export const todoStorageClient = new storageClient(
+export const todoStorageClient = new storageClient<any>(
   'lavender-snake-todo',
   todoMemoryStorage
 )

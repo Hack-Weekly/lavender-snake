@@ -10,6 +10,8 @@ import { colors } from "./branding";
 import { LoginPage } from "./components/Login/LoginPage";
 import styled from "@emotion/styled";
 import { ServerListener } from "./ServerListener";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 
 function AppContent() {
 	const [user] = useUser();
@@ -21,9 +23,11 @@ function App() {
 	return (
 		<AppContainer>
 			<BackgroundImage src="./lavender-snake-bg.png" />
-			<Context>
-				<AppContent />
-			</Context>
+			<QueryClientProvider client={queryClient}>
+				<Context>
+					<AppContent />
+				</Context>
+			</QueryClientProvider>
 		</AppContainer>
 	);
 }
