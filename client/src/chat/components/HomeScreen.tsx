@@ -7,6 +7,7 @@ import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
 import dummyProfilePic1 from "../../chatImages/3.jpg";
+import * as Popover from '@radix-ui/react-popover';
 
 const homeScreenCSS = {
 	homeScreenContainer: css({
@@ -199,9 +200,30 @@ function ChatList() {
 }
 
 function NewChatButton() {
+	const [open, setOpen] = useState(false);
+	
+	// const handleAddNewUser = () => {
+	// 	return (
+			
+	// 	);
+	// }
 	return (
 		<div css={homeScreenCSS.newChatButton}>
-			<MdAddCircle />
+			<Popover.Root>
+    		<Popover.Trigger asChild	>
+					<MdAddCircle />
+				</Popover.Trigger>
+    		<Popover.Anchor />
+				<Popover.Portal>
+	      <Popover.Content side="right" asChild>
+					<div css={{width: "var(--radix-popover-trigger-width)", height: "var(--radix-popover-content-available-height)", background: chatColors.accent}}>test
+						
+						<Popover.Close>x</Popover.Close>
+						<Popover.Arrow />
+					</div>
+      	</Popover.Content>
+				</Popover.Portal>
+			</Popover.Root>
 		</div>
 	);
 }
