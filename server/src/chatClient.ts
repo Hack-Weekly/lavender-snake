@@ -14,6 +14,7 @@ import {
 import { UserAccount } from './user/data.js'
 import { generateId } from './utils/generateId.js'
 import { upsert } from 'shared/utils.js'
+import { DateTime } from 'luxon'
 
 class ChatClient {
   async GetUserData(userId: UserId) {
@@ -36,6 +37,7 @@ class ChatClient {
       id: generateId(),
       from: senderId,
       message: messageText,
+      dateTime: DateTime.now().toString(),
     }
 
     if (!thread.participants.includes(senderId)) {
