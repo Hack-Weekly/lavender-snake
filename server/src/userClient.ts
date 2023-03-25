@@ -1,13 +1,26 @@
+import { User } from 'shared/userTypes.js'
 import { usersStorageClient } from './storageClients.js'
 import { UserAccount } from './user/data.js'
 
 class UserClient {
   async LoadUsers() {
-    const allUserAccounts = (await usersStorageClient.load(
-      'allUsers'
-    )) as unknown as UserAccount[] // this is special
+    const allUserAccounts = await this.LoadUserAccounts()
     // Only return the account data, with password/email removed
     return allUserAccounts.map((acct) => acct.user)
+  }
+
+  async LoadUserAccounts() {
+    return (await usersStorageClient.load(
+      'allUsers'
+    )) as unknown as UserAccount[] // this is special
+  }
+
+  async AddUser(userAccount: UserAccount) {
+    const allUserAccounts = await this.LoadUserAccounts()
+    await usersStorageClient.save('allUsers', [
+      ...allUserAccounts,
+      userAccount,
+    ] as any)
   }
 }
 

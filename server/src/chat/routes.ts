@@ -1,4 +1,4 @@
-// import { chatGptClient } from '../chatGptClient.js'
+import { chatGptClient } from '../chatGptClient.js'
 import { generateId } from '../utils/generateId.js'
 import {
   genThreadSummary,
@@ -14,8 +14,8 @@ import {
   usersStorageClient,
 } from '../storageClients.js'
 import { UserId } from 'shared/userTypes.js'
-import { userClient } from '@/userClient.js'
-import { chatClient } from '@/chatClient.js'
+import { userClient } from '../userClient.js'
+import { chatClient } from '../chatClient.js'
 import { sleep } from 'shared/utils.js'
 
 function randChoice<T>(arr: Array<T>): T {
@@ -78,7 +78,7 @@ export default function chatHandler(server, options, done) {
         message: messageText,
       } = req.body as addMessageType
 
-      if ((userId && threadId) || (!userId && !threadId)) {
+      if ((recipientId && threadId) || (!recipientId && !threadId)) {
         resp.code(400).send({ message: 'Must supply thread or user ID' })
         return
       }
@@ -103,11 +103,13 @@ export default function chatHandler(server, options, done) {
         thread.participants.includes('autofriendid')
       ) {
         await sleep(3000)
-        const msg = randChoice([
-          "That sound's great",
-          'Sure thing :)',
-          'How kind of you to say',
-        ])
+        const msg = chatGptClient
+          ? await chatGptClient.getResponse(messageText)
+          : randChoice([
+              "That sound's great",
+              'Sure thing :)',
+              'How kind of you to say',
+            ])
         chatClient.AddMessageToThread(thread, 'autofriendid', msg)
         server.broadcast(new WsMessageEvent('add', thread.id, message))
       }
@@ -118,8 +120,8 @@ export default function chatHandler(server, options, done) {
 
   server.get('/chatgpt', async (req, res) => {
     try {
-      // const fact = await chatGptClient.getResponse('Tell me a random fact.')
-      // res.send({ fact })
+      const fact = await chatGptClient.getResponse('Tell me a random fact.')
+      res.send({ fact })
     } catch (err) {
       console.error(err)
     }

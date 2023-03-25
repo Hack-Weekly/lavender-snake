@@ -5,6 +5,7 @@ import { usersStorageClient } from '../storageClients.js'
 import { generateId } from '../utils/generateId.js'
 import { isValidEmail, isValidPassword } from '../utils/validators.js'
 import { UserAccount } from './data.js'
+import { userClient } from '../userClient.js'
 
 const SignUpRouteBodySchema = Type.Object({
   email: Type.String(),
@@ -67,7 +68,7 @@ export default function userHandler(server: FastifyInstance, options, done) {
       }
 
       // Request is not malformed; does the account exist?
-      const users = await usersStorageClient.load('allUsers')
+      const users = await userClient.LoadUserAccounts()
       if (users.find((user) => user.email === email.toLowerCase())) {
         reply.code(400).send({
           message: `user with the email ${email.toLowerCase()} already exist`,
@@ -85,7 +86,7 @@ export default function userHandler(server: FastifyInstance, options, done) {
         },
       }
 
-      await usersStorageClient.save('allUsers', [...users, acct])
+      await userClient.AddUser(acct)
 
       const token = server.jwt.sign({ id: acct.user.id })
       return reply.send({ jwt: token, userData: acct.user })
@@ -112,7 +113,7 @@ export default function userHandler(server: FastifyInstance, options, done) {
       }
 
       // Looks okay - can we find this account?
-      const users = await usersStorageClient.load('allUsers')
+      const users = await userClient.LoadUserAccounts()
 
       const acct = users.find(
         (acct) => acct.email.toLowerCase() === email

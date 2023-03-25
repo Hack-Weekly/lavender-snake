@@ -33,8 +33,11 @@ export interface UserChatData {
 export const genThreadSummary = (thread: Thread) => {
   const res: ThreadSummary = {
     id: thread.id,
-    lastMessage: thread.messages[thread.messages.length - 1],
+    lastMessage: { ...thread.messages[thread.messages.length - 1] },
     participants: [...thread.participants],
   };
+  if (res.lastMessage.message.length > 23) {
+    res.lastMessage.message = `${res.lastMessage.message.substring(0, 20)}...`;
+  }
   return res;
 };
