@@ -9,3 +9,11 @@ export function sleep(ms, props = undefined) {
         setTimeout(resolve, ms);
     });
 }
+export function upsert(array, elem, selector) {
+    const cmp = selector(elem);
+    const i = array.findIndex((_element) => selector(_element) === cmp);
+    if (i > -1)
+        array[i] = elem;
+    else
+        array.push(elem);
+}

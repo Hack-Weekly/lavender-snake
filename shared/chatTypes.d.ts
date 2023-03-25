@@ -23,3 +23,4 @@ export interface UserChatData {
     threads: ThreadSummary[];
     contacts: User[];
 }
+export declare const genThreadSummary: (thread: Thread) => ThreadSummary;

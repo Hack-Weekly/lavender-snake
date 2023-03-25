@@ -1,6 +1,12 @@
 // import { chatGptClient } from '../chatGptClient.js'
 import { generateId } from '../utils/generateId.js'
-import { Message, Thread, ThreadId, UserChatData } from 'shared/chatTypes.js'
+import {
+  genThreadSummary,
+  Message,
+  Thread,
+  ThreadId,
+  UserChatData,
+} from 'shared/chatTypes.js'
 import { WsMessageEvent } from 'shared/wsEvents.js'
 import {
   chatStorageClient,
@@ -8,37 +14,40 @@ import {
   usersStorageClient,
 } from '../storageClients.js'
 import { UserId } from 'shared/userTypes.js'
+import { userClient } from '@/userClient.js'
+import { chatClient } from '@/chatClient.js'
+import { sleep } from 'shared/utils.js'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
-function sleep(ms: number, props: any = undefined) {
-  let res: any
-  props?.signal?.addEventListener('abort', () => {
-    res()
-  })
-  return new Promise((resolve, reject) => {
-    res = resolve
-    setTimeout(resolve, ms)
-  })
-}
 
 interface addMessageType {
   message: string
-  threadId: ThreadId // TODO: can also be UserId (e.g., create new thread)
+  threadId?: ThreadId
+  userId?: UserId
 }
 
 export default function chatHandler(server, options, done) {
   server.get('/', { onRequest: [server.authenticate] }, async (req, res) => {
     const userId: UserId = req.user.id
-    const allUsers = await usersStorageClient.load('allUsers')
-    const userData = await chatStorageClient.load(userId)
-    const defaultResp: UserChatData = {
-      contacts: allUsers.map((userData) => userData.user),
-      threads: [],
+    const userData = await chatClient.GetUserData(userId)
+    if (userData) {
+      res.send(userData)
+    } else {
+      const defaultResp: UserChatData = {
+        contacts: await userClient.LoadUsers(),
+        threads: [],
+      }
+      res.send(defaultResp)
+      // user has no messages at all - lets send one from Lavender Buddy
+      await sleep(3000)
+      await chatClient.SendMessage(
+        'autofriendid',
+        userId,
+        "Hi! I see you are new to Lavender LINE, so let's be friends :) I'm really good with facts and random trivia, so ask me something!"
+      )
     }
-    console.log({ userData, defaultResp })
-    res.send(userData || defaultResp)
   })
 
   server.get(
@@ -47,7 +56,7 @@ export default function chatHandler(server, options, done) {
     async (req, res) => {
       const userId: UserId = req.user.id
       const { threadId } = req.params
-      const threadData = await threadStorageClient.load(threadId)
+      const threadData = await chatClient.GetThread(threadId)
 
       if (!threadData) {
         res.code(400).send({ message: 'Unknown thread ' })
@@ -59,54 +68,47 @@ export default function chatHandler(server, options, done) {
     }
   )
 
-  server.post('/', { onRequest: [server.authenticate] }, async (req, res) => {
+  server.post('/', { onRequest: [server.authenticate] }, async (req, resp) => {
     const userId: UserId = req.user.id
 
     try {
-      const payload: addMessageType = req.body
-      const thread: Thread = await threadStorageClient.load(payload.threadId) // TODO: maybe this is a userId
-      if (!thread) {
-        res.send({
-          error: 'thread not found',
-        })
-        return // TODO is this right?
-      }
+      const {
+        threadId,
+        userId: recipientId,
+        message: messageText,
+      } = req.body as addMessageType
 
-      if (!thread.participants.includes(userId)) {
-        res.code(400).send({ message: 'Access not allowed to this thread' })
+      if ((userId && threadId) || (!userId && !threadId)) {
+        resp.code(400).send({ message: 'Must supply thread or user ID' })
         return
       }
 
-      const message: Message = {
-        id: generateId(),
-        from: userId,
-        message: payload.message,
+      const res = threadId
+        ? await chatClient.AddMessageToThread(threadId, userId, messageText)
+        : await chatClient.SendMessage(userId, recipientId, messageText)
+
+      if (res.error) {
+        resp.code(400).send({ message: res.error })
+        return
       }
 
-      thread.messages.push(message)
-
-      threadStorageClient.save(payload.threadId, thread)
-
-      res.send(thread)
+      const { message, thread } = res
+      resp.send(message)
+      // TODO: we shouldn't broadcast to everyone - just participants
       server.broadcast(new WsMessageEvent('add', thread.id, message))
 
+      // If user is chatting with the bot, lets respond
       if (
         thread.participants.length === 2 &&
         thread.participants.includes('autofriendid')
       ) {
-        // User is chatting with the bot - lets respond
         await sleep(3000)
-        const thread: Thread = await threadStorageClient.load(payload.threadId)
-        const message: Message = {
-          id: generateId(),
-          from: 'autofriendid',
-          message: randChoice([
-            "That sound's great",
-            'Sure thing :)',
-            'How kind of you to say',
-          ]),
-        }
-        thread.messages.push(message)
+        const msg = randChoice([
+          "That sound's great",
+          'Sure thing :)',
+          'How kind of you to say',
+        ])
+        chatClient.AddMessageToThread(thread, 'autofriendid', msg)
         server.broadcast(new WsMessageEvent('add', thread.id, message))
       }
     } catch (err) {
