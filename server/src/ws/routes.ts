@@ -68,7 +68,6 @@ export default async function wsHandler(server: FastifyInstance) {
                 'Sure thing :)',
                 'How kind of you to say',
               ])
-          console.log(msg)
           const botRes = await chatClient.AddMessageToThread(
             res.thread,
             'autofriendid',
