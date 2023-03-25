@@ -7,6 +7,19 @@ import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
 import dummyProfilePic1 from "../../chatImages/3.jpg";
+import * as Dialog from '@radix-ui/react-dialog';
+import {
+	Button,
+	DialogContent,
+	DialogDescription,
+	DialogOverlay,
+	DialogTitle,
+	Fieldset,
+	Flex,
+	IconButton,
+	Input,
+	Label,
+} from "@/components/Dialog";
 import { DateTime } from "luxon";
 
 const homeScreenCSS = {
@@ -218,9 +231,32 @@ function ChatList() {
 }
 
 function NewChatButton() {
+	
 	return (
 		<div css={homeScreenCSS.newChatButton}>
-			<MdAddCircle />
+			<Dialog.Root>
+				<Dialog.Trigger asChild>
+					<MdAddCircle />
+				</Dialog.Trigger>
+				<Dialog.Portal>
+				<DialogOverlay />
+					<DialogContent>
+						<DialogTitle>Add new chat:</DialogTitle>
+						<DialogDescription>Test dialog... maybe search bar here filtering names?</DialogDescription>
+						<button type="submit">Create</button>
+						<ul>
+							<li>User Placeholder - TODO: styles, allow y-scroll </li>
+							<li>User Placeholder - when clicked, have an active hover state?</li>
+							<li>User Placeholder</li>
+							<li>User Placeholder</li>
+							<li>User Placeholder</li>
+						</ul>
+						<Dialog.Close asChild>
+						<IconButton aria-label="Close">X</IconButton>
+						</Dialog.Close>
+					</DialogContent>
+				</Dialog.Portal>
+			</Dialog.Root>
 		</div>
 	);
 }
