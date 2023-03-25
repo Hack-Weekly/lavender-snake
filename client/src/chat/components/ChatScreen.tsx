@@ -226,9 +226,7 @@ function CreateChatMessage() {
 	const addMessage = async () => {
 		if (curThreadId) {
 			setText("");
-			// const newThread = await chatApiClient.sendMessage(curThreadId, text);
 			await chatApiClient.sendWsMessage(curThreadId, text);
-			// setCurrentThreadData(newThread);
 		}
 	};
 
