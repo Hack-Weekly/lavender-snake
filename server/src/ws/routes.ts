@@ -1,32 +1,35 @@
-import { usersStorageClient } from '../storageClients.js'
-import { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance } from 'fastify'
+import { WsMessageEvent } from 'shared/wsEvents.js'
+import { parseJwt } from '../utils/parseJwt.js'
+import { userClient } from '../userClient.js'
 
 export default async function wsHandler(server: FastifyInstance) {
-  // Auth is probably unnecessary, because to connect to the websocket you need to be logged in on the client anyway
-  // Uncomment this line to enable authentication
-  // server.addHook('preValidation', server.authenticate!) // TODO: make TS happy with this line
-
-  server.get<{ Querystring: { username: string } }>(
+  server.get<{ Querystring: { jwt: string } }>(
     '/',
     { websocket: true },
     async (connection, req) => {
       // A user join the chat
-      // const { id } = req.user as any
-      // const userAccounts = await usersStorageClient.load('allUsers')
-      // const user = userAccounts.find((account) => account.user.id === id)
-      // const username = user ? user.name : 'Unknown user'
+      const { jwt } = req.query
+      const { id } = parseJwt(jwt)
+      const userAccounts = await userClient.LoadUserAccounts()
+      const userAccount = userAccounts.find((account) => account.user.id === id)
+      const user = userAccount?.user
 
-      broadcast({
-        sender: '__server',
-        message: `${'TODO'} joined`,
-      })
+      if (user) {
+        broadcast({
+          sender: '__server',
+          message: `${user.name} joined`,
+        })
+      }
 
       // A user leaving the chat
       connection.socket.on('close', () => {
-        broadcast({
-          sender: '__server',
-          message: `${req.query.username} left`,
-        })
+        if (user) {
+          broadcast({
+            sender: '__server',
+            message: `${user.name} left`,
+          })
+        }
       })
 
       // Broadcast incoming message
@@ -34,7 +37,6 @@ export default async function wsHandler(server: FastifyInstance) {
         message = JSON.parse(message.toString())
 
         broadcast({
-          // sender: 'TODO',
           ...message,
         })
       })

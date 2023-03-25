@@ -54,7 +54,9 @@ export function useChatApi() {
 	const [user] = useUser();
 	const [apiEndpoint] = useApiEndpoint();
 
-	const { sendJsonMessage } = useWebSocket(apiEndpoint.ws);
+	const { sendJsonMessage } = useWebSocket(apiEndpoint.ws, {
+		queryParams: { jwt: user ? user.jwt : "" },
+	});
 
 	return useMemo(
 		() => new ChatApiClient(apiEndpoint.http, user, sendJsonMessage),
