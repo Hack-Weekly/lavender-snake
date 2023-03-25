@@ -231,7 +231,6 @@ function ChatList() {
 }
 
 function NewChatButton() {
-	
 	return (
 		<div css={homeScreenCSS.newChatButton}>
 			<Dialog.Root>
