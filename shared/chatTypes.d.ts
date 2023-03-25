@@ -4,6 +4,7 @@ export interface Message {
     id: MessageId;
     from: UserId;
     message: string;
+    dateTime: string;
 }
 export type ThreadId = string;
 export interface Thread {
@@ -23,3 +24,4 @@ export interface UserChatData {
     threads: ThreadSummary[];
     contacts: User[];
 }
+export declare const genThreadSummary: (thread: Thread) => ThreadSummary;

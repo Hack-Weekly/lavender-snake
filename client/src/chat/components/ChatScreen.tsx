@@ -2,7 +2,7 @@ import { colors } from "@/branding";
 import { ApiEndpoints, useUser } from "@/Context";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Message, Thread, UserChatData } from "shared/chatTypes";
 import { useChatApi } from "../chatApiClient";
 import {
@@ -17,6 +17,11 @@ import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import { DateTime, Duration } from "luxon";
+
+interface ChatMessageProps {
+	data: Message;
+}
 
 const ChatScreenContainer = styled.div({
 	minWidth: "73%",
@@ -94,6 +99,7 @@ const chatScreenCSS = {
 	chatMessages: css({
 		display: "flex",
 		flexDirection: "column",
+		marginBottom: "1rem",
 	}),
 	createMessageContainer: css({
 		height: "4rem",
@@ -155,7 +161,25 @@ function CurrentChatHeader() {
 	);
 }
 
-function ChatMessage({ data }: any) {
+function getTime(time : string){	
+	const messageTime = DateTime.fromISO(time);
+    const diff = DateTime.now().diff(messageTime, ['hours', 'minutes']);
+    const hours = Math.round(diff.hours);
+    const minutes = Math.round(diff.minutes);
+
+    if (hours >= 12) {
+        return messageTime.toLocaleString(DateTime.DATETIME_SHORT);
+    }else if(hours >= 1){
+		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
+	}else if (minutes > 0) {
+        return minutes + ` minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+        // between 2-30 minutes
+        return "just now";
+    }
+}
+
+const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
 	const [currentUser] = useUser();
@@ -163,20 +187,62 @@ function ChatMessage({ data }: any) {
 	return (
 		<div
 			css={{
-				background: isCurrentUser
-					? colors.bgChatMessageSelf
-					: colors.bgChatMessage,
-				marginBottom: "1em",
-				borderRadius: ".8em",
-				padding: "10px 20px",
-				color: isCurrentUser
-					? colors.chatMessageTextSelf
-					: colors.chatMessageText,
 				width: "fit-content",
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+				display: "flex",
+				flexDirection: "column",
 			}}
 		>
-			{user?.name}: {data.message}
+			<span css={{
+				display: 'flex',
+				flexDirection: isCurrentUser
+					?	'row-reverse'
+					:	'row',
+				gap: '0.5rem',
+
+			}}>
+				<span css={{
+					background: isCurrentUser
+						? colors.bgChatMessageSelf
+						: colors.bgChatMessage,
+					// marginBottom: "1em",
+					borderRadius: ".6em",
+					padding: "0.6rem 1.2rem",
+					color: isCurrentUser
+						? colors.chatMessageTextSelf
+						: colors.chatMessageText,
+					position: 'relative',
+					marginTop: '1.5rem',
+				}}>
+					<span css={{
+						borderRadius: '0.8rem 0.8em 0 0',
+						color: isCurrentUser
+							?	chatColors.secondaryText
+							:	chatColors.secondaryText,
+						fontSize: '0.9rem',
+						marginBottom: '0.1rem',
+						position: 'absolute',
+						top: '-1.1rem',
+						left: isCurrentUser
+							?	''
+							:	'0.1rem',
+						right: isCurrentUser
+							?	'0.1rem'
+							:	'',
+							whiteSpace: 'nowrap',
+					}}>
+						{ user?.name ?? ""}
+					</span>
+					{data.message}
+				</span>
+				<span css={{
+						fontSize: '0.7rem',
+						alignSelf: 'flex-end',
+						color: chatColors.secondaryText
+				}}>
+					{getTime(data.dateTime)}
+				</span>
+			</span>
 		</div>
 	);
 }

@@ -20,6 +20,7 @@ import {
 	Input,
 	Label,
 } from "@/components/Dialog";
+import { DateTime } from "luxon";
 
 const homeScreenCSS = {
 	homeScreenContainer: css({
@@ -172,6 +173,24 @@ function SearchBox() {
 	);
 }
 
+function getTime(time : string){	
+	const messageTime = DateTime.fromISO(time);
+    const diff = DateTime.now().diff(messageTime, ['hours', 'minutes']);
+	
+    const hours = Math.round(diff.hours);
+    const minutes = Math.round(diff.minutes);
+
+    if (hours >= 12) {
+        return messageTime.toLocaleString(DateTime.DATE_SHORT);
+    }else if(hours >= 1){
+		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
+	}else if (minutes > 0) {
+        return minutes + ` m`;
+    } else {
+        return "Now";
+    }
+}
+
 const ThreadComp: FC<{ thread: ThreadSummary }> = ({ thread }) => {
 	const contacts = useContacts();
 	const participants = thread.participants.map((p) =>
@@ -186,7 +205,7 @@ const ThreadComp: FC<{ thread: ThreadSummary }> = ({ thread }) => {
 				<div css={homeScreenCSS.name}>{participants[0]?.name}</div>
 				<div css={homeScreenCSS.message}>{thread.lastMessage.message}</div>
 			</div>
-			<div css={homeScreenCSS.time}>12m</div>
+			<div css={homeScreenCSS.time}>{getTime(thread.lastMessage.dateTime)}</div>
 		</div>
 	);
 };

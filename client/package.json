@@ -17,13 +17,20 @@
     "@radix-ui/react-toggle-group": "^1.0.3",
     "@react-oauth/google": "^0.8.0",
     "@swc/plugin-emotion": "^2.5.45",
+    "@types/luxon": "^3.2.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "luxon": "^3.3.0",
+    "axios": "^1.3.4",
+    "axios-cache-interceptor": "^1.0.1",
     "normalize.css": "^8.0.1",
+    "pokenode-ts": "^1.18.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-grid-gallery": "^1.0.0",
     "react-icons": "^4.8.0",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.9.0",
     "react-use-websocket": "^4.3.1",
     "shared": "file:../shared",
@@ -31,6 +38,7 @@
     "vite": "^4.1.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/node": "^18.15.3"
   }
 }
