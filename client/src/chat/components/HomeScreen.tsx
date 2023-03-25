@@ -224,9 +224,10 @@ function NewChatButton() {
 					<DialogContent>
 						<DialogTitle>Add new chat:</DialogTitle>
 						<DialogDescription>Test dialog... maybe search bar here filtering names?</DialogDescription>
+						<button type="submit">Create</button>
 						<ul>
-							<li>User Placeholder - TODO: style</li>
-							<li>User Placeholder</li>
+							<li>User Placeholder - TODO: styles, allow y-scroll </li>
+							<li>User Placeholder - when clicked, have an active hover state?</li>
 							<li>User Placeholder</li>
 							<li>User Placeholder</li>
 							<li>User Placeholder</li>
