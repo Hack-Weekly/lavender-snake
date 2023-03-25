@@ -95,7 +95,7 @@ export default async function wsHandler(server: FastifyInstance) {
 
   function serverBroadcast(message: string) {
     broadcast({
-      sender: '__server',
+      dataType: 'server_announcement',
       message,
     })
   }
