@@ -212,7 +212,6 @@ function ChatList() {
 }
 
 function NewChatButton() {
-	const [open, setOpen] = useState(false);
 	
 	return (
 		<div css={homeScreenCSS.newChatButton}>
@@ -224,7 +223,14 @@ function NewChatButton() {
 				<DialogOverlay />
 					<DialogContent>
 						<DialogTitle>Add new chat:</DialogTitle>
-						<Dialog.Description />
+						<DialogDescription>Test dialog... maybe search bar here filtering names?</DialogDescription>
+						<ul>
+							<li>User Placeholder - TODO: style</li>
+							<li>User Placeholder</li>
+							<li>User Placeholder</li>
+							<li>User Placeholder</li>
+							<li>User Placeholder</li>
+						</ul>
 						<Dialog.Close asChild>
 						<IconButton aria-label="Close">X</IconButton>
 						</Dialog.Close>
