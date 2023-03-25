@@ -161,13 +161,13 @@ function HomeScreenHeader() {
 	);
 }
 
-function SearchBox() {
+function SearchBox({placeholder}: {placeholder: string}) {
 	return (
 		<div css={homeScreenCSS.search}>
 			<input
 				type="text"
 				css={homeScreenCSS.searchInput}
-				placeholder="Search messages"
+				placeholder={placeholder}
 			/>
 		</div>
 	);
@@ -242,7 +242,7 @@ function NewChatButton() {
 				<DialogOverlay />
 					<DialogContent>
 						<DialogTitle>Add new chat:</DialogTitle>
-						<DialogDescription>Test dialog... maybe search bar here filtering names?</DialogDescription>
+						<SearchBox placeholder="Search name..."/>
 						<button type="submit">Create</button>
 						<ul>
 							<li>User Placeholder - TODO: styles, allow y-scroll </li>
@@ -265,7 +265,7 @@ export function HomeScreen() {
 	return (
 		<div css={homeScreenCSS.homeScreenContainer}>
 			<HomeScreenHeader />
-			<SearchBox />
+			<SearchBox placeholder="Search messages..." />
 			<ChatList />
 			<NewChatButton />
 		</div>
