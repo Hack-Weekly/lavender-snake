@@ -7,7 +7,19 @@ import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
 import dummyProfilePic1 from "../../chatImages/3.jpg";
-import * as Popover from '@radix-ui/react-popover';
+import * as Dialog from '@radix-ui/react-dialog';
+import {
+	Button,
+	DialogContent,
+	DialogDescription,
+	DialogOverlay,
+	DialogTitle,
+	Fieldset,
+	Flex,
+	IconButton,
+	Input,
+	Label,
+} from "@/components/Dialog";
 
 const homeScreenCSS = {
 	homeScreenContainer: css({
@@ -202,28 +214,23 @@ function ChatList() {
 function NewChatButton() {
 	const [open, setOpen] = useState(false);
 	
-	// const handleAddNewUser = () => {
-	// 	return (
-			
-	// 	);
-	// }
 	return (
 		<div css={homeScreenCSS.newChatButton}>
-			<Popover.Root>
-    		<Popover.Trigger asChild	>
+			<Dialog.Root>
+				<Dialog.Trigger asChild>
 					<MdAddCircle />
-				</Popover.Trigger>
-    		<Popover.Anchor />
-				<Popover.Portal>
-	      <Popover.Content side="right" asChild>
-					<div css={{width: "var(--radix-popover-trigger-width)", height: "var(--radix-popover-content-available-height)", background: chatColors.accent}}>test
-						
-						<Popover.Close>x</Popover.Close>
-						<Popover.Arrow />
-					</div>
-      	</Popover.Content>
-				</Popover.Portal>
-			</Popover.Root>
+				</Dialog.Trigger>
+				<Dialog.Portal>
+				<DialogOverlay />
+					<DialogContent>
+						<DialogTitle>Add new chat:</DialogTitle>
+						<Dialog.Description />
+						<Dialog.Close asChild>
+						<IconButton aria-label="Close">X</IconButton>
+						</Dialog.Close>
+					</DialogContent>
+				</Dialog.Portal>
+			</Dialog.Root>
 		</div>
 	);
 }

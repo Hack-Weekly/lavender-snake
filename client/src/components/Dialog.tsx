@@ -5,7 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 
 export const overlayShow = keyframes({
 	"0%": { opacity: 0 },
-	"100%": { opacity: 1 },
+	"100%": { opacity: 0.50 },
 });
 
 export const contentShow = keyframes({
@@ -15,6 +15,7 @@ export const contentShow = keyframes({
 
 export const DialogOverlay = styled(Dialog.Overlay)({
 	backgroundColor: "black",
+	opacity: 0.50,
 	position: "fixed",
 	inset: 0,
 	animation: `${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
