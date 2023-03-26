@@ -1,4 +1,4 @@
-import { Storage } from '@google-cloud/storage'
+import { Bucket, Storage } from '@google-cloud/storage'
 import {
   Thread,
   ThreadSummary,
@@ -13,7 +13,7 @@ const storage = new Storage()
 
 class storageClient<ContentT> {
   isProd: boolean
-  bucket: any
+  bucket: Bucket
   inMemoryStorage: any
   constructor(bucket: string, inMemoryStorage: any) {
     this.isProd = process.env.NODE_ENV === 'production'
@@ -22,6 +22,10 @@ class storageClient<ContentT> {
     if (this.isProd) {
       this.bucket = storage.bucket(bucket)
     }
+  }
+
+  async clearStorage() {
+    await this.bucket.deleteFiles()
   }
 
   async load(id): Promise<ContentT | undefined> {

@@ -10,6 +10,11 @@ import {
   LAVENDER_BUDDY_ID,
 } from '../chatClient.js'
 import { sleep } from 'shared/utils.js'
+import {
+  chatStorageClient,
+  threadStorageClient,
+  usersStorageClient,
+} from '@/storageClients.js'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -126,6 +131,17 @@ export default function chatHandler(server, options, done) {
     try {
       const fact = await chatGptClient.getResponse('Tell me a random fact.')
       res.send({ fact })
+    } catch (err) {
+      console.error(err)
+    }
+  })
+
+  // Reset all our storage. Careful!
+  server.get('/reset', async (req, res) => {
+    try {
+      await chatStorageClient.clearStorage()
+      await threadStorageClient.clearStorage()
+      await usersStorageClient.clearStorage()
     } catch (err) {
       console.error(err)
     }
