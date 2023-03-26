@@ -12,7 +12,7 @@ import {
 	useTypingData,
 	useUserChatData,
 } from "./chat/ChatContext";
-import { useUser } from "./Context";
+import { useApiEndpoint, useUser } from "./Context";
 import { DateTime } from "luxon";
 
 export function ServerListener() {
@@ -20,8 +20,9 @@ export function ServerListener() {
 	const [, setUserChatData] = useUserChatData();
 	const [user] = useUser();
 	const [, setTypingData] = useTypingData();
+	const [apiEndpoint] = useApiEndpoint();
 
-	useWebSocket("ws://localhost:3000/ws", {
+	useWebSocket(apiEndpoint.ws, {
 		queryParams: { jwt: user ? user.jwt : "" },
 		onOpen: () => console.log("Connected to WS"),
 		onClose: () => console.log("Disconnected from WS"),
