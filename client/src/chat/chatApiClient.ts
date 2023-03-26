@@ -35,18 +35,18 @@ class ChatApiClient extends ApiClientBase {
 		// I'm confused about how to use the WsMessageEvent
 		// For now I just hard code the message to be in the same form as WsMessageEvent
 
-		const data: WsMessageEvent = {
-			dataType: "message",
-			operation: "add",
-			context: id,
-			data: {
-				id: "123", // how to get this?
-				from: "username", // how to get this?
-				message: message,
-			},
-		};
+		// const data: WsMessageEvent = {
+		// 	dataType: "message",
+		// 	operation: "add",
+		// 	context: id,
+		// 	data: {
+		// 		id: "123", // how to get this?
+		// 		from: "username", // how to get this?
+		// 		message: message,
+		// 	},
+		// };
 
-		return (await this.wsSendMessage(data)) as Thread;
+		this.wsSendMessage({ threadId: id, message });
 	}
 }
 
@@ -54,7 +54,9 @@ export function useChatApi() {
 	const [user] = useUser();
 	const [apiEndpoint] = useApiEndpoint();
 
-	const { sendJsonMessage } = useWebSocket(apiEndpoint.ws);
+	const { sendJsonMessage } = useWebSocket(apiEndpoint.ws, {
+		queryParams: { jwt: user ? user.jwt : "" },
+	});
 
 	return useMemo(
 		() => new ChatApiClient(apiEndpoint.http, user, sendJsonMessage),

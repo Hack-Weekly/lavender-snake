@@ -6,6 +6,7 @@ import {
   genThreadSummary,
 } from 'shared/chatTypes.js'
 import { UserAccount } from './user/data.js'
+import { Thread, ThreadSummary, UserChatData } from 'shared/chatTypes.js'
 import { DateTime } from 'luxon'
 
 const storage = new Storage()

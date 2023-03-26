@@ -1,34 +1,34 @@
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 import { Thread } from "shared/chatTypes";
-import { WsEvent, WsMessageEvent, WsThreadEvent } from "shared/wsEvents";
-import { useCurrentThreadData, useSelectedThread } from "./chat/ChatContext";
+import { WsEvent } from "shared/wsEvents";
+import { useCurrentThreadData } from "./chat/ChatContext";
+import { useUser } from "./Context";
 
 export function ServerListener() {
-	const [cc, setCurrentThreadData] = useCurrentThreadData();
+	const [currentThreadData, setCurrentThreadData] = useCurrentThreadData();
+	const [user] = useUser();
 
-	const { sendMessage, lastMessage, readyState } = useWebSocket(
-		"ws://localhost:3000/ws",
-		{
-			onOpen: () => console.log("connected to ws"),
-			onClose: () => console.log("disconnected from ws"),
-			onMessage: (messageEvent) => {
-				const baseEvt: WsEvent = JSON.parse(messageEvent.data);
-				console.log(baseEvt);
-				if (baseEvt.dataType === "message") {
-					// TODO: this is wrong; it may not be the current thread
-					// set user data with updated 'lastMessage', and if it is current thread,
-					// add the message
-					setCurrentThreadData((threadData: Thread) => {
-						return {
-							...threadData,
-							messages: [...threadData.messages, baseEvt.data],
-						};
-					});
-				}
-			},
-			onError: (errorEvent) => console.log(errorEvent),
-		}
-	);
+	useWebSocket("ws://localhost:3000/ws", {
+		queryParams: { jwt: user ? user.jwt : "" },
+		onOpen: () => console.log("Connected to WS"),
+		onClose: () => console.log("Disconnected from WS"),
+		onMessage: (messageEvent) => {
+			const baseEvt: WsEvent = JSON.parse(messageEvent.data);
+			console.log("Received message event from WS: ", baseEvt); // FOR DEBUG
+			if (
+				baseEvt.dataType === "message" &&
+				baseEvt.context === currentThreadData?.id
+			) {
+				setCurrentThreadData((threadData: Thread) => {
+					return {
+						...threadData,
+						messages: [...threadData.messages, baseEvt.data],
+					};
+				});
+			}
+		},
+		onError: (errorEvent) => console.log(errorEvent),
+	});
 
 	return <></>;
 }
