@@ -1,7 +1,7 @@
 import { brandGradient, colors } from "@/branding";
 import { ApiEndpoints, testUser, useApiEndpoint, useUser } from "@/Context";
 import { pokemon } from "@/pokemon";
-import { keyframes } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
@@ -10,20 +10,40 @@ import { Button, Spacer } from "../Dialog";
 import { CreateAccountButton, thumbnailForPokemon } from "./CreateAccount";
 import { SignIn } from "./SignIn";
 
+const shimmer = keyframes({
+	from: { backgroundPosition: "top 0px left -800px" },
+	to: { backgroundPosition: "bottom 0px right -800px" },
+});
+
 function Hero() {
 	return (
 		<div
-			css={[
-				brandGradient,
-				{
+			css={{
+				animation: `${shimmer} 5s linear infinite`,
+				marginBottom: "1em",
+				fontSize: "10em",
+				background: " url(horiz-bar-white.png)",
+				backgroundSize: "150px 250%",
+				backgroundRepeat: "no-repeat",
+
+				// backgroundColor: "#000",
+				backgroundClip: "text",
+			}}
+		>
+			<div
+				css={{
 					display: "flex",
 					justifyContent: "center",
-					fontSize: "10em",
-					marginBottom: "1em",
-				},
-			]}
-		>
-			Lavender
+
+					background:
+						"linear-gradient(90deg, rgba(140, 81, 165, .9) 0%,rgba(203, 94, 152, .9) 100%)",
+					WebkitBackgroundClip: "text",
+					WebkitTextFillColor: "transparent",
+					fontWeight: "1000",
+				}}
+			>
+				Lavender
+			</div>
 		</div>
 	);
 }
@@ -72,7 +92,7 @@ function RandomUser() {
 		};
 		handler();
 	};
-	return <Button onClick={randomSignUp}>Random user</Button>;
+	return <Button onClick={randomSignUp}>Random user &gt;</Button>;
 }
 function LoginButtons() {
 	return (
@@ -80,7 +100,7 @@ function LoginButtons() {
 			<CreateAccountButton />
 			<Spacer />
 			<RandomUser />
-			<DevSignIn />
+			{/* <DevSignIn /> */}
 			<SignIn />
 		</div>
 	);

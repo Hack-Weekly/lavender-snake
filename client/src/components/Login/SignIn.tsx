@@ -52,7 +52,7 @@ export function SignIn() {
 	return (
 		<Dialog.Root open={open} onOpenChange={setOpen}>
 			<Dialog.Trigger asChild>
-				<Button>Sign in</Button>
+				<Button>Sign in &gt;</Button>
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<DialogOverlay />
