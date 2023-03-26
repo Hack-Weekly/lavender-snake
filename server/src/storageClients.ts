@@ -7,6 +7,7 @@ import {
 } from 'shared/chatTypes.js'
 import { UserAccount } from './user/data.js'
 import { DateTime } from 'luxon'
+import { LAVENDER_BUDDY_ID } from './chatClient.js'
 
 const storage = new Storage()
 
@@ -47,80 +48,80 @@ class storageClient<ContentT> {
   }
 }
 
-const testUser = {
-  // TODO: don't copy this
-  email: 'testuser@dummy.com',
-  password: 'test',
-  user: {
-    id: 'testuserid',
-    name: 'Test User',
-    picture:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/555.png',
-  },
-}
-const autoFriend = {
-  email: 'autofriend@dummy.com',
-  password: '3316a735-2da2-43b4-978a-138a1eab26b1',
-  user: {
-    id: 'autofriendid',
-    name: 'Lavender Buddy',
-    picture:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png',
-  },
-}
+// const testUser = {
+//   // TODO: don't copy this
+//   email: 'testuser@dummy.com',
+//   password: 'test',
+//   user: {
+//     id: 'testuserid',
+//     name: 'Test User',
+//     picture:
+//       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/555.png',
+//   },
+// }
+// const autoFriend = {
+//   email: `${LAVENDER_BUDDY_ID}@dummy.com`,
+//   password: '3316a735-2da2-43b4-978a-138a1eab26b1',
+//   user: {
+//     id: LAVENDER_BUDDY_ID,
+//     name: 'Lavender Buddy',
+//     picture:
+//       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png',
+//   },
+// }
 
-const threadData: Thread = {
-  id: '3c908c32-c061-494f-a038-682d9c15eb76',
-  messages: [
-    {
-      id: '22692d8f-5677-4657-a281-a5696d00ea08',
-      from: autoFriend.user.id,
-      message: 'Hi, test user!',
-      dateTime: DateTime.now().toString(),
-    },
-  ],
-  participants: [autoFriend.user.id, testUser.user.id],
-}
+// const threadData: Thread = {
+//   id: '3c908c32-c061-494f-a038-682d9c15eb76',
+//   messages: [
+//     {
+//       id: '22692d8f-5677-4657-a281-a5696d00ea08',
+//       from: autoFriend.user.id,
+//       message: 'Hi, test user!',
+//       dateTime: DateTime.now().toString(),
+//     },
+//   ],
+//   participants: [autoFriend.user.id, testUser.user.id],
+// }
 
-const threadDataSummary = genThreadSummary(threadData)
+// const threadDataSummary = genThreadSummary(threadData)
 
-// TODO: we can't store the full user at rest.
-const testUserData: UserChatData = {
-  contacts: [testUser.user, autoFriend.user],
-  threads: [threadDataSummary],
-}
+// // TODO: we can't store the full user at rest.
+// const testUserData: UserChatData = {
+//   contacts: [testUser.user, autoFriend.user],
+//   threads: [threadDataSummary],
+// }
 
-const autoFriendData: UserChatData = {
-  contacts: [autoFriend.user, testUser.user],
-  threads: [threadDataSummary],
-}
+// const autoFriendData: UserChatData = {
+//   contacts: [autoFriend.user, testUser.user],
+//   threads: [threadDataSummary],
+// }
 
-const chatMemoryStorage = {
-  [testUser.user.id]: testUserData,
-  [autoFriend.user.id]: autoFriendData,
-}
+// const chatMemoryStorage = {
+//   [testUser.user.id]: testUserData,
+//   [autoFriend.user.id]: autoFriendData,
+// }
 export const chatStorageClient = new storageClient<UserChatData>(
   'lavender-snake-chat-userdata',
-  chatMemoryStorage
+  {}
 )
 
-const threadMemoryStorage = {
-  [threadData.id]: threadData,
-}
+// const threadMemoryStorage = {
+//   [threadData.id]: threadData,
+// }
 export const threadStorageClient = new storageClient<Thread>(
   'lavender-snake-chat-threads',
-  threadMemoryStorage
+  {}
 )
 
-const usersMemoryStorage = {
-  allUsers: [testUser, autoFriend],
-}
+// const usersMemoryStorage = {
+//   allUsers: [testUser, autoFriend],
+// }
 export const usersStorageClient = new storageClient<UserAccount>(
   'lavender-snake-users',
-  usersMemoryStorage
+  {}
 )
-const todoMemoryStorage = {}
+// const todoMemoryStorage = {}
 export const todoStorageClient = new storageClient<any>(
   'lavender-snake-todo',
-  todoMemoryStorage
+  {}
 )

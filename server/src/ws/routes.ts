@@ -3,7 +3,7 @@ import { WsMessageEvent, WsTypingEvent } from 'shared/wsEvents.js'
 import { parseJwt } from '../utils/parseJwt.js'
 import { userClient } from '../userClient.js'
 import { User, UserId } from 'shared/userTypes.js'
-import { chatClient } from '../chatClient.js'
+import { chatClient, LAVENDER_BUDDY_ID } from '../chatClient.js'
 import { chatGptClient } from '../chatGptClient.js'
 import { sleep } from 'shared/utils.js'
 
@@ -62,10 +62,10 @@ export default async function wsHandler(server: FastifyInstance) {
           // If user is chatting with the bot:
           if (
             res.thread.participants.length === 2 &&
-            res.thread.participants.includes('autofriendid')
+            res.thread.participants.includes(LAVENDER_BUDDY_ID)
           ) {
             await sleep(1000)
-            broadcast(new WsTypingEvent(res.thread.id, 'autofriendid'))
+            broadcast(new WsTypingEvent(res.thread.id, LAVENDER_BUDDY_ID))
             await sleep(3000)
             const msg = chatGptClient
               ? await chatGptClient.getResponse(incomingMessage.message)
@@ -76,7 +76,7 @@ export default async function wsHandler(server: FastifyInstance) {
                 ])
             const botRes = await chatClient.AddMessageToThread(
               res.thread,
-              'autofriendid',
+              LAVENDER_BUDDY_ID,
               msg
             )
 

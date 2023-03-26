@@ -10,9 +10,10 @@ class UserClient {
   }
 
   async LoadUserAccounts() {
-    return (await usersStorageClient.load(
+    const res = (await usersStorageClient.load(
       'allUsers'
     )) as unknown as UserAccount[] // this is special
+    return res ?? []
   }
 
   async AddUser(userAccount: UserAccount) {

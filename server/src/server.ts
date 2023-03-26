@@ -6,11 +6,38 @@ import fastifyCors from '@fastify/cors'
 import jwt from './plugins/jwt.js'
 import fastifyWS from '@fastify/websocket'
 import { FastifyPluginCallback } from 'fastify'
-import { chatClient, GLOBAL_THREAD_ID } from './chatClient.js'
+import {
+  chatClient,
+  GLOBAL_THREAD_ID,
+  LAVENDER_BUDDY_ID,
+} from './chatClient.js'
 import { threadStorageClient } from './storageClients.js'
 import { userClient } from './userClient.js'
+import { UserChatData } from 'shared/chatTypes.js'
 
 export async function initData() {
+  // Create lavender buddy
+  const allUsers = await userClient.LoadUsers()
+  const lavenderBuddy = allUsers.find((u) => u.id === LAVENDER_BUDDY_ID)
+  if (!lavenderBuddy) {
+    console.log('Creating lavender buddy')
+    await userClient.AddUser({
+      email: `${LAVENDER_BUDDY_ID}@dummy.com`,
+      password: '3316a735-2da2-43b4-978a-138a1eab26b1',
+      user: {
+        id: LAVENDER_BUDDY_ID,
+        name: 'Lavender Buddy',
+        picture:
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png',
+      },
+    })
+    const buddyChatData: UserChatData = {
+      contacts: allUsers,
+      threads: [],
+    }
+    await chatClient.SetUserData(LAVENDER_BUDDY_ID, buddyChatData)
+  }
+  // Create global thread
   let globalThread = await chatClient.GetThread(GLOBAL_THREAD_ID)
   if (!globalThread) {
     console.log('Creating global thread')

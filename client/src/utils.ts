@@ -12,6 +12,10 @@ export const useThreadImage = (thread: Thread | ThreadSummary | undefined) => {
 		return "";
 	}
 
+	if (thread.participants.length > 2) {
+		return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/256px-Pok%C3%A9_Ball_icon.svg.png";
+	}
+
 	const participants = thread.participants
 		.map((p) => contacts?.find((c) => c.id === p))
 		.filter((u) => u)

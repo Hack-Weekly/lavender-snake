@@ -114,4 +114,5 @@ class ChatClient {
 }
 
 export const GLOBAL_THREAD_ID = 'globalthreadid'
+export const LAVENDER_BUDDY_ID = 'lavenderbuddyid'
 export const chatClient = new ChatClient()

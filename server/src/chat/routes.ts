@@ -1,22 +1,14 @@
 import { chatGptClient } from '../chatGptClient.js'
-import { generateId } from '../utils/generateId.js'
-import {
-  genThreadSummary,
-  Message,
-  Thread,
-  ThreadId,
-  UserChatData,
-} from 'shared/chatTypes.js'
+import { genThreadSummary, ThreadId, UserChatData } from 'shared/chatTypes.js'
 import { WsMessageEvent, WsThreadEvent } from 'shared/wsEvents.js'
-import {
-  chatStorageClient,
-  threadStorageClient,
-  usersStorageClient,
-} from '../storageClients.js'
 import { UserId } from 'shared/userTypes.js'
 import { DateTime } from 'luxon'
 import { userClient } from '../userClient.js'
-import { chatClient, GLOBAL_THREAD_ID } from '../chatClient.js'
+import {
+  chatClient,
+  GLOBAL_THREAD_ID,
+  LAVENDER_BUDDY_ID,
+} from '../chatClient.js'
 import { sleep } from 'shared/utils.js'
 
 function randChoice<T>(arr: Array<T>): T {
@@ -54,7 +46,7 @@ export default function chatHandler(server, options, done) {
       // Since user has no messages at all - lets send one from Lavender Buddy
       await sleep(3000)
       const { message, thread } = await chatClient.SendMessage(
-        'autofriendid',
+        LAVENDER_BUDDY_ID,
         userId,
         "Hi! I see you are new to Lavender LINE, so let's be friends :) I'm really good with facts and random trivia, so ask me something!"
       )
@@ -112,7 +104,7 @@ export default function chatHandler(server, options, done) {
       // If user is chatting with the bot, lets respond
       if (
         thread.participants.length === 2 &&
-        thread.participants.includes('autofriendid')
+        thread.participants.includes(LAVENDER_BUDDY_ID)
       ) {
         await sleep(3000)
         const msg = chatGptClient
@@ -122,7 +114,7 @@ export default function chatHandler(server, options, done) {
               'Sure thing :)',
               'How kind of you to say',
             ])
-        chatClient.AddMessageToThread(thread, 'autofriendid', msg)
+        chatClient.AddMessageToThread(thread, LAVENDER_BUDDY_ID, msg)
         server.broadcast(new WsMessageEvent('add', thread.id, message))
       }
     } catch (err) {
