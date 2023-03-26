@@ -1,6 +1,6 @@
 // Include things here that are 'brand specific'
 
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 
 export const colors = {
 	bgPrimary: "#160020",
@@ -19,10 +19,16 @@ export const colors = {
 	successText: "springgreen",
 };
 
+const shimmer = keyframes({
+	from: { backgroundPosition: "top left" },
+	to: { backgroundPosition: "top right" },
+});
+
 export const brandGradient = css({
 	background:
 		"linear-gradient(90deg, rgba(140, 81, 165, 1) 0%,rgba(203, 94, 152, 1) 100%)",
 	WebkitBackgroundClip: "text",
 	WebkitTextFillColor: "transparent",
 	fontWeight: "1000",
+	animation: `${shimmer} 2s ease infinate`,
 });
