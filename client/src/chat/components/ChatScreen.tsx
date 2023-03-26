@@ -14,15 +14,23 @@ import {
 	useUserChatData,
 } from "../ChatContext";
 import { chatColors } from "@/chatColors";
-import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
+import { useThreadImage, useThreadLabel } from "@/utils";
+// import dummyImage1 from "../../chatImages/3.jpg";
+import { BsCircleFill, BsThreeDotsVertical, BsSendFill, BsFillEmojiSunglassesFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { DateTime, Duration } from "luxon";
-import { useThreadImage, useThreadLabel } from "@/utils";
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+import "./EmojiPickerStyles.css";
+import useOutsideClick from "./hooks/useOutsideClick";
 
 interface ChatMessageProps {
 	data: Message;
 	prev: Message | undefined;
+}
+interface SyntheticEvent {
+	native: Event;
 }
 
 const ChatScreenContainer = styled.div({
@@ -90,6 +98,7 @@ const chatScreenCSS = {
 		flexDirection: "column-reverse",
 		padding: "1rem 1.5rem 0rem",
 		overflow: "auto",
+		position: 'relative',
 		"&::-webkit-scrollbar": {
 			width: ".3rem",
 			backgroundColor: chatColors.chatBG,
@@ -118,6 +127,8 @@ const chatScreenCSS = {
 	}),
 	createMessageInputContainer: css({
 		width: "92%",
+		marginLeft: "1rem",
+		marginRight: "1rem",
 		position: "relative",
 		display: "flex",
 		alignItems: "center",
@@ -140,6 +151,22 @@ const chatScreenCSS = {
 		position: "absolute",
 		right: "2%",
 		cursor: "pointer",
+	}),
+	emojiPickerIconContainer: css({
+		fontSize: '1.7rem',
+		display: 'flex',
+		cursor: 'pointer',
+		"& svg":{
+			fill: chatColors.secondaryText
+		}
+	}),
+	emojiPickerContainer: css({
+		position: 'absolute',
+		right: '1rem',
+		bottom: '4rem',
+	}),
+	emojiPicker: css({
+
 	}),
 };
 
@@ -350,11 +377,22 @@ function CreateChatMessage() {
 	const chatApiClient = useChatApi();
 	const [curThreadId] = useSelectedThread();
 	const [, setCurrentThreadData] = useCurrentThreadData();
+	// const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+	const {showEmojiPicker, setShowEmojiPicker, ref} = useOutsideClick(false);
+	
+	const handleShowEmojiPicker = () => {
+		setShowEmojiPicker(!showEmojiPicker);
+	}
+	const addEmoji = (e: SyntheticEvent) => {
+		setText((text) => (text += e.native));		
+	}
 
 	const addMessage = async () => {
-		if (curThreadId) {
-			setText("");
-			await chatApiClient.sendWsMessage(curThreadId, text);
+		if(text != ""){
+			if (curThreadId) {
+				setText("");
+				await chatApiClient.sendWsMessage(curThreadId, text);
+			}
 		}
 	};
 
@@ -377,6 +415,16 @@ function CreateChatMessage() {
 					css={chatScreenCSS.createMessageInput}
 				/>
 				<BsSendFill onClick={addMessage} css={chatScreenCSS.sendButton} />
+			</div>
+			<div css={chatScreenCSS.emojiPickerIconContainer} onClick={handleShowEmojiPicker}>
+				<BsFillEmojiSunglassesFill />
+			</div>
+			<div css={chatScreenCSS.emojiPickerContainer} ref={ref}>
+				{
+					showEmojiPicker && (
+						<Picker data={data} onEmojiSelect={addEmoji} css={chatScreenCSS.emojiPicker}/>
+					)
+				}
 			</div>
 		</div>
 	);

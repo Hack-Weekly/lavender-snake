@@ -1,0 +1,11 @@
+em-emoji-picker {
+    /* --background-rgb: 85, 170, 255; */
+    --color-border: rgba(0, 0, 0, 0.05);
+    --rgb-accent: 79, 55, 139;
+    --rgb-background: 230, 230, 250;
+    --rgb-color: 102, 51, 153;
+    --rgb-input: 255, 235, 235;
+    --shadow: 5px 5px 15px -8px rebeccapurple;
+
+    height: 50vh;
+}
