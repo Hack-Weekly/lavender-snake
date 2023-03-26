@@ -3,6 +3,7 @@ import { TodoAppContent } from "@/todo/TodoAppContent";
 import React from "react";
 import IndexContent from "../index/IndexContent";
 import { ChatApp } from "@/chat/ChatApp";
+import { AdminPage } from "@/admin/AdminPage";
 
 // routes are declared here
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
 	{
 		path: "/chat",
 		element: <ChatApp />,
+	},
+	{
+		path: "/admin",
+		element: <AdminPage />,
 	},
 ]);
 

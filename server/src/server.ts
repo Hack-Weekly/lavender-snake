@@ -14,6 +14,7 @@ import {
 import { threadStorageClient } from './storageClients.js'
 import { userClient } from './userClient.js'
 import { UserChatData } from 'shared/chatTypes.js'
+import adminHandler from './admin/routes.js'
 
 export async function initData() {
   // Create lavender buddy
@@ -61,6 +62,7 @@ export function createServer() {
   server.register(jwt)
   server.register(userHandler, { prefix: '/user' })
   server.register(chatHandler, { prefix: '/chat' })
+  server.register(adminHandler, { prefix: '/admin' })
 
   server.register(fastifyWS as unknown as FastifyPluginCallback)
   server.register(wsHandler, { prefix: '/ws' })

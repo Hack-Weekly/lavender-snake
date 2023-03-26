@@ -25,7 +25,7 @@ class storageClient<ContentT> {
   }
 
   async clearStorage() {
-    await this.bucket.deleteFiles()
+    await this.bucket?.deleteFiles()
   }
 
   async load(id): Promise<ContentT | undefined> {
