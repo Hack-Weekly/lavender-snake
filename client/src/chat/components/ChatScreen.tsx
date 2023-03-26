@@ -15,7 +15,6 @@ import {
 } from "../ChatContext";
 import { chatColors } from "@/chatColors";
 import { useThreadImage, useThreadLabel } from "@/utils";
-// import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill, BsFillEmojiSunglassesFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
@@ -28,6 +27,9 @@ import useOutsideClick from "./hooks/useOutsideClick";
 interface ChatMessageProps {
 	data: Message;
 	prev: Message | undefined;
+}
+interface SyntheticEvent {
+	native: Event;
 }
 interface SyntheticEvent {
 	native: Event;
