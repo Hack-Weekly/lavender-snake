@@ -92,7 +92,7 @@ function RandomUser() {
 		};
 		handler();
 	};
-	return <Button onClick={randomSignUp}>Random user</Button>;
+	return <Button onClick={randomSignUp}>Random user &gt;</Button>;
 }
 function LoginButtons() {
 	return (
@@ -100,7 +100,7 @@ function LoginButtons() {
 			<CreateAccountButton />
 			<Spacer />
 			<RandomUser />
-			<DevSignIn />
+			{/* <DevSignIn /> */}
 			<SignIn />
 		</div>
 	);
