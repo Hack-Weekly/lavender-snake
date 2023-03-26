@@ -197,7 +197,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 				css={{
 					display: "flex",
 					flexDirection: isCurrentUser ? "row-reverse" : "row",
-					gap: "0.5rem",
+					gap: "0.3rem",
 				}}
 			>
 				<span
@@ -239,6 +239,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 						fontSize: "0.7rem",
 						alignSelf: "flex-end",
 						color: chatColors.secondaryText,
+						fontStyle: "italic",
 					}}
 				>
 					{getTime(data.dateTime)}

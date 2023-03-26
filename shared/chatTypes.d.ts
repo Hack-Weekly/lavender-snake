@@ -1,28 +1,27 @@
-import { User, UserId } from "./userTypes.js"
-import { DateTime } from "luxon"
-export type MessageId = string
+import { User, UserId } from "./userTypes.js";
+export type MessageId = string;
 export interface Message {
-	id: MessageId
-	from: UserId
-	message: string
-	dateTime: string
+    id: MessageId;
+    from: UserId;
+    message: string;
+    dateTime: string;
 }
-export type ThreadId = string
+export type ThreadId = string;
 export interface Thread {
-	id: ThreadId
-	participants: UserId[]
-	messages: Message[]
+    id: ThreadId;
+    participants: UserId[];
+    messages: Message[];
 }
 export interface ThreadSummary {
-	id: ThreadId
-	participants: UserId[]
-	lastMessage: Message
+    id: ThreadId;
+    participants: UserId[];
+    lastMessage: Message;
 }
 export interface Data {
-	messages: Thread[]
+    messages: Thread[];
 }
 export interface UserChatData {
-	threads: ThreadSummary[]
-	contacts: User[]
+    threads: ThreadSummary[];
+    contacts: User[];
 }
-export declare const genThreadSummary: (thread: Thread) => ThreadSummary
+export declare const genThreadSummary: (thread: Thread) => ThreadSummary;
