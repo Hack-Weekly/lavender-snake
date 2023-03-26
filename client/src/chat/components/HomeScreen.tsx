@@ -115,9 +115,9 @@ const homeScreenCSS = {
 	}),
 	newChatButton: css({
 		position: "absolute",
-		right: "20%",
-		bottom: "10%",
-		fontSize: "2.2rem",
+		right: "10%",
+		bottom: "3%",
+		fontSize: "4.2rem",
 		display: "flex",
 		alignItems: "center",
 		color: chatColors.secondaryAccent,

@@ -22,6 +22,7 @@ import { useThreadImage, useThreadLabel } from "@/utils";
 
 interface ChatMessageProps {
 	data: Message;
+	prev: Message | undefined;
 }
 
 const ChatScreenContainer = styled.div({
@@ -229,11 +230,15 @@ function IsTyping() {
 	}
 }
 
-const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
+const ChatMessage: FC<ChatMessageProps> = ({ data, prev }) => {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
 	const [currentUser] = useUser();
 	const isCurrentUser = user?.id === currentUser?.userData?.id;
+	const [currentThreadData] = useCurrentThreadData();
+
+	const showPictures = (currentThreadData?.participants?.length ?? 0) > 2;
+	const picture = prev?.from === data.from ? "" : user?.picture;
 	return (
 		<div
 			css={{
@@ -251,6 +256,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 					gap: "0.3rem",
 				}}
 			>
+				{showPictures && <img width="60px" src={picture} />}
 				<span
 					css={{
 						background: isCurrentUser
@@ -310,7 +316,6 @@ function CurrentChatContent() {
 			if (currentChatData) {
 				// Load from server
 				const threadData = await chatApiClient.getThread(currentChatData.id);
-				console.log(threadData);
 				setCurrentThreadData(threadData);
 			} else {
 				// clear
@@ -325,8 +330,12 @@ function CurrentChatContent() {
 			<div css={chatScreenCSS.chatMessagesContainer}>
 				{/* the container uses column-reverse direction which helps keep initial chat scroll at bottom, but it reverses contents. The next div is additional one which tackles the reverse content */}
 				<div css={chatScreenCSS.chatMessages}>
-					{currentThreadData?.messages.map((message) => (
-						<ChatMessage key={message.id} data={message} />
+					{currentThreadData?.messages.map((message, idx) => (
+						<ChatMessage
+							key={message.id}
+							prev={currentThreadData.messages[idx - 1]}
+							data={message}
+						/>
 					))}
 					<IsTyping />
 				</div>
