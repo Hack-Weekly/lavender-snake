@@ -72,6 +72,7 @@ export function createServer() {
   })
 
   server.setErrorHandler((error, req, res) => {
+    console.error(error)
     req.log.error(error.toString())
     res.code(400).send({ error })
   })
