@@ -2,7 +2,12 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { FC, useState } from "react";
 import { ThreadSummary } from "shared/chatTypes";
-import { useContacts, useSelectedThread, useThreads } from "../ChatContext";
+import {
+	useContacts,
+	useSelectedThread,
+	useThreads,
+	useUserChatData,
+} from "../ChatContext";
 import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
@@ -134,6 +139,7 @@ const Thread = styled.div<{ active: boolean }>`
 `;
 
 function HomeScreenHeader() {
+	const [userChatData] = useUserChatData();
 	return (
 		<div css={homeScreenCSS.header}>
 			<div css={[brandGradient, { fontSize: "1.5rem" }]}>
@@ -148,7 +154,9 @@ function HomeScreenHeader() {
 					Line
 				</span>
 			</div>
-			<div css={homeScreenCSS.unreadChatCount}>12</div>
+			<div css={homeScreenCSS.unreadChatCount}>
+				{userChatData?.threads?.length ?? 0}
+			</div>
 			<div css={homeScreenCSS.account}>
 				<MdAccountCircle />
 			</div>
