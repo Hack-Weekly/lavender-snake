@@ -6,11 +6,13 @@ import { generateId } from '../utils/generateId.js'
 import { isValidEmail, isValidPassword } from '../utils/validators.js'
 import { UserAccount } from './data.js'
 import { userClient } from '../userClient.js'
+import { chatClient } from '@/chatClient.js'
 
 const SignUpRouteBodySchema = Type.Object({
   email: Type.String(),
   password: Type.String(),
   username: Type.String(),
+  thumbnail: Type.String(),
 })
 type SignUpRouteBody = Static<typeof SignUpRouteBodySchema>
 
@@ -47,10 +49,10 @@ export default function userHandler(server: FastifyInstance, options, done) {
       },
     },
     async (req, reply) => {
-      const { email, password, username } = req.body
+      const { email, password, username, thumbnail } = req.body
 
       // First check if request is valid (has all fields, etc)
-      if (!email || !password || !username) {
+      if (!email || !password || !username || !thumbnail) {
         reply.code(400).send({ message: 'missing fields' })
         return
       }
@@ -82,7 +84,7 @@ export default function userHandler(server: FastifyInstance, options, done) {
         user: {
           id: generateId(),
           name: username,
-          picture: 'TODO a picture',
+          picture: thumbnail,
         },
       }
 

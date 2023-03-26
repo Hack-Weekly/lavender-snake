@@ -1,12 +1,13 @@
 import { brandGradient, colors } from "@/branding";
 import { ApiEndpoints, testUser, useApiEndpoint, useUser } from "@/Context";
+import { pokemon } from "@/pokemon";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
-import { sleep } from "shared/utils";
+import { getRandom, sleep } from "shared/utils";
 import { Button, Spacer } from "../Dialog";
-import { CreateAccountButton } from "./CreateAccount";
+import { CreateAccountButton, thumbnailForPokemon } from "./CreateAccount";
 import { SignIn } from "./SignIn";
 
 function Hero() {
@@ -46,11 +47,39 @@ function DevSignIn() {
 	};
 	return <Button onClick={devSignIn}>Dev sign in</Button>;
 }
+function RandomUser() {
+	const [apiEndpoint] = useApiEndpoint();
+	const [, setUser] = useUser();
+
+	const email = `rand${Math.floor(Math.random() * 1000000)}@rand.com`;
+	const randomSignUp = () => {
+		const handler = async () => {
+			const p = getRandom(pokemon, 1)[0];
+			const resp = await fetch(`${apiEndpoint.http}/user/signup`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email,
+					username: p.name, // TODO: something fun
+					thumbnail: thumbnailForPokemon(p.id),
+					password: "random",
+				}),
+			});
+			const data = await resp.json();
+			setUser(data);
+		};
+		handler();
+	};
+	return <Button onClick={randomSignUp}>Random user</Button>;
+}
 function LoginButtons() {
 	return (
 		<div css={{ display: "flex", justifyContent: "center" }}>
 			<CreateAccountButton />
 			<Spacer />
+			<RandomUser />
 			<DevSignIn />
 			<SignIn />
 		</div>

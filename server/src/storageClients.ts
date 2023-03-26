@@ -6,7 +6,6 @@ import {
   genThreadSummary,
 } from 'shared/chatTypes.js'
 import { UserAccount } from './user/data.js'
-import { Thread, ThreadSummary, UserChatData } from 'shared/chatTypes.js'
 import { DateTime } from 'luxon'
 
 const storage = new Storage()
@@ -52,12 +51,22 @@ const testUser = {
   // TODO: don't copy this
   email: 'testuser@dummy.com',
   password: 'test',
-  user: { id: 'testuserid', name: 'Test User', picture: 'my picture' },
+  user: {
+    id: 'testuserid',
+    name: 'Test User',
+    picture:
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/555.png',
+  },
 }
 const autoFriend = {
   email: 'autofriend@dummy.com',
   password: '3316a735-2da2-43b4-978a-138a1eab26b1',
-  user: { id: 'autofriendid', name: 'Lavender Buddy', picture: 'my picture' },
+  user: {
+    id: 'autofriendid',
+    name: 'Lavender Buddy',
+    picture:
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/23.png',
+  },
 }
 
 const threadData: Thread = {

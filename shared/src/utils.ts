@@ -26,7 +26,7 @@ export const arrayRange = (start: number, stop: number, step: number = 1) =>
     (value, index) => start + index * step
   );
 
-export function getRandom(arr: any[], n: number) {
+export function getRandom<T>(arr: T[], n: number) {
   var result = new Array(n),
     len = arr.length,
     taken = new Array(len);
@@ -37,5 +37,5 @@ export function getRandom(arr: any[], n: number) {
     result[n] = arr[x in taken ? taken[x] : x];
     taken[x] = --len in taken ? taken[len] : len;
   }
-  return result;
+  return result as T[];
 }

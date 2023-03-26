@@ -89,6 +89,29 @@ class ChatClient {
   async GetThread(threadId: ThreadId) {
     return await threadStorageClient.load(threadId)
   }
+
+  async CreateThread(users: UserId[]) {
+    const thread: Thread = {
+      id: generateId(),
+      messages: [],
+      participants: users,
+    }
+    return await threadStorageClient.save(thread.id, thread)
+  }
+
+  async AddUserToThread(threadId: ThreadId, userId: UserId) {
+    const thread = await this.GetThread(threadId)
+    if (!thread) {
+      console.log(`Couldn't find thread '${threadId}'`)
+      return undefined
+    }
+    if (!thread.participants.includes(userId)) {
+      thread.participants.push(userId)
+    }
+    await threadStorageClient.save(threadId, thread)
+    return thread
+  }
 }
 
+export const GLOBAL_THREAD_ID = 'globalthreadid'
 export const chatClient = new ChatClient()

@@ -6,7 +6,23 @@ import fastifyCors from '@fastify/cors'
 import jwt from './plugins/jwt.js'
 import fastifyWS from '@fastify/websocket'
 import { FastifyPluginCallback } from 'fastify'
+import { chatClient, GLOBAL_THREAD_ID } from './chatClient.js'
+import { threadStorageClient } from './storageClients.js'
+import { userClient } from './userClient.js'
 
+export async function initData() {
+  let globalThread = await chatClient.GetThread(GLOBAL_THREAD_ID)
+  if (!globalThread) {
+    console.log('Creating global thread')
+    const allUsers = await userClient.LoadUsers()
+    globalThread = {
+      id: GLOBAL_THREAD_ID,
+      messages: [],
+      participants: allUsers.map((user) => user.id),
+    }
+    await threadStorageClient.save(GLOBAL_THREAD_ID, globalThread)
+  }
+}
 export function createServer() {
   const server = fastify()
   server.register(fastifyCors, {

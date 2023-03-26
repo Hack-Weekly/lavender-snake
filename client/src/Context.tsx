@@ -2,6 +2,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { createContext, useContext, useState } from "react";
 import { isProd } from "./utils";
 import { ClientUser } from "shared/userTypes";
+import { thumbnailForPokemon } from "./components/Login/CreateAccount";
 
 interface ApiEndpoint {
 	name: string;
@@ -32,7 +33,7 @@ export const testUser: ClientUser = {
 	userData: {
 		id: "testuserid",
 		name: "Test User",
-		picture: "my picture",
+		picture: thumbnailForPokemon(55),
 	},
 };
 const UserContext = createContext<[ClientUser | undefined, any]>([

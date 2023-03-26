@@ -10,14 +10,15 @@ import {
 	useCurrentChatData,
 	useCurrentThreadData,
 	useSelectedThread,
+	useTypingData,
 	useUserChatData,
 } from "../ChatContext";
 import { chatColors } from "@/chatColors";
-import dummyImage1 from "../../chatImages/3.jpg";
 import { BsCircleFill, BsThreeDotsVertical, BsSendFill } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { DateTime, Duration } from "luxon";
+import { useThreadImage, useThreadLabel } from "@/utils";
 
 interface ChatMessageProps {
 	data: Message;
@@ -142,13 +143,16 @@ const chatScreenCSS = {
 };
 
 function CurrentChatHeader() {
+	const [threadSummary] = useCurrentThreadData();
+	const threadImage = useThreadImage(threadSummary);
+	const threadLabel = useThreadLabel(threadSummary);
 	return (
 		<div css={chatScreenCSS.header}>
 			<div css={chatScreenCSS.avatar}>
-				<img src={dummyImage1} alt="" />
+				<img src={threadImage} alt="" />
 			</div>
 			<div css={chatScreenCSS.nameAndStatus}>
-				<div css={chatScreenCSS.recipientName}>Lavender Buddy</div>
+				<div css={chatScreenCSS.recipientName}>{threadLabel}</div>
 				<div css={chatScreenCSS.onlineStatus}>
 					<BsCircleFill />
 					<div>Online</div>
@@ -179,6 +183,52 @@ function getTime(time: string) {
 	}
 }
 
+function IsTyping() {
+	const [user] = useUser();
+	const [currentThreadData] = useCurrentThreadData();
+	const [typingData] = useTypingData();
+	const [userChatData] = useUserChatData();
+	const [now, setNow] = useState(DateTime.now());
+
+	useEffect(() => {
+		const interval = setInterval(() => setNow(DateTime.now()), 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, []);
+
+	if (
+		!userChatData ||
+		!currentThreadData ||
+		!typingData[currentThreadData.id]
+	) {
+		return <></>;
+	}
+
+	// We have some typing data - get those that are recent
+	const thresholdDt = now.minus({ seconds: 4 });
+	const typingUsers = Object.entries(typingData[currentThreadData.id])
+		.filter(([, dt]) => dt > thresholdDt)
+		.map((entry) => entry[0])
+		.filter((u) => u != user?.userData?.id);
+
+	if (typingUsers.length === 0) {
+		return <></>;
+	} else if (typingUsers.length === 1) {
+		const typingUser = userChatData.contacts.find(
+			(c) => c.id === typingUsers[0]
+		);
+		if (!typingUser) {
+			console.error("tsh");
+			return <></>;
+		}
+
+		return <div>{typingUser.name} is typing...</div>;
+	} else {
+		return <div>Multiple people are typing...</div>;
+	}
+}
+
 const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 	const contacts = useContacts();
 	const user = contacts?.find((user) => user.id === data.from);
@@ -191,6 +241,7 @@ const ChatMessage: FC<ChatMessageProps> = ({ data }) => {
 				alignSelf: isCurrentUser ? "flex-end" : "flex-start",
 				display: "flex",
 				flexDirection: "column",
+				maxWidth: "50%",
 			}}
 		>
 			<span
@@ -258,7 +309,6 @@ function CurrentChatContent() {
 		const handler = async () => {
 			if (currentChatData) {
 				// Load from server
-				console.log("loading from server?");
 				const threadData = await chatApiClient.getThread(currentChatData.id);
 				console.log(threadData);
 				setCurrentThreadData(threadData);
@@ -278,6 +328,7 @@ function CurrentChatContent() {
 					{currentThreadData?.messages.map((message) => (
 						<ChatMessage key={message.id} data={message} />
 					))}
+					<IsTyping />
 				</div>
 			</div>
 		</div>
@@ -298,6 +349,11 @@ function CreateChatMessage() {
 		}
 	};
 
+	const chatChange = async (txt: string) => {
+		setText(txt);
+		chatApiClient.sendTyping(curThreadId); // don't need to await this
+	};
+
 	return (
 		<div css={chatScreenCSS.createMessageContainer}>
 			<GrAttachment css={chatScreenCSS.attachmentButton} />
@@ -305,7 +361,7 @@ function CreateChatMessage() {
 				<input
 					type="text"
 					value={text}
-					onChange={(e) => setText(e.target.value)}
+					onChange={(e) => chatChange(e.target.value)}
 					onKeyDown={(e) => {
 						if (e.key === "Enter") addMessage();
 					}}

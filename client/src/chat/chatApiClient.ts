@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { Thread, ThreadId, UserChatData } from "shared/chatTypes";
 import { threadId } from "worker_threads";
 import useWebSocket from "react-use-websocket";
-import { WsMessageEvent } from "shared";
+import { WsEvent, WsMessageEvent, WsTypingEvent } from "shared";
 
 class ChatApiClient extends ApiClientBase {
 	wsSendMessage: Function;
@@ -47,6 +47,15 @@ class ChatApiClient extends ApiClientBase {
 		// };
 
 		this.wsSendMessage({ threadId: id, message });
+	}
+
+	async sendTyping(threadId: ThreadId | undefined) {
+		if (!this.user || !threadId) {
+			return;
+		}
+
+		const msg = new WsTypingEvent(threadId, this.user.userData.id);
+		this.wsSendMessage(msg);
 	}
 }
 

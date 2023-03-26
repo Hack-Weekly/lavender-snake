@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { WsMessageEvent } from 'shared/wsEvents.js'
+import { WsMessageEvent, WsTypingEvent } from 'shared/wsEvents.js'
 import { parseJwt } from '../utils/parseJwt.js'
 import { userClient } from '../userClient.js'
 import { User, UserId } from 'shared/userTypes.js'
@@ -32,46 +32,24 @@ export default async function wsHandler(server: FastifyInstance) {
       })
 
       // Broadcast incoming message
-      connection.socket.on('message', async (msg) => {
-        msg = JSON.parse(msg.toString())
-        const incomingMessage = msg as unknown as {
-          threadId: string
-          message: string
-        }
+      connection.socket.on('message', async (rawMsg) => {
+        const msg = JSON.parse(rawMsg.toString())
+        if (msg.dataType === 'typing') {
+          const incomingMessage = msg as WsTypingEvent
+          broadcast(incomingMessage)
+        } else {
+          const incomingMessage = msg as unknown as {
+            threadId: string
+            message: string
+          }
 
-        const { jwt } = req.query
-        const userId: UserId = getUserIdFromJwt(jwt)
+          const { jwt } = req.query
+          const userId: UserId = getUserIdFromJwt(jwt)
 
-        const res = await chatClient.AddMessageToThread(
-          incomingMessage.threadId,
-          userId,
-          incomingMessage.message
-        )
-
-        if (res.error) {
-          serverBroadcast(res.error)
-          return
-        }
-
-        broadcast(new WsMessageEvent('add', res.thread.id, res.message))
-
-        // If user is chatting with the bot:
-        if (
-          res.thread.participants.length === 2 &&
-          res.thread.participants.includes('autofriendid')
-        ) {
-          await sleep(3000)
-          const msg = chatGptClient
-            ? await chatGptClient.getResponse(incomingMessage.message)
-            : randChoice([
-                "That sound's great",
-                'Sure thing :)',
-                'How kind of you to say',
-              ])
-          const botRes = await chatClient.AddMessageToThread(
-            res.thread,
-            'autofriendid',
-            msg
+          const res = await chatClient.AddMessageToThread(
+            incomingMessage.threadId,
+            userId,
+            incomingMessage.message
           )
 
           if (res.error) {
@@ -79,7 +57,38 @@ export default async function wsHandler(server: FastifyInstance) {
             return
           }
 
-          broadcast(new WsMessageEvent('add', botRes.thread.id, botRes.message))
+          broadcast(new WsMessageEvent('add', res.thread.id, res.message))
+
+          // If user is chatting with the bot:
+          if (
+            res.thread.participants.length === 2 &&
+            res.thread.participants.includes('autofriendid')
+          ) {
+            await sleep(1000)
+            broadcast(new WsTypingEvent(res.thread.id, 'autofriendid'))
+            await sleep(3000)
+            const msg = chatGptClient
+              ? await chatGptClient.getResponse(incomingMessage.message)
+              : randChoice([
+                  "That sound's great",
+                  'Sure thing :)',
+                  'How kind of you to say',
+                ])
+            const botRes = await chatClient.AddMessageToThread(
+              res.thread,
+              'autofriendid',
+              msg
+            )
+
+            if (res.error) {
+              serverBroadcast(res.error)
+              return
+            }
+
+            broadcast(
+              new WsMessageEvent('add', botRes.thread.id, botRes.message)
+            )
+          }
         }
       })
     }

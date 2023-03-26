@@ -7,7 +7,7 @@ import {
   ThreadId,
   UserChatData,
 } from 'shared/chatTypes.js'
-import { WsMessageEvent } from 'shared/wsEvents.js'
+import { WsMessageEvent, WsThreadEvent } from 'shared/wsEvents.js'
 import {
   chatStorageClient,
   threadStorageClient,
@@ -16,7 +16,7 @@ import {
 import { UserId } from 'shared/userTypes.js'
 import { DateTime } from 'luxon'
 import { userClient } from '../userClient.js'
-import { chatClient } from '../chatClient.js'
+import { chatClient, GLOBAL_THREAD_ID } from '../chatClient.js'
 import { sleep } from 'shared/utils.js'
 
 function randChoice<T>(arr: Array<T>): T {
@@ -36,18 +36,29 @@ export default function chatHandler(server, options, done) {
     if (userData) {
       res.send(userData)
     } else {
+      // Create new user
+      const globalThread = await chatClient.AddUserToThread(
+        GLOBAL_THREAD_ID,
+        userId
+      )
+
       const defaultResp: UserChatData = {
         contacts: await userClient.LoadUsers(),
-        threads: [],
+        threads: [genThreadSummary(globalThread)],
       }
+      await chatClient.SetUserData(userId, defaultResp)
+
+      // Send them their data
       res.send(defaultResp)
-      // user has no messages at all - lets send one from Lavender Buddy
+
+      // Since user has no messages at all - lets send one from Lavender Buddy
       await sleep(3000)
-      await chatClient.SendMessage(
+      const { message, thread } = await chatClient.SendMessage(
         'autofriendid',
         userId,
         "Hi! I see you are new to Lavender LINE, so let's be friends :) I'm really good with facts and random trivia, so ask me something!"
       )
+      server.broadcast(new WsThreadEvent('add', genThreadSummary(thread)))
     }
   })
 

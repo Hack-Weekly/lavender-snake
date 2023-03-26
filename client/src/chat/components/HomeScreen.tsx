@@ -2,12 +2,11 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import { FC, useState } from "react";
 import { ThreadSummary } from "shared/chatTypes";
-import { useContacts, useThreads } from "../ChatContext";
+import { useContacts, useSelectedThread, useThreads } from "../ChatContext";
 import { MdAccountCircle, MdAddCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
-import dummyProfilePic1 from "../../chatImages/3.jpg";
-import * as Dialog from '@radix-ui/react-dialog';
+import * as Dialog from "@radix-ui/react-dialog";
 import {
 	DialogContent,
 	DialogOverlay,
@@ -15,6 +14,8 @@ import {
 	IconButton,
 } from "@/components/Dialog";
 import { DateTime } from "luxon";
+import { useUser } from "@/Context";
+import { useThreadImage, useThreadLabel } from "@/utils";
 
 const homeScreenCSS = {
 	homeScreenContainer: css({
@@ -155,7 +156,7 @@ function HomeScreenHeader() {
 	);
 }
 
-function SearchBox({placeholder}: {placeholder: string}) {
+function SearchBox({ placeholder }: { placeholder: string }) {
 	return (
 		<div css={homeScreenCSS.search}>
 			<input
@@ -167,46 +168,48 @@ function SearchBox({placeholder}: {placeholder: string}) {
 	);
 }
 
-function getTime(time : string){	
+function getTime(time: string) {
 	const messageTime = DateTime.fromISO(time);
-    const diff = DateTime.now().diff(messageTime, ['hours', 'minutes']);
-	
-    const hours = Math.round(diff.hours);
-    const minutes = Math.round(diff.minutes);
+	const diff = DateTime.now().diff(messageTime, ["hours", "minutes"]);
 
-    if (hours >= 12) {
-        return messageTime.toLocaleString(DateTime.DATE_SHORT);
-    }else if(hours >= 1){
+	const hours = Math.round(diff.hours);
+	const minutes = Math.round(diff.minutes);
+
+	if (hours >= 12) {
+		return messageTime.toLocaleString(DateTime.DATE_SHORT);
+	} else if (hours >= 1) {
 		return messageTime.toLocaleString(DateTime.TIME_SIMPLE);
-	}else if (minutes > 0) {
-        return minutes + ` m`;
-    } else {
-        return "Now";
-    }
+	} else if (minutes > 0) {
+		return minutes + ` m`;
+	} else {
+		return "Now";
+	}
 }
 
 const ThreadComp: FC<{ thread: ThreadSummary }> = ({ thread }) => {
-	const contacts = useContacts();
-	const participants = thread.participants.map((p) =>
-		contacts?.find((c) => c.id === p)
-	);
+	const threadImage = useThreadImage(thread);
+	const threadLabel = useThreadLabel(thread);
+	const lastMessage = thread.lastMessage;
+
 	return (
 		<div css={homeScreenCSS.threadCSS}>
 			<div css={homeScreenCSS.avatar}>
-				<img src={dummyProfilePic1} alt="" />
+				<img src={threadImage} alt="" />
 			</div>
 			<div css={homeScreenCSS.nameAndMessage}>
-				<div css={homeScreenCSS.name}>{participants[0]?.name}</div>
-				<div css={homeScreenCSS.message}>{thread.lastMessage.message}</div>
+				<div css={homeScreenCSS.name}>{threadLabel}</div>
+				<div css={homeScreenCSS.message}>{lastMessage?.message}</div>
 			</div>
-			<div css={homeScreenCSS.time}>{getTime(thread.lastMessage.dateTime)}</div>
+			<div css={homeScreenCSS.time}>
+				{lastMessage ? getTime(lastMessage.dateTime) : ""}
+			</div>
 		</div>
 	);
 };
 
 function ChatList() {
 	const threads = useThreads();
-	const [selectedId, setSelectedId] = useState("");
+	const [selectedId, setSelectedId] = useSelectedThread();
 	return (
 		<div css={homeScreenCSS.chatList}>
 			{threads?.map((t) => (
@@ -232,20 +235,22 @@ function NewChatButton() {
 					<MdAddCircle />
 				</Dialog.Trigger>
 				<Dialog.Portal>
-				<DialogOverlay />
+					<DialogOverlay />
 					<DialogContent>
 						<DialogTitle>Add new chat:</DialogTitle>
-						<SearchBox placeholder="Search name..."/>
+						<SearchBox placeholder="Search name..." />
 						<button type="submit">Create</button>
 						<ul>
 							<li>User Placeholder - TODO: styles, allow y-scroll </li>
-							<li>User Placeholder - when clicked, have an active hover state?</li>
+							<li>
+								User Placeholder - when clicked, have an active hover state?
+							</li>
 							<li>User Placeholder</li>
 							<li>User Placeholder</li>
 							<li>User Placeholder</li>
 						</ul>
 						<Dialog.Close asChild>
-						<IconButton aria-label="Close">X</IconButton>
+							<IconButton aria-label="Close">X</IconButton>
 						</Dialog.Close>
 					</DialogContent>
 				</Dialog.Portal>

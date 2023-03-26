@@ -15,7 +15,7 @@ export interface Thread {
 export interface ThreadSummary {
     id: ThreadId;
     participants: UserId[];
-    lastMessage: Message;
+    lastMessage: Message | undefined;
 }
 export interface Data {
     messages: Thread[];

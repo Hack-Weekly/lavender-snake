@@ -25,8 +25,10 @@ const SelectedImageCtx = createContext<[number | undefined, any]>([
 	undefined,
 ]);
 
-const thumbnailForPokemon = (id: number) =>
-	`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+export const thumbnailForPokemon = (id: number | undefined) =>
+	id
+		? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
+		: "";
 const pokemonIds = getRandom(arrayRange(1, 1000), 20);
 const pokemonImages = pokemonIds.map((id) => ({
 	pokemonId: id,
