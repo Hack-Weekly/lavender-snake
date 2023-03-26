@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 
-const useOutsideClick = (initialValue: boolean) => {
-    const ref = useRef(null);
+const useOutsideEmojiPickerClick = (initialValue: boolean) => {
+    const ref = useRef<HTMLDivElement>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(initialValue);
-    const handleClickOutside = (event: Event) => {
+    const handleClickOutside = (event: any) => {
         if(ref.current && !ref.current.contains(event.target)) setShowEmojiPicker(false);
     }
 
@@ -18,4 +18,4 @@ const useOutsideClick = (initialValue: boolean) => {
     return {showEmojiPicker, setShowEmojiPicker, ref};
 }
 
-export default useOutsideClick;
+export default useOutsideEmojiPickerClick;

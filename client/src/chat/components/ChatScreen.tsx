@@ -22,14 +22,11 @@ import { DateTime, Duration } from "luxon";
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import "./EmojiPickerStyles.css";
-import useOutsideClick from "./hooks/useOutsideClick";
+import useOutsideClick from "./hooks/useOutsideEmojiPickerClick";
 
 interface ChatMessageProps {
 	data: Message;
 	prev: Message | undefined;
-}
-interface SyntheticEvent {
-	native: Event;
 }
 
 const ChatScreenContainer = styled.div({
@@ -382,8 +379,8 @@ function CreateChatMessage() {
 	const handleShowEmojiPicker = () => {
 		setShowEmojiPicker(!showEmojiPicker);
 	}
-	const addEmoji = (e: SyntheticEvent) => {
-		setText((text) => (text += e.native));		
+	const addEmoji = (emoji: string) => {
+		setText((text) => (text += emoji));		
 	}
 
 	const addMessage = async () => {
@@ -421,7 +418,7 @@ function CreateChatMessage() {
 			<div css={chatScreenCSS.emojiPickerContainer} ref={ref}>
 				{
 					showEmojiPicker && (
-						<Picker data={data} onEmojiSelect={addEmoji} css={chatScreenCSS.emojiPicker}/>
+						<Picker data={data} onEmojiSelect={(e: any)=> addEmoji(e.native)} css={chatScreenCSS.emojiPicker}/>
 					)
 				}
 			</div>
