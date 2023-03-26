@@ -11,26 +11,23 @@ import { CreateAccountButton, thumbnailForPokemon } from "./CreateAccount";
 import { SignIn } from "./SignIn";
 
 const shimmer = keyframes({
-	from: { backgroundPosition: "top 0px left 0px" },
-	to: { backgroundPosition: "bottom 0px right -200px" },
+	from: { backgroundPosition: "top 0px left -800px" },
+	to: { backgroundPosition: "bottom 0px right -800px" },
 });
 
 function Hero() {
 	return (
 		<div
 			css={{
-				animation: `${shimmer} 3s ease infinite`,
+				animation: `${shimmer} 5s linear infinite`,
 				marginBottom: "1em",
 				fontSize: "10em",
-				background:
-					"linear-gradient(.55turn, rgba(255, 255, 255, 1) 0%,rgba(255, 255, 255, 1) 100%)",
-				// "gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff))",
-				backgroundSize: "12px 500%",
+				background: " url(horiz-bar-white.png)",
+				backgroundSize: "150px 250%",
 				backgroundRepeat: "no-repeat",
 
-				backgroundColor: "#222",
+				// backgroundColor: "#000",
 				backgroundClip: "text",
-				transform: "rotate(30deg)",
 			}}
 		>
 			<div
