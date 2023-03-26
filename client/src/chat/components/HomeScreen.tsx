@@ -17,6 +17,7 @@ import {
 	DialogOverlay,
 	DialogTitle,
 	IconButton,
+	Button,
 } from "@/components/Dialog";
 import { DateTime } from "luxon";
 import { useUser } from "@/Context";
@@ -244,22 +245,19 @@ function NewChatButton() {
 				</Dialog.Trigger>
 				<Dialog.Portal>
 					<DialogOverlay />
-					<DialogContent>
+					<DialogContent css={{fontFamily: "Outfit, sans-serif"}}>
 						<DialogTitle>Add new chat:</DialogTitle>
-						<SearchBox placeholder="Search name..." />
-						<button type="submit">Create</button>
-						<ul>
-							<li>User Placeholder - TODO: styles, allow y-scroll </li>
-							<li>
-								User Placeholder - when clicked, have an active hover state?
-							</li>
-							<li>User Placeholder</li>
-							<li>User Placeholder</li>
-							<li>User Placeholder</li>
-						</ul>
-						<Dialog.Close asChild>
-							<IconButton aria-label="Close">X</IconButton>
-						</Dialog.Close>
+						<div css={{display: "flex", alignItems: "center", justifyContent: "space-around"}}>
+							<SearchBox placeholder="Search name..." />
+							<button 
+								type="submit" 
+								css={{background: "#4F378B", color: "#e6e6fa", borderRadius: "12px", cursor: "pointer", padding: "5px" }}>
+								Create
+							</button>
+							<Dialog.Close asChild>
+								<IconButton aria-label="Close">X</IconButton>
+							</Dialog.Close>
+						</div>
 					</DialogContent>
 				</Dialog.Portal>
 			</Dialog.Root>
