@@ -1,5 +1,5 @@
 import { Message, ThreadId, ThreadSummary } from "./chatTypes.js";
-import { UserId } from "./userTypes.js";
+import { User, UserId } from "./userTypes.js";
 type OperationT = "add" | "delete" | "update";
 export interface WsEvent {
     dataType: "message" | "thread" | "user" | "typing";
@@ -30,5 +30,13 @@ export declare class WsTypingEvent implements WsEvent {
     data: UserId;
     static isInstance(evt: WsEvent): boolean;
     constructor(threadId: ThreadId, userId: UserId);
+}
+export declare class WsUserEvent implements WsEvent {
+    operation: OperationT;
+    dataType: "user";
+    context: "";
+    data: User;
+    static isInstance(evt: WsEvent): boolean;
+    constructor(operation: OperationT, user: User);
 }
 export {};

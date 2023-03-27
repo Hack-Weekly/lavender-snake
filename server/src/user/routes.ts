@@ -7,6 +7,7 @@ import { isValidEmail, isValidPassword } from '../utils/validators.js'
 import { UserAccount } from './data.js'
 import { userClient } from '../userClient.js'
 import { chatClient } from '@/chatClient.js'
+import { WsUserEvent } from 'shared/wsEvents.js'
 
 const SignUpRouteBodySchema = Type.Object({
   email: Type.String(),
@@ -91,7 +92,9 @@ export default function userHandler(server: FastifyInstance, options, done) {
       await userClient.AddUser(acct)
 
       const token = server.jwt.sign({ id: acct.user.id })
-      return reply.send({ jwt: token, userData: acct.user })
+      reply.send({ jwt: token, userData: acct.user })
+      const svr = server as any
+      svr.broadcast(new WsUserEvent('add', acct.user))
     }
   )
 

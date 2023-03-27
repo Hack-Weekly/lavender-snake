@@ -5,6 +5,7 @@ import {
 	WsMessageEvent,
 	WsThreadEvent,
 	WsTypingEvent,
+	WsUserEvent,
 } from "shared/wsEvents";
 import {
 	TypingData,
@@ -17,7 +18,7 @@ import { DateTime } from "luxon";
 
 export function ServerListener() {
 	const [currentThreadData, setCurrentThreadData] = useCurrentThreadData();
-	const [, setUserChatData] = useUserChatData();
+	const [userChatData, setUserChatData] = useUserChatData();
 	const [user] = useUser();
 	const [, setTypingData] = useTypingData();
 	const [apiEndpoint] = useApiEndpoint();
@@ -63,6 +64,19 @@ export function ServerListener() {
 					typingData[typingEvt.context][typingEvt.data] = DateTime.now();
 					return { ...typingData };
 				});
+			} else if (WsUserEvent.isInstance(baseEvt)) {
+				const userEvt = baseEvt as WsUserEvent;
+				if (userEvt.operation === "add") {
+					if (!userChatData?.contacts.find((c) => c.id === userEvt.data.id)) {
+						// We don't know this user - add them
+						setUserChatData((cd: UserChatData) => {
+							return {
+								...cd,
+								contacts: [...cd.contacts, userEvt.data],
+							};
+						});
+					}
+				}
 			}
 		},
 		onError: (errorEvent) => console.log(errorEvent),

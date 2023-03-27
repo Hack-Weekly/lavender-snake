@@ -31,3 +31,14 @@ export class WsTypingEvent {
         this.data = userId;
     }
 }
+export class WsUserEvent {
+    static isInstance(evt) {
+        return evt.dataType === "user";
+    }
+    constructor(operation, user) {
+        this.dataType = "user";
+        this.context = "";
+        this.operation = operation;
+        this.data = user;
+    }
+}
