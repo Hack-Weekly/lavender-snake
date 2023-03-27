@@ -37,12 +37,12 @@ const Entry: FC<EntryProps> = ({ user, setSelected, selected }) => {
 			}}
 			onClick={toggle}
 		>
-			<img width="100px" src={user.picture} />
+			<img width="80px" src={user.picture} />
 			<div
 				css={{
 					display: "flex",
 					alignItems: "center",
-					padding: "50px",
+					paddingX: "50px",
 				}}
 			>
 				{user.name}
@@ -81,7 +81,13 @@ export function NewChatButton() {
 					<DialogOverlay />
 					<DialogContent css={{ fontFamily: "Outfit, sans-serif" }}>
 						<DialogTitle>Select message participants</DialogTitle>
-						<div>
+						<div
+							css={{
+								marginTop: "10px",
+								overflowY: "scroll",
+								maxHeight: "500px",
+							}}
+						>
 							{userChatData.contacts
 								.filter((u) => u.id != user.userData.id)
 								.map((c) => (
@@ -99,6 +105,7 @@ export function NewChatButton() {
 									disabled={selArr.length < 1}
 									type="submit"
 									css={{
+										marginTop: "16px",
 										background: "#4F378B",
 										color: "#e6e6fa",
 										borderRadius: "12px",
