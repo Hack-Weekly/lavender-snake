@@ -73,7 +73,9 @@ export function NewChatButton() {
 		<div css={homeScreenCSS.newChatButton}>
 			<Dialog.Root>
 				<Dialog.Trigger asChild>
-					<MdAddCircle />
+					<div>
+						<MdAddCircle />
+					</div>
 				</Dialog.Trigger>
 				<Dialog.Portal>
 					<DialogOverlay />
