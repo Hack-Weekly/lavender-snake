@@ -8,22 +8,16 @@ import {
 	useThreads,
 	useUserChatData,
 } from "../ChatContext";
-import { MdAccountCircle, MdAddCircle } from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
 import { chatColors } from "@/chatColors";
 import { brandGradient } from "@/branding";
-import * as Dialog from "@radix-ui/react-dialog";
-import {
-	DialogContent,
-	DialogOverlay,
-	DialogTitle,
-	IconButton,
-	Button,
-} from "@/components/Dialog";
+import { Button } from "@/components/Dialog";
 import { DateTime } from "luxon";
 import { useUser } from "@/Context";
 import { useThreadImage, useThreadLabel } from "@/utils";
+import { NewChatButton } from "./NewChatButton";
 
-const homeScreenCSS = {
+export const homeScreenCSS = {
 	homeScreenContainer: css({
 		minWidth: "27%",
 		display: "flex",
@@ -165,7 +159,7 @@ function HomeScreenHeader() {
 	);
 }
 
-function SearchBox({ placeholder }: { placeholder: string }) {
+export function SearchBox({ placeholder }: { placeholder: string }) {
 	return (
 		<div css={homeScreenCSS.search}>
 			<input
@@ -232,35 +226,6 @@ function ChatList() {
 					<ThreadComp key={t.id} thread={t} />
 				</Thread>
 			))}
-		</div>
-	);
-}
-
-function NewChatButton() {
-	return (
-		<div css={homeScreenCSS.newChatButton}>
-			<Dialog.Root>
-				<Dialog.Trigger asChild>
-					<MdAddCircle />
-				</Dialog.Trigger>
-				<Dialog.Portal>
-					<DialogOverlay />
-					<DialogContent css={{fontFamily: "Outfit, sans-serif"}}>
-						<DialogTitle>Add new chat:</DialogTitle>
-						<div css={{display: "flex", alignItems: "center", justifyContent: "space-around"}}>
-							<SearchBox placeholder="Search name..." />
-							<button 
-								type="submit" 
-								css={{background: "#4F378B", color: "#e6e6fa", borderRadius: "12px", cursor: "pointer", padding: "5px" }}>
-								Create
-							</button>
-							<Dialog.Close asChild>
-								<IconButton aria-label="Close">X</IconButton>
-							</Dialog.Close>
-						</div>
-					</DialogContent>
-				</Dialog.Portal>
-			</Dialog.Root>
 		</div>
 	);
 }

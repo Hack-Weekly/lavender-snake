@@ -27,25 +27,22 @@ class ChatApiClient extends ApiClientBase {
 		return (await this.get(`chat/thread/${id}`)) as Thread;
 	}
 
-	async sendMessage(id: ThreadId | UserId, message: string) {
-		return (await this.post({ threadId: id, message })) as Thread;
+	async createThread(users: UserId | UserId[]) {
+		if (!Array.isArray(users)) {
+			users = [users];
+		}
+
+		if (!users.includes(this.user!.userData.id)) {
+			users = [...users, this.user!.userData.id];
+		}
+
+		return await this.request("chat/thread", {
+			method: "POST",
+			body: JSON.stringify({ users }),
+		});
 	}
 
 	async sendWsMessage(id: ThreadId | UserId, message: string) {
-		// I'm confused about how to use the WsMessageEvent
-		// For now I just hard code the message to be in the same form as WsMessageEvent
-
-		// const data: WsMessageEvent = {
-		// 	dataType: "message",
-		// 	operation: "add",
-		// 	context: id,
-		// 	data: {
-		// 		id: "123", // how to get this?
-		// 		from: "username", // how to get this?
-		// 		message: message,
-		// 	},
-		// };
-
 		this.wsSendMessage({ threadId: id, message });
 	}
 

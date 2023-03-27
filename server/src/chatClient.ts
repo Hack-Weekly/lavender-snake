@@ -96,7 +96,8 @@ class ChatClient {
       messages: [],
       participants: users,
     }
-    return await threadStorageClient.save(thread.id, thread)
+    await threadStorageClient.save(thread.id, thread)
+    return thread
   }
 
   async AddUserToThread(threadId: ThreadId, userId: UserId) {

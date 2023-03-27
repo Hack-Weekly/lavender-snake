@@ -1,5 +1,10 @@
 import { chatGptClient } from '../chatGptClient.js'
-import { genThreadSummary, ThreadId, UserChatData } from 'shared/chatTypes.js'
+import {
+  genThreadSummary,
+  Thread,
+  ThreadId,
+  UserChatData,
+} from 'shared/chatTypes.js'
 import { WsMessageEvent, WsThreadEvent } from 'shared/wsEvents.js'
 import { UserId } from 'shared/userTypes.js'
 import { DateTime } from 'luxon'
@@ -15,6 +20,7 @@ import {
   threadStorageClient,
   usersStorageClient,
 } from '../storageClients.js'
+import { generateId } from '../utils/generateId.js'
 
 function randChoice<T>(arr: Array<T>): T {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -73,6 +79,25 @@ export default function chatHandler(server, options, done) {
         res.code(400).send({ message: 'Access not allowed to this thread' })
       } else {
         res.send(threadData)
+      }
+    }
+  )
+
+  server.post(
+    '/thread',
+    { onRequest: [server.authenticate] },
+    async (req, resp) => {
+      const userId: UserId = req.user.id
+      try {
+        const body = req.body as {
+          users: UserId[]
+        }
+
+        const thread = await chatClient.CreateThread(body.users)
+        resp.send(thread)
+        server.broadcast(new WsThreadEvent('add', genThreadSummary(thread)))
+      } catch (err) {
+        console.error(err)
       }
     }
   )
