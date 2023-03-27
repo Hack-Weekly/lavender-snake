@@ -41,7 +41,7 @@ export default function chatHandler(server, options, done) {
         contacts: await userClient.LoadUsers(),
         threads: userData.threads,
       }
-      res.send(userData)
+      res.send(data)
     } else {
       // Create new user
       const globalThread = await chatClient.AddUserToThread(
