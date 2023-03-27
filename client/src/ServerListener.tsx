@@ -28,7 +28,7 @@ export function ServerListener() {
 		onClose: () => console.log("Disconnected from WS"),
 		onMessage: (messageEvent) => {
 			const baseEvt: WsEvent = JSON.parse(messageEvent.data);
-			console.log("Received message event from WS: ", baseEvt); // FOR DEBUG
+			// console.log("Received message event from WS: ", baseEvt); // FOR DEBUG
 			if (
 				baseEvt.dataType === "message" &&
 				baseEvt.context === currentThreadData?.id
