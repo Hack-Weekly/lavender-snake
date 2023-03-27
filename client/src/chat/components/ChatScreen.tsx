@@ -15,12 +15,16 @@ import {
 } from "../ChatContext";
 import { chatColors } from "@/chatColors";
 import { useThreadImage, useThreadLabel } from "@/utils";
-import { BsCircleFill, BsThreeDotsVertical, BsSendFill, BsFillEmojiSunglassesFill } from "react-icons/bs";
+import {
+	BsCircleFill,
+	BsThreeDotsVertical,
+	BsSendFill,
+	BsFillEmojiSunglassesFill,
+} from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 import { DateTime, Duration } from "luxon";
-import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import "./EmojiPickerStyles.css";
 import useOutsideClick from "./hooks/useOutsideEmojiPickerClick";
 
@@ -94,7 +98,7 @@ const chatScreenCSS = {
 		flexDirection: "column-reverse",
 		padding: "1rem 1.5rem 0rem",
 		overflow: "auto",
-		position: 'relative',
+		position: "relative",
 		"&::-webkit-scrollbar": {
 			width: ".3rem",
 			backgroundColor: chatColors.chatBG,
@@ -149,21 +153,19 @@ const chatScreenCSS = {
 		cursor: "pointer",
 	}),
 	emojiPickerIconContainer: css({
-		fontSize: '1.7rem',
-		display: 'flex',
-		cursor: 'pointer',
-		"& svg":{
-			fill: chatColors.secondaryText
-		}
+		fontSize: "1.7rem",
+		display: "flex",
+		cursor: "pointer",
+		"& svg": {
+			fill: chatColors.secondaryText,
+		},
 	}),
 	emojiPickerContainer: css({
-		position: 'absolute',
-		right: '1rem',
-		bottom: '4rem',
+		position: "absolute",
+		right: "1rem",
+		bottom: "4rem",
 	}),
-	emojiPicker: css({
-
-	}),
+	emojiPicker: css({}),
 };
 
 function CurrentChatHeader() {
@@ -374,17 +376,17 @@ function CreateChatMessage() {
 	const [curThreadId] = useSelectedThread();
 	const [, setCurrentThreadData] = useCurrentThreadData();
 	// const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-	const {showEmojiPicker, setShowEmojiPicker, ref} = useOutsideClick(false);
-	
+	const { showEmojiPicker, setShowEmojiPicker, ref } = useOutsideClick(false);
+
 	const handleShowEmojiPicker = () => {
 		setShowEmojiPicker(!showEmojiPicker);
-	}
+	};
 	const addEmoji = (emoji: string) => {
-		setText((text) => (text += emoji));		
-	}
+		setText((text) => (text += emoji));
+	};
 
 	const addMessage = async () => {
-		if(text != ""){
+		if (text != "") {
 			if (curThreadId) {
 				setText("");
 				await chatApiClient.sendWsMessage(curThreadId, text);
@@ -412,15 +414,20 @@ function CreateChatMessage() {
 				/>
 				<BsSendFill onClick={addMessage} css={chatScreenCSS.sendButton} />
 			</div>
-			<div css={chatScreenCSS.emojiPickerIconContainer} onClick={handleShowEmojiPicker}>
+			<div
+				css={chatScreenCSS.emojiPickerIconContainer}
+				onClick={handleShowEmojiPicker}
+			>
 				<BsFillEmojiSunglassesFill />
 			</div>
 			<div css={chatScreenCSS.emojiPickerContainer} ref={ref}>
-				{
-					showEmojiPicker && (
-						<Picker data={data} onEmojiSelect={(e: any)=> addEmoji(e.native)} css={chatScreenCSS.emojiPicker}/>
-					)
-				}
+				{showEmojiPicker && (
+					<Picker
+						data={data}
+						onEmojiSelect={(e: any) => addEmoji(e.native)}
+						css={chatScreenCSS.emojiPicker}
+					/>
+				)}
 			</div>
 		</div>
 	);

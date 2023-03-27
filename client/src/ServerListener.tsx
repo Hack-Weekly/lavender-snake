@@ -27,6 +27,7 @@ export function ServerListener() {
 		queryParams: { jwt: user ? user.jwt : "" },
 		onOpen: () => console.log("Connected to WS"),
 		onClose: () => console.log("Disconnected from WS"),
+		shouldReconnect: () => true,
 		onMessage: (messageEvent) => {
 			const baseEvt: WsEvent = JSON.parse(messageEvent.data);
 			// console.log("Received message event from WS: ", baseEvt); // FOR DEBUG
