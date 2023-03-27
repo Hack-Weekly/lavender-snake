@@ -37,6 +37,10 @@ export default function chatHandler(server, options, done) {
     const userId: UserId = req.user.id
     const userData = await chatClient.GetUserData(userId)
     if (userData) {
+      const data: UserChatData = {
+        contacts: await userClient.LoadUsers(),
+        threads: userData.threads,
+      }
       res.send(userData)
     } else {
       // Create new user
