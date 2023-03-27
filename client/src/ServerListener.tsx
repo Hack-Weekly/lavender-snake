@@ -50,10 +50,12 @@ export function ServerListener() {
 			} else if (WsThreadEvent.isInstance(baseEvt)) {
 				const threadEvt = baseEvt as WsThreadEvent;
 				if (threadEvt.operation === "add") {
-					setUserChatData((userChatData: UserChatData) => ({
-						...userChatData,
-						threads: [...userChatData.threads, threadEvt.data],
-					}));
+					if (threadEvt.data.participants.includes(user?.userData.id ?? "")) {
+						setUserChatData((userChatData: UserChatData) => ({
+							...userChatData,
+							threads: [...userChatData.threads, threadEvt.data],
+						}));
+					}
 				} else if (threadEvt.operation === "update") {
 				} else if (threadEvt.operation === "delete") {
 				}
